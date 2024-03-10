@@ -46,7 +46,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
 
   public void setManualControl(double RotateSpeed) {
     setMotor(RotateSpeed);
-    rotatePID.setSetpoint(getAngleDegree());
+    rotatePID.setSetpoint(getAngle());
   }
 
   public double getSetpoint() {
@@ -67,7 +67,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
   }
 
   public void setPIDControl() {
-    double rotateVoltage = rotatePID.calculate(getAngleDegree());
+    double rotateVoltage = rotatePID.calculate(getAngle());
     double modifiedRotateVoltage = rotateVoltage;
     if (Math.abs(modifiedRotateVoltage) > RotateShooterConstants.kRotateVoltLimit) {
       modifiedRotateVoltage = RotateShooterConstants.kRotateVoltLimit * (rotateVoltage > 0 ? 1 : -1);
@@ -75,7 +75,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
     setMotor(modifiedRotateVoltage);
   }
 
-  public double getAngleDegree() {
+  public double getAngle() {
     double degree = (RotateShooterConstants.kEncoderInverted ? -1.0 : 1.0)
         * ((rotateEncoder.getAbsolutePosition() * 360.0) - 120.0);
     return degree;
@@ -108,7 +108,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
         break;
       //carryDegree:0
       case 2:
-        setSetpoint(RotateShooterConstants.kEndDegree);
+        setSetpoint(RotateShooterConstants.kCarryDegree);
       //initDegree:57
       case 3:
         setSetpoint(RotateShooterConstants.kInitDegree);
@@ -186,7 +186,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
   public void periodic() {
     changeRotateMode();
     SmartDashboard.putData("rotate_PID", rotatePID);
-    SmartDashboard.putNumber("encoderDegree", getAngleDegree());
+    SmartDashboard.putNumber("encoderDegree", getAngle());
     SmartDashboard.putNumber("switchMode", switchMode);
   }
 
@@ -194,7 +194,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
   public void initSendable(SendableBuilder builder) {
     builder.setSmartDashboardType("RotateShooterSubsystem");
     builder.addDoubleProperty("rotateVoltage", () -> rotateMotor.get() * rotateMotor.getBusVoltage(), null);
-    builder.addDoubleProperty("roateAngelDegree", () -> this.getAimDegree(getAngleDegree()), null);
+    builder.addDoubleProperty("roateAngelDegree", () -> this.getAimDegree(getAngle()), null);
     rotatePID.initSendable(builder);
   }
 }
