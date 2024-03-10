@@ -57,9 +57,8 @@ public class RobotContainer {
     mainController.b().toggleOnTrue(shooterSubsystem.shootPIDRateCmd());
     mainController.a().whileTrue(shooterSubsystem.setRateModeCmd(1).alongWith(rotateShooterSubsystem.setModeCmd(3)))
         .whileFalse(shooterSubsystem.setRateModeCmd(0).alongWith(rotateShooterSubsystem.setModeCmd(0)));
-    ;
-    mainController.leftBumper().whileTrue(rotateShooterSubsystem.setModeCmd(1)).whileFalse(rotateShooterSubsystem.setModeCmd(0));
-    mainController.rightBumper().whileTrue(rotateShooterSubsystem.setModeCmd(2));
+    mainController.leftBumper().whileTrue(shooterSubsystem.setRateModeCmd(2).alongWith(rotateShooterSubsystem.setModeCmd(2))).whileFalse(shooterSubsystem.setRateModeCmd(0).alongWith(rotateShooterSubsystem.setModeCmd(0)));
+    mainController.rightBumper().whileTrue(rotateShooterSubsystem.setModeCmd(3)).whileFalse(rotateShooterSubsystem.setModeCmd(0));
 
     // transport
 
