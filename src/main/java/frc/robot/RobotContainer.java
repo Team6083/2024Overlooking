@@ -13,9 +13,11 @@ import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.controllerCmds.SwerveJoystickCmd;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionSubsystem;
+import frc.robot.subsystems.RotateShooterSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TransportSubsystem;
 import frc.robot.subsystems.drive.Drivebase;
+import frc.robot.subsystems.visionProcessing.TagTracking;
 
 public class RobotContainer {
   private final CommandXboxController mainController;
@@ -24,12 +26,16 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsystem;
   private final ShooterSubsystem shooterSubsystem;
   private final TransportSubsystem transportSubsystem;
+  private final RotateShooterSubsystem rotateShooterSubsystem;
+  private final TagTracking tagTracking;
 
   public RobotContainer() {
+    tagTracking = new TagTracking();
     // define subsystems
     mainController = new CommandXboxController(DriveControllerConstants.kMainController);
     powerDistributionSubsystem = new PowerDistributionSubsystem();
     drivebase = new Drivebase();
+    rotateShooterSubsystem = new RotateShooterSubsystem(powerDistributionSubsystem, tagTracking);
     intakeSubsystem = new IntakeSubsystem(powerDistributionSubsystem);
     shooterSubsystem = new ShooterSubsystem(powerDistributionSubsystem);
     transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);

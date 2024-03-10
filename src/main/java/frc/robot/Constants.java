@@ -18,8 +18,8 @@ public final class Constants {
     }
 
     public static class ShooterConstants {
-        public static final int kUpMotorChannel = 25;
-        public static final int kDownMotorChannel = 26;
+        public static final int kUpMotorChannel = 26;
+        public static final int kDownMotorChannel = 25;
         public static final int kUpEncoderChannelA = 0;
         public static final int kUpEncoderChannelB = 1;
         public static final int kDownEncoderChannelA = 8;
@@ -48,15 +48,15 @@ public final class Constants {
     public static class TransportConstants {
         public static final int kTransportChannel = 22;
         public static final boolean kTransportInverted = true;
-        public static final double kTransVoltage = 3;
-        public static final double kReTransVoltage = -3;
-        public static final double kDistanceRange = 3.5;
+        public static final double kTransVoltage = 5;
+        public static final double kReTransVoltage = -5;
+        public static final double kDistanceRange = 8.0;
     }
 
     public static class IntakeConstants {
         public static final int kIntakeChannel = 24;
         public static final Boolean kIntakeInverted = true;
-        public static final double kIntakeVoltage = 6;
+        public static final double kIntakeVoltage = 7.0;
         public static final double kThrowPrecentage = -4.0;
     }
 
@@ -67,12 +67,13 @@ public final class Constants {
         public static final int kEncoderChannel = 2;
         public static final double kInitDegree = 57.0;
         public static final double kRotateVoltLimit = 5.0;
-        public static final double kRotateAngleMin = 5.0;
+        public static final double kRotateAngleMin = -5.0;
         public static final double kRotateAngleMax = 65.0;
         public static final double kRotateDegreeErrorPoint = 3;
         public static final double kRotateAngleOffset = 0.52;
         public static final double kRotateTriggerValue = 0.15;
         public static final double kSpeakerHeight = 2.0;
+        public static final double kAMPHeight = 0.89;
         public static final double kShooterHeight = 0.31;
         public static final double kP = 0.095;
         public static final double kI = 0.0004;
