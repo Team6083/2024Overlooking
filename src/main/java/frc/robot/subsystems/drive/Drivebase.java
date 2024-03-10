@@ -155,13 +155,17 @@ public class Drivebase extends SubsystemBase {
   }
 
   public Command accelerateCmd() {
-    Command cmd = Commands.runOnce(() -> setMagnification(DrivebaseConstants.kHighMagnification), this);
+    Command cmd = Commands.runOnce(
+        () -> setMagnification(DrivebaseConstants.kHighMagnification),
+        this);
     cmd.setName("accelerateCmd");
     return cmd;
   }
 
   public Command defaultSpeedCmd() {
-    Command cmd = Commands.runOnce(() -> setMagnification(DrivebaseConstants.kDefaultMagnification), this);
+    Command cmd = Commands.runOnce(
+        () -> setMagnification(DrivebaseConstants.kDefaultMagnification),
+        this);
     cmd.setName("defaultSpeedCmd");
     return cmd;
   }
@@ -214,7 +218,6 @@ public class Drivebase extends SubsystemBase {
     putDashboard();
   }
 
-  
   public Command gyroResetCmd() {
     Command cmd = this.runOnce(this::resetGyro);
     cmd.setName("gyroResetCmd");

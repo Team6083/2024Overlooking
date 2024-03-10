@@ -52,8 +52,8 @@ public class RobotContainer {
   private void configureBindings() {
     // drivetrain
     drivebase.setDefaultCommand(new SwerveJoystickCmd(drivebase, mainController));
-    mainController.pov(0).onTrue(drivebase.accelerateCmd());
-    mainController.pov(180).onTrue(drivebase.defaultSpeedCmd());
+    mainController.rightBumper().onTrue(drivebase.accelerateCmd());
+    mainController.leftBumper().onTrue(drivebase.defaultSpeedCmd());
 
     // intake and transport
     mainController.y().toggleOnTrue(new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
