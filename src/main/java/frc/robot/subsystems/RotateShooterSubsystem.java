@@ -26,6 +26,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
   private final PowerDistributionSubsystem powerDistributionSubsystem;
   private final TagTracking apriltagTracking;
   private int switchMode = 4;
+  private boolean isMaunal = false;
   // private final SparkMaxRelativeEncoder riseEncoderSPX;
 
   public RotateShooterSubsystem(PowerDistributionSubsystem powerDistributionSubsystem,
@@ -105,15 +106,11 @@ public class RotateShooterSubsystem extends SubsystemBase {
       case 1:
         setSetpoint(getAimDegree(getSetpoint()));
         break;
-      //AMPDegree
-      case 2:
-        setSetpoint(getAMPDegree(getSetpoint()));
-        break;
       //carryDegree:0
-      case 3:
+      case 2:
         setSetpoint(RotateShooterConstants.kEndDegree);
       //initDegree:57
-      case 4:
+      case 3:
         setSetpoint(RotateShooterConstants.kInitDegree);
         break;
       default:
@@ -121,6 +118,15 @@ public class RotateShooterSubsystem extends SubsystemBase {
     }
   }
 
+  public void changeMaunalMode(boolean mode){
+    isMaunal = mode;
+  }
+
+  public Command changeMaunalModeCmd(boolean mode){
+    Command cmd = runOnce(() -> changeMaunalMode(mode));
+    cmd.setName("changeMaunalModeCmd");
+    return cmd;
+  }
   public void setMode(int mode){
     switchMode = mode;
   }
@@ -168,10 +174,17 @@ public class RotateShooterSubsystem extends SubsystemBase {
         : (angle > RotateShooterConstants.kRotateAngleMax ? 1 : 0));
   }
 
+  private void changeRotateMode(){
+    if(!isMaunal){
+      switchMode();
+      setPIDControl();
+    }
+
+  }
+
   @Override
   public void periodic() {
-    switchMode();
-    setPIDControl();
+    changeRotateMode();
     SmartDashboard.putData("rotate_PID", rotatePID);
     SmartDashboard.putNumber("encoderDegree", getAngleDegree());
     SmartDashboard.putNumber("switchMode", switchMode);

@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
 import frc.robot.commands.IntakeWithTransportCmd;
@@ -22,6 +23,7 @@ import frc.robot.subsystems.visionProcessing.TagTracking;
 
 public class RobotContainer {
   private final CommandXboxController mainController;
+  private final CommandGenericHID controlPanel;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
   private final Drivebase drivebase;
   private final IntakeSubsystem intakeSubsystem;
@@ -34,6 +36,7 @@ public class RobotContainer {
     tagTracking = new TagTracking();
     // define subsystems
     mainController = new CommandXboxController(DriveControllerConstants.kMainController);
+    controlPanel = new CommandGenericHID(DriveControllerConstants.kControlPanel);
     powerDistributionSubsystem = new PowerDistributionSubsystem();
     drivebase = new Drivebase();
     rotateShooterSubsystem = new RotateShooterSubsystem(powerDistributionSubsystem, tagTracking);
@@ -54,12 +57,14 @@ public class RobotContainer {
     mainController.x().whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
 
     // shooter
-    mainController.b().toggleOnTrue(shooterSubsystem.shootPIDRateCmd().alongWith(rotateShooterSubsystem.setModeCmd(1))).toggleOnFalse(rotateShooterSubsystem.setModeCmd(4));
-    // mainController.a().whileTrue(shooterSubsystem.setRateModeCmd(1).alongWith(rotateShooterSubsystem.setModeCmd(1)))
-    // .whileFalse(shooterSubsystem.setRateModeCmd(2).alongWith(rotateShooterSubsystem.setModeCmd(2)));
-    // mainController.leftBumper()
-    // .whileTrue(shooterSubsystem.setRateModeCmd(3).alongWith(rotateShooterSubsystem.setModeCmd(3)))
-    // .whileFalse(shooterSubsystem.setRateModeCmd(1).alongWith(rotateShooterSubsystem.setModeCmd(4)));
+    mainController.b().toggleOnTrue(shooterSubsystem.shootPIDRateCmd().alongWith(rotateShooterSubsystem.setModeCmd(1)))
+        .toggleOnFalse(rotateShooterSubsystem.setModeCmd(4));
+    controlPanel.button(0)
+        .whileTrue(shooterSubsystem.setRateModeCmd(3).alongWith(rotateShooterSubsystem.setModeCmd(3)))
+        .whileFalse(shooterSubsystem.setRateModeCmd(1).alongWith(rotateShooterSubsystem.setModeCmd(1)));
+    controlPanel.button(1)
+        .whileTrue(rotateShooterSubsystem.changeMaunalModeCmd(true))
+        .whileFalse(rotateShooterSubsystem.changeMaunalModeCmd(false));
 
     // transport
     mainController.a().whileTrue(new TransportShootCmd(transportSubsystem, shooterSubsystem));
