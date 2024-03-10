@@ -14,7 +14,7 @@ public final class Constants {
 
     public static class DriveControllerConstants {
         public static final int kMainController = 0;
-        public static final int kControlPanel = 2;
+        public static final int kControlPanel = 1;
     }
 
     public static class ShooterConstants {
@@ -31,8 +31,8 @@ public final class Constants {
         public static final double kUpMotorManualVoltage = 10.0;
         public static final double kDownMotorManualVoltage = 10.0;
         public static final double[] kSpeakerShootRate = { 60.0, 60.0 };
-        public static final double[] kAmpShootRate = { 30.0, 45.0 };
         public static final double[] kCarryShooterRate = { 30.0, 30.0 };
+        public static final double[] kInitShooterRate = {60.0,60.0};
         public static final double kShooterRateOffset = 15;
         public static final double kP = 0.0;
         public static final double kI = 0.0;

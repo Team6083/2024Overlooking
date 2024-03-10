@@ -71,13 +71,12 @@ public class ShooterSubsystem extends SubsystemBase {
         downRate = ShooterConstants.kSpeakerShootRate[1];
         break;
       case 2:
-        upRate = ShooterConstants.kAmpShootRate[0];
-        downRate = ShooterConstants.kAmpShootRate[1];
-        break;
-      case 3:
         upRate = ShooterConstants.kCarryShooterRate[0];
         downRate = ShooterConstants.kCarryShooterRate[1];
         break;
+      case 3:
+        upRate = ShooterConstants.kInitShooterRate[0];
+        downRate = ShooterConstants.kInitShooterRate[1];
       default:
         upRate = 0;
         downRate = 0;
@@ -151,11 +150,11 @@ public class ShooterSubsystem extends SubsystemBase {
         return (getUpEncoderRate() >= ShooterConstants.kSpeakerShootRate[0] - ShooterConstants.kShooterRateOffset
             && getDownEncoderRate() >= ShooterConstants.kSpeakerShootRate[1] - ShooterConstants.kShooterRateOffset);
       case 2:
-        return (getUpEncoderRate() >= ShooterConstants.kAmpShootRate[0] - ShooterConstants.kShooterRateOffset
-            && getDownEncoderRate() >= ShooterConstants.kAmpShootRate[1] - ShooterConstants.kShooterRateOffset);
-      case 3:
         return (getUpEncoderRate() >= ShooterConstants.kCarryShooterRate[0] - ShooterConstants.kShooterRateOffset
             && getDownEncoderRate() >= ShooterConstants.kCarryShooterRate[1] - ShooterConstants.kShooterRateOffset);
+      case 3:
+        return (getUpEncoderRate() >= ShooterConstants.kInitShooterRate[0] - ShooterConstants.kShooterRateOffset
+            && getDownEncoderRate() >= ShooterConstants.kInitShooterRate[1] - ShooterConstants.kShooterRateOffset);
       default:
         return false;
     }
