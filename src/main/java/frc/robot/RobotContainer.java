@@ -54,21 +54,22 @@ public class RobotContainer {
     mainController.x().whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
 
     // shooter
+    mainController.b().toggleOnTrue(shooterSubsystem.shootPIDRateCmd());
+    // mainController.a().whileTrue(shooterSubsystem.setRateModeCmd(1).alongWith(rotateShooterSubsystem.setModeCmd(1)))
+    // .whileFalse(shooterSubsystem.setRateModeCmd(2).alongWith(rotateShooterSubsystem.setModeCmd(2)));
+    // mainController.leftBumper()
+    // .whileTrue(shooterSubsystem.setRateModeCmd(3).alongWith(rotateShooterSubsystem.setModeCmd(3)))
+    // .whileFalse(shooterSubsystem.setRateModeCmd(1).alongWith(rotateShooterSubsystem.setModeCmd(4)));
+
+    // transport
     mainController.a().toggleOnTrue(new TransportShootCmd(transportSubsystem, shooterSubsystem));
 
-    mainController.b().toggleOnTrue(shooterSubsystem.shootPIDRateCmd());
-    mainController.a().whileTrue(shooterSubsystem.setRateModeCmd(1).alongWith(rotateShooterSubsystem.setModeCmd(1)))
-        .whileFalse(shooterSubsystem.setRateModeCmd(2).alongWith(rotateShooterSubsystem.setModeCmd(2)));
-    mainController.leftBumper()
-        .whileTrue(shooterSubsystem.setRateModeCmd(3).alongWith(rotateShooterSubsystem.setModeCmd(3)))
-        .whileFalse(shooterSubsystem.setRateModeCmd(1).alongWith(rotateShooterSubsystem.setModeCmd(4)));
-    // transport
-    mainController.back().toggleOnTrue(transportSubsystem.setTransportCmd());
     // hook
 
     // semi-automatic
 
     // reset
+    mainController.back().onTrue(drivebase.gyroResetCmd());
   }
 
   public Command getAutonomousCommand() {

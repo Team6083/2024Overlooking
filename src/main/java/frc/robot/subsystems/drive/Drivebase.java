@@ -213,4 +213,11 @@ public class Drivebase extends SubsystemBase {
     field2d.setRobotPose(getPose2d());
     putDashboard();
   }
+
+  
+  public Command gyroResetCmd() {
+    Command cmd = this.runOnce(this::resetGyro);
+    cmd.setName("gyroResetCmd");
+    return cmd;
+  }
 }
