@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.driveControls;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.subsystems.drive.Drivebase;
 
-public class NoteDriveCmd extends Command {
-  /** Creates a new NoteDriveCmd. */
+public class TagDriveCmd extends Command {
+  /** Creates a new TagDriveCmd. */
   private final Drivebase drivebase;
   private final CommandXboxController main;
   private final SlewRateLimiter xLimiter;
@@ -19,7 +19,8 @@ public class NoteDriveCmd extends Command {
   private final SlewRateLimiter rotLimiter;
   private final double drivebaseMaxSpeed = DrivebaseConstants.kMaxSpeed;
   private double xSpeed, ySpeed, rotSpeed, magnification;
-  public NoteDriveCmd(Drivebase drivebase, CommandXboxController main) {
+
+  public TagDriveCmd(Drivebase drivebase, CommandXboxController main) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivebase = drivebase;
     this.main = main;
@@ -35,7 +36,7 @@ public class NoteDriveCmd extends Command {
     xSpeed = xLimiter.calculate(main.getLeftY()) * drivebaseMaxSpeed * magnification; // forward
     ySpeed = yLimiter.calculate(main.getLeftX()) * drivebaseMaxSpeed * magnification; // side
     rotSpeed = rotLimiter.calculate(main.getRightX()) * drivebaseMaxSpeed;
-    drivebase.noteTracking(xSpeed, ySpeed, rotSpeed);
+    drivebase.tagTracking(xSpeed, ySpeed, rotSpeed);
   }
 
   // Called once the command ends or is interrupted.
