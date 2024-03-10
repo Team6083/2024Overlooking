@@ -33,6 +33,11 @@ public class TransportSubsystem extends SubsystemBase {
     setVoltage(TransportConstants.kTransVoltage);
   }
 
+  public Command setTransportCmd(){
+    Command cmd = runEnd(()->setTransport(), ()->stopMotor());
+    return cmd;
+  }
+
   public void setReTransport() {
     setVoltage(TransportConstants.kReTransVoltage);
   }

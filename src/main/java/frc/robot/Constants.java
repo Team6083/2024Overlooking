@@ -50,7 +50,7 @@ public final class Constants {
         public static final boolean kTransportInverted = true;
         public static final double kTransVoltage = 5;
         public static final double kReTransVoltage = -5;
-        public static final double kDistanceRange = 8.0;
+        public static final double kDistanceRange = 3.0;
     }
 
     public static class IntakeConstants {
@@ -75,9 +75,9 @@ public final class Constants {
         public static final double kSpeakerHeight = 2.0;
         public static final double kAMPHeight = 0.89;
         public static final double kShooterHeight = 0.31;
-        public static final double kP = 0.095;
-        public static final double kI = 0.0004;
-        public static final double kD = 0.0002;
+        public static final double kP = 0.05;
+        public static final double kI = 0.00001;
+        public static final double kD = 0.0001;
     }
 
     public static class RotateIntakeConstants {

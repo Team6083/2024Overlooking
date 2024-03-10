@@ -55,13 +55,13 @@ public class RobotContainer {
     // shooter
 
     mainController.b().toggleOnTrue(shooterSubsystem.shootPIDRateCmd());
-    mainController.a().whileTrue(shooterSubsystem.setRateModeCmd(1).alongWith(rotateShooterSubsystem.setModeCmd(1)))
-        .whileFalse(shooterSubsystem.setRateModeCmd(2).alongWith(rotateShooterSubsystem.setModeCmd(2)));
+    mainController.a().whileTrue(shooterSubsystem.setRateModeCmd(0).alongWith(rotateShooterSubsystem.setModeCmd(1)))
+        .whileFalse(shooterSubsystem.setRateModeCmd(2).alongWith(rotateShooterSubsystem.setModeCmd(4)));
     mainController.leftBumper()
         .whileTrue(shooterSubsystem.setRateModeCmd(3).alongWith(rotateShooterSubsystem.setModeCmd(3)))
         .whileFalse(shooterSubsystem.setRateModeCmd(1).alongWith(rotateShooterSubsystem.setModeCmd(4)));
     // transport
-
+    mainController.back().toggleOnTrue(transportSubsystem.setTransportCmd());
     // hook
 
     // semi-automatic
