@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "x2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "connect_y2"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Test",
+  "choreoAuto": false
+}

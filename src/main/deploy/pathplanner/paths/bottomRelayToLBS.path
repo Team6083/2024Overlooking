@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.513940720189134,
+        "y": 1.8352513628104188
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.362947187432837,
+        "y": 1.4701744788104976
+      },
+      "isLocked": false,
+      "linkedName": "BottomRelay"
+    },
+    {
+      "anchor": {
+        "x": 2.0,
+        "y": 3.0
+      },
+      "prevControl": {
+        "x": 2.843437994568298,
+        "y": 1.7760497059455664
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "LeftBottomShoot"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -52.25,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Relay To Shoot Point",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
