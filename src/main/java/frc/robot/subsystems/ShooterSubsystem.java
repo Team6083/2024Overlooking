@@ -147,13 +147,13 @@ public class ShooterSubsystem extends SubsystemBase {
    */
   public boolean isEnoughRate() {
     switch (rateMode) {
-      case 0:
+      case 1:
         return (getUpEncoderRate() >= ShooterConstants.kSpeakerShootRate[0] - ShooterConstants.kShooterRateOffset
             && getDownEncoderRate() >= ShooterConstants.kSpeakerShootRate[1] - ShooterConstants.kShooterRateOffset);
-      case 1:
+      case 2:
         return (getUpEncoderRate() >= ShooterConstants.kAmpShootRate[0] - ShooterConstants.kShooterRateOffset
             && getDownEncoderRate() >= ShooterConstants.kAmpShootRate[1] - ShooterConstants.kShooterRateOffset);
-      case 2:
+      case 3:
         return (getUpEncoderRate() >= ShooterConstants.kCarryShooterRate[0] - ShooterConstants.kShooterRateOffset
             && getDownEncoderRate() >= ShooterConstants.kCarryShooterRate[1] - ShooterConstants.kShooterRateOffset);
       default:

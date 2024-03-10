@@ -101,17 +101,21 @@ public class RotateShooterSubsystem extends SubsystemBase {
 
   public void switchMode() {
     switch (switchMode) {
-      case 0:
-        setSetpoint(RotateShooterConstants.kInitDegree);
-        break;
+      //speakerDegree
       case 1:
         setSetpoint(getAimDegree(getSetpoint()));
         break;
+      //AMPDegree
       case 2:
-        setSetpoint(RotateShooterConstants.kEndDegree);
-        break;
-      case 3:
         setSetpoint(getAMPDegree(getSetpoint()));
+        break;
+      //carryDegree:0
+      case 3:
+        setSetpoint(RotateShooterConstants.kEndDegree);
+      //initDegree:57
+      case 4:
+        setSetpoint(RotateShooterConstants.kInitDegree);
+        break;
       default:
         break;
     }
