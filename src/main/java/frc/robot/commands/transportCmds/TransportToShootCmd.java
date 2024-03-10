@@ -12,10 +12,10 @@ import frc.robot.subsystems.TransportSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TransportShootCmd extends ParallelDeadlineGroup {
+public class TransportToShootCmd extends ParallelDeadlineGroup {
 
   /** Creates a new TransCmd. */
-  public TransportShootCmd(TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem) {
+  public TransportToShootCmd(TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem) {
     super(new WaitCommand(3).onlyWhile(shooterSubsystem::isEnoughRate));
     addCommands(
         transportSubsystem.setTransportCmd().onlyWhile(shooterSubsystem::isEnoughRate));

@@ -12,7 +12,7 @@ import frc.robot.Constants.DriveControllerConstants;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.controllerCmds.SwerveJoystickCmd;
-import frc.robot.commands.transportCmds.TransportShootCmd;
+import frc.robot.commands.transportCmds.TransportToShootCmd;
 import frc.robot.subsystems.HookSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionSubsystem;
@@ -70,7 +70,7 @@ public class RobotContainer {
         .whileFalse(rotateShooterSubsystem.changeMaunalModeCmd(false));
 
     // transport
-    mainController.a().whileTrue(new TransportShootCmd(transportSubsystem, shooterSubsystem));
+    mainController.a().whileTrue(new TransportToShootCmd(transportSubsystem, shooterSubsystem));
 
     // hook
     mainController.rightTrigger(0.5).whileTrue(hookSubsystem.upAllCmd());
