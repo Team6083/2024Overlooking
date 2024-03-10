@@ -30,7 +30,7 @@ public final class Constants {
         public static final Boolean kDownEncoderInverted = true;
         public static final double kUpMotorManualVoltage = 10.0;
         public static final double kDownMotorManualVoltage = 10.0;
-        public static final double[] kSpeakerShootRate = { 60.0, 60.0 };
+        public static final double[] kSpeakerShootRate = { 70.0, 70.0 };
         public static final double[] kAmpShootRate = { 30.0, 45.0 };
         public static final double[] kCarryShooterRate = { 30.0, 30.0 };
         public static final double kShooterRateOffset = 5;
@@ -159,7 +159,7 @@ public final class Constants {
         public static final double kFrontLeftCanCoderMagOffset = -0.079590;
         public static final double kFrontRightCanCoderMagOffset = -0.458984;
         public static final double kBackLeftCanCoderMagOffset = 0.355225;
-        public static final double kBackRightCanCoderMagOffset = -0.333984;
+        public static final double kBackRightCanCoderMagOffset = -0.160156;
 
         public static final double kMaxSpeed = 5;
         public static final double kMinSpeed = 0.25;
