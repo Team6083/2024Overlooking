@@ -48,7 +48,7 @@ public class TransportSubsystem extends SubsystemBase {
     return false;
   }
 
-  public void setVoltage(double voltage) {
+  private void setVoltage(double voltage) {
     if (powerDistributionSubsystem.isTransportOverCurrent()) {
       stopMotor();
       return;
