@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,13 +23,13 @@ public class RotateShooterSubsystem extends SubsystemBase {
   private final PIDController rotatePID;
   private double rotateDegreeError = 0.0;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
-  private final TagTracking apriltagTracking;
+  private final TagTracking tagTracking;
   private int switchMode = 4;
   private boolean isMaunal = false;
   // private final SparkMaxRelativeEncoder riseEncoderSPX;
 
   public RotateShooterSubsystem(PowerDistributionSubsystem powerDistributionSubsystem,
-      TagTracking aprilTagTracking) {
+      TagTracking tagTracking) {
     rotateMotor = new CANSparkMax(RotateShooterConstants.kRotateShooterChannel, MotorType.kBrushless);
 
     rotateEncoder = new DutyCycleEncoder(RotateShooterConstants.kEncoderChannel);
@@ -39,7 +38,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
 
     rotateMotor.setInverted(RotateShooterConstants.kRotateShooterInverted);
     this.powerDistributionSubsystem = powerDistributionSubsystem;
-    this.apriltagTracking = aprilTagTracking;
+    this.tagTracking = tagTracking;
     rotatePID.enableContinuousInput(-180.0, 180.0);
     setSetpoint(RotateShooterConstants.kInitDegree);
   }
@@ -82,19 +81,19 @@ public class RotateShooterSubsystem extends SubsystemBase {
   }
 
   public double getAimDegree(double currentDegree) {
-    if (apriltagTracking.getTv() == 1 && apriltagTracking.getTID() != 3.0
-        && apriltagTracking.getTID() != 8.0) {
+    if (tagTracking.getTv() == 1 && tagTracking.getTID() != 3.0
+        && tagTracking.getTID() != 8.0) {
       double speakerToShooterHeight = RotateShooterConstants.kSpeakerHeight - RotateShooterConstants.kShooterHeight;
-      double degree = Math.toDegrees(Math.atan(speakerToShooterHeight / apriltagTracking.getHorizontalDistanceByCT()));
+      double degree = Math.toDegrees(Math.atan(speakerToShooterHeight / tagTracking.getHorizontalDistanceByCT()));
       return degree;
     }
     return currentDegree;
   }
 
   public double getAmpDegree(double currentDegree) {
-    if (apriltagTracking.getTv() == 1) {
+    if (tagTracking.getTv() == 1) {
       double ampToShooterHeight = RotateShooterConstants.kAMPHeight - RotateShooterConstants.kShooterHeight;
-      double degree = Math.toDegrees(Math.atan(ampToShooterHeight / apriltagTracking.getHorizontalDistanceByCT()));
+      double degree = Math.toDegrees(Math.atan(ampToShooterHeight / tagTracking.getHorizontalDistanceByCT()));
       return degree;
     }
     return currentDegree;
@@ -186,10 +185,9 @@ public class RotateShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // changeRotateMode();
+    changeRotateMode();
     SmartDashboard.putData("rotate_PID", rotatePID);
     SmartDashboard.putNumber("encoderDegree", getAngle());
-    // SmartDashboard.putNumber("switchMode", switchMode);
   }
 
   public Command setInherentSetpoint() {
