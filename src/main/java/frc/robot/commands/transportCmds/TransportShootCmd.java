@@ -15,10 +15,7 @@ public class TransportShootCmd extends SequentialCommandGroup {
 
   /** Creates a new TransCmd. */
   public TransportShootCmd(TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem) {
-
-
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
-    addCommands(transportSubsystem.setTransportCmd().onlyWhile(shooterSubsystem::isEnoughRate));
+    addCommands(
+        transportSubsystem.setTransportCmd().onlyWhile(shooterSubsystem::isEnoughRate));
   }
 }
