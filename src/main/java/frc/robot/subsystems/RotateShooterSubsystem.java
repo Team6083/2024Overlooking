@@ -101,7 +101,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
 
   /**
    * @param 0 init degree
-   * @param 1 speaker degree
+   * @param 1 aim degree
    * @param 2 carry degree
    * @param 3
    */
