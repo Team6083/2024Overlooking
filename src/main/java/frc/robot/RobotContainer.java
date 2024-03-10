@@ -11,7 +11,7 @@ import frc.robot.Constants.DriveControllerConstants;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.controllerCmds.SwerveJoystickCmd;
-import frc.robot.commands.transportCmds.TransCmd;
+import frc.robot.commands.transportCmds.TransportShootCmd;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionSubsystem;
 import frc.robot.subsystems.RotateShooterSubsystem;
@@ -54,7 +54,7 @@ public class RobotContainer {
     mainController.x().whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
 
     // shooter
-    mainController.a().toggleOnTrue(new TransCmd(transportSubsystem, shooterSubsystem));
+    mainController.a().toggleOnTrue(new TransportShootCmd(transportSubsystem, shooterSubsystem));
 
     mainController.b().toggleOnTrue(shooterSubsystem.shootPIDRateCmd());
     mainController.a().whileTrue(shooterSubsystem.setRateModeCmd(1).alongWith(rotateShooterSubsystem.setModeCmd(1)))
