@@ -34,10 +34,12 @@ public class SwerveModule extends SubsystemBase {
 
   private final PIDController rotController;
 
+  private final String name;
+
   public SwerveModule(int driveMotorChannel,
       int turningMotorChannel,
-      int turningEncoderChannel, boolean driveInverted, double canCoderMagOffset) {
-
+      int turningEncoderChannel, boolean driveInverted, double canCoderMagOffset, String name) {
+    this.name = name;
     driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
     turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
@@ -146,14 +148,14 @@ public class SwerveModule extends SubsystemBase {
       var moduleState = optimizeOutputVoltage(desiredState, getRotation());
       driveMotor.setVoltage(moduleState[0]);
       turningMotor.setVoltage(moduleState[1]);
-      SmartDashboard.putNumber("turningEncoder_ID" + turningEncoder.getDeviceID() + "_voltage", moduleState[0]);
+      SmartDashboard.putNumber(name + "_voltage", moduleState[0]);
     }
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("turningEncoder_ID" + turningEncoder.getDeviceID() + "_degree", getRotation());
+    SmartDashboard.putNumber(name + "_degree", getRotation());
   }
 
 }
