@@ -75,10 +75,10 @@ public class RobotContainer {
     // hook
     mainController.rightTrigger(0.5).whileTrue(hookSubsystem.upAllCmd());
     mainController.leftTrigger(0.5).whileTrue(hookSubsystem.downAllCmd());
-    controlPanel.button(5).whileTrue(hookSubsystem.leftUpIndivisual());
-    controlPanel.button(6).whileTrue(hookSubsystem.leftDownIndivisual());
-    controlPanel.button(7).whileTrue(hookSubsystem.rightUpIndivisual());
-    controlPanel.button(8).whileTrue(hookSubsystem.rightDownIndivisual());
+    controlPanel.button(4).whileTrue(hookSubsystem.leftUpIndivisual());
+    controlPanel.button(5).whileTrue(hookSubsystem.leftDownIndivisual());
+    controlPanel.button(6).whileTrue(hookSubsystem.rightUpIndivisual());
+    controlPanel.button(7).whileTrue(hookSubsystem.rightDownIndivisual());
 
     // semi-automatic
 
