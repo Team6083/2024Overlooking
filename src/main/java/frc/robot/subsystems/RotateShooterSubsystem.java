@@ -166,6 +166,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    switchMode();
     setPIDControl();
     SmartDashboard.putData("rotate_PID", rotatePID);
     SmartDashboard.putNumber("encoderDegree", getAngleDegree());
