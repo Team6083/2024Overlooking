@@ -66,15 +66,15 @@ public class ShooterSubsystem extends SubsystemBase {
     double upRate;
     double downRate;
     switch (rateMode) {
-      case 0:
+      case 1:
         upRate = ShooterConstants.kSpeakerShootRate[0];
         downRate = ShooterConstants.kSpeakerShootRate[1];
         break;
-      case 1:
+      case 2:
         upRate = ShooterConstants.kAmpShootRate[0];
         downRate = ShooterConstants.kAmpShootRate[1];
         break;
-      case 2:
+      case 3:
         upRate = ShooterConstants.kCarryShooterRate[0];
         downRate = ShooterConstants.kCarryShooterRate[1];
         break;
