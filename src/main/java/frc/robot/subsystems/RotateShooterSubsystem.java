@@ -44,8 +44,8 @@ public class RotateShooterSubsystem extends SubsystemBase {
     setSetpoint(RotateShooterConstants.kInitDegree);
   }
 
-  public void setManualControl(double RotateSpeed) {
-    setMotor(RotateSpeed);
+  public void setManualControl(double rotateSpeed) {
+    setMotor(rotateSpeed);
     rotatePID.setSetpoint(getAngle());
   }
 
@@ -91,7 +91,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
     return currentDegree;
   }
 
-  public double getAMPDegree(double currentDegree) {
+  public double getAmpDegree(double currentDegree) {
     if (apriltagTracking.getTv() == 1) {
       double ampToShooterHeight = RotateShooterConstants.kAMPHeight - RotateShooterConstants.kShooterHeight;
       double degree = Math.toDegrees(Math.atan(ampToShooterHeight / apriltagTracking.getHorizontalDistanceByCT()));
@@ -100,40 +100,43 @@ public class RotateShooterSubsystem extends SubsystemBase {
     return currentDegree;
   }
 
+  /**
+   * @param 0 init degree
+   * @param 1 speaker degree
+   * @param 2 carry degree
+   * @param 3
+   */
   public void switchMode() {
     switch (switchMode) {
-      //speakerDegree
+      case 0:
+        setSetpoint(RotateShooterConstants.kInitDegree);
+        break;
       case 1:
         setSetpoint(getAimDegree(getSetpoint()));
         break;
-      //carryDegree:0
       case 2:
         setSetpoint(RotateShooterConstants.kCarryDegree);
-      //initDegree:57
-      case 3:
-        setSetpoint(RotateShooterConstants.kInitDegree);
-        break;
       default:
         break;
     }
   }
 
-  public void changeMaunalMode(boolean mode){
+  public void changeMaunalMode(boolean mode) {
     isMaunal = mode;
   }
 
-  public Command changeMaunalModeCmd(boolean mode){
+  public Command changeMaunalModeCmd(boolean mode) {
     Command cmd = runOnce(() -> changeMaunalMode(mode));
     cmd.setName("changeMaunalModeCmd");
     return cmd;
   }
-  public void setMode(int mode){
+
+  public void setMode(int mode) {
     switchMode = mode;
   }
 
-
-  public Command setModeCmd(int mode){
-    Command cmd = runOnce(()-> setMode(mode));
+  public Command setModeCmd(int mode) {
+    Command cmd = runOnce(() -> setMode(mode));
     cmd.setName("setModeCmd");
     return cmd;
   }
@@ -174,27 +177,26 @@ public class RotateShooterSubsystem extends SubsystemBase {
         : (angle > RotateShooterConstants.kRotateAngleMax ? 1 : 0));
   }
 
-  private void changeRotateMode(){
-    if(!isMaunal){
+  private void changeRotateMode() {
+    if (!isMaunal) {
       switchMode();
       setPIDControl();
     }
-
   }
 
   @Override
   public void periodic() {
-    changeRotateMode();
+    // changeRotateMode();
     SmartDashboard.putData("rotate_PID", rotatePID);
     SmartDashboard.putNumber("encoderDegree", getAngle());
-    SmartDashboard.putNumber("switchMode", switchMode);
+    // SmartDashboard.putNumber("switchMode", switchMode);
   }
 
-  @Override
-  public void initSendable(SendableBuilder builder) {
-    builder.setSmartDashboardType("RotateShooterSubsystem");
-    builder.addDoubleProperty("rotateVoltage", () -> rotateMotor.get() * rotateMotor.getBusVoltage(), null);
-    builder.addDoubleProperty("roateAngelDegree", () -> this.getAimDegree(getAngle()), null);
-    rotatePID.initSendable(builder);
+  public Command setInherentSetpoint() {
+    Command cmd = Commands.run(
+        () -> setSetpoint(RotateShooterConstants.kInitDegree),
+        this);
+    cmd.setName("setInherentSetpoint");
+    return cmd;
   }
 }
