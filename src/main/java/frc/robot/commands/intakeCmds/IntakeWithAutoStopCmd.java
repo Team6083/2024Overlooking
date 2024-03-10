@@ -7,12 +7,12 @@ package frc.robot.commands.intakeCmds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class IntakeDistanceCmd extends Command {
+public class IntakeWithAutoStopCmd extends Command {
   /** Creates a new TeleopModeIntakeCmd. */
   private final IntakeSubsystem intakeSubsystem;
   private final boolean isGetNote;
 
-  public IntakeDistanceCmd(IntakeSubsystem intakeSubsystem, boolean isGetNote) {
+  public IntakeWithAutoStopCmd(IntakeSubsystem intakeSubsystem, boolean isGetNote) {
     this.intakeSubsystem = intakeSubsystem;
     this.isGetNote = isGetNote;
     addRequirements(this.intakeSubsystem);
