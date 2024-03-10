@@ -54,6 +54,9 @@ public class RobotContainer {
 
     // shooter
     mainController.b().toggleOnTrue(shooterSubsystem.shootPIDRateCmd());
+    mainController.a().whileTrue(shooterSubsystem.setRateModeCmd(1));
+    mainController.a().whileFalse(shooterSubsystem.setRateModeCmd(0));
+
 
     // transport
 

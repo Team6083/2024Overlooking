@@ -25,6 +25,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
   private double rotateDegreeError = 0.0;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
   private final TagTracking apriltagTracking;
+  private int switchMode = 0;
   // private final SparkMaxRelativeEncoder riseEncoderSPX;
 
   public RotateShooterSubsystem(PowerDistributionSubsystem powerDistributionSubsystem,
@@ -89,7 +90,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
     return currentDegree;
   }
 
-    public double getAMPDegree(double currentDegree) {
+  public double getAMPDegree(double currentDegree) {
     if (apriltagTracking.getTv() == 1) {
       double ampToShooterHeight = RotateShooterConstants.kAMPHeight - RotateShooterConstants.kShooterHeight;
       double degree = Math.toDegrees(Math.atan(ampToShooterHeight / apriltagTracking.getHorizontalDistanceByCT()));
@@ -98,11 +99,32 @@ public class RotateShooterSubsystem extends SubsystemBase {
     return currentDegree;
   }
 
+  public void switchMode() {
+    switch (switchMode) {
+      case 0:
+        setSetpoint(RotateShooterConstants.kInitDegree);
+        break;
+      case 1:
+        setSetpoint(getAimDegree(getSetpoint()));
+        break;
+      case 2:
+        setSetpoint(RotateShooterConstants.kEndDegree);
+        break;
+      case 3:
+        setSetpoint(getAMPDegree(getSetpoint()));
+      default:
+        break;
+    }
+  }
 
-  public Command setAutoAim() {
-    Command cmd = Commands.runOnce(
-        () -> setSetpoint(getAimDegree(getSetpoint())), this);
-    cmd.setName("autoAimCmd");
+  public void setMode(int mode){
+    switchMode = mode;
+  }
+
+
+  public Command setModeCmd(int mode){
+    Command cmd = runOnce(()-> setMode(mode));
+    cmd.setName("setModeCmd");
     return cmd;
   }
 
@@ -147,6 +169,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
     setPIDControl();
     SmartDashboard.putData("rotate_PID", rotatePID);
     SmartDashboard.putNumber("encoderDegree", getAngleDegree());
+    SmartDashboard.putNumber("switchMode", switchMode);
   }
 
   @Override

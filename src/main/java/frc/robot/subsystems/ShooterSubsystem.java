@@ -47,8 +47,6 @@ public class ShooterSubsystem extends SubsystemBase {
         ShooterConstants.kDownMotorV,
         ShooterConstants.kDownMotorA);
 
-    rateMode = 0;
-
     resetEncoder();
 
     this.powerDistributionSubsystem = powerDistribution;
@@ -175,6 +173,12 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("shooterRateMode", rateMode);
   }
 
+  public Command setRateModeCmd(int mode) {
+    Command cmd = runOnce(() -> setRateMode(mode));
+    cmd.setName("setRateModeCmd");
+    return cmd;
+  }
+
   public Command shootPIDRateCmd() {
     Command cmd = runEnd(
         this::setRateControl,
@@ -185,7 +189,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public Command resetEncoderCmd() {
     Command cmd = runOnce(
-      this::resetEncoderCmd);
+        this::resetEncoderCmd);
     cmd.setName("resetEncoderCmd");
     return cmd;
   }
