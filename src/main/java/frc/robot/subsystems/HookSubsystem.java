@@ -12,6 +12,7 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -48,6 +49,8 @@ public class HookSubsystem extends SubsystemBase {
     rightMotor.setInverted(HookConstants.kRightMotorInverted);
     lineMotor.setInverted(HookConstants.kLineMotorInverted);
     this.powerDistributionSubsystem = powerDistributionSubsystem;
+
+    resetEncoder();
   }
 
   private double getLineSetpoint() {
@@ -216,28 +219,16 @@ public class HookSubsystem extends SubsystemBase {
     linePIDControl();
     leftPIDControl();
     rightPIDControl();
-    // This method will be called once per scheduler run
-    // SmartDashboard.putData("LINEPID", linePID);
-    // SmartDashboard.putData("left hook motor", hookLeftMotorPID);
-    // SmartDashboard.putData("Right hook PID", hookRightMotorPID);
+    SmartDashboard.putData(linePID);
+    SmartDashboard.putData(leftPID);
+    SmartDashboard.putData(rightPID);
+    SmartDashboard.putNumber("hookLineVoltage", lineMotor.get() * lineMotor.getBusVoltage());
+    SmartDashboard.putNumber("hookLeftVoltage", leftMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("hookRightVoltage", rightMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("hookLinePosition", getLinePosition());
+    SmartDashboard.putNumber("hookLeftPosition", getLeftPosition());
+    SmartDashboard.putNumber("hookRightPosition", getRightPosition());
   }
-
-  // @Override
-  // public void initSendable(SendableBuilder builder) {
-  // builder.setSmartDashboardType("hookSubsystem");
-  // builder.addDoubleProperty("lineVoltage", () -> lineMotor.get() *
-  // lineMotor.getBusVoltage(), null);
-  // builder.addDoubleProperty("hookLeftMotorVoltage",
-  // leftMotor::getMotorOutputVoltage, null);
-  // builder.addDoubleProperty("hookRightMotorVoltage",
-  // rightMotor::getMotorOutputVoltage, null);
-  // builder.addDoubleProperty("linePosition", lineEncoder::getPosition, null);
-  // builder.addDoubleProperty("hookAbsolutePosition",
-  // leftEncoder::getAbsolutePosition, null);
-  // linePID.initSendable(builder);
-  // leftPID.initSendable(builder);
-  // rightPID.initSendable(builder);
-  // }
 
   public Command upAllCmd() {
     Command cmd = new ParallelCommandGroup(upLineCmd(), upRightCmd(), upLeftCmd());
