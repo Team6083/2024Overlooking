@@ -52,8 +52,8 @@ public class SwerveModule extends SubsystemBase {
 
     driveEncoder = driveMotor.getEncoder();
 
-    rotController = new PIDController(ModuleConstants.kPRotController, ModuleConstants.kIRotController,
-        ModuleConstants.kDRotController);
+    rotController = new PIDController(ModuleConstants.kPRotationController, ModuleConstants.kIRotationController,
+        ModuleConstants.kDRotationController);
     rotController.enableContinuousInput(-180.0, 180.0);
   }
 

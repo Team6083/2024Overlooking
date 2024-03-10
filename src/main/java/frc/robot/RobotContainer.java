@@ -14,18 +14,23 @@ import frc.robot.subsystems.drive.Drivebase;
 public class RobotContainer {
   private final CommandXboxController mainController;
   private final Drivebase drivebase;
+  // private final IntakeSubsystem IntakeSubsystem;
+  // private final ShooterS
 
   public RobotContainer() {
     // define subsystems
     mainController = new CommandXboxController(DriveControllerConstants.kMainController);
     drivebase = new Drivebase();
+    
 
     configureBindings();
   }
 
   private void configureBindings() {
-    // buttons only
+    // drivetrain
     drivebase.setDefaultCommand(new SwerveJoystickCmd(drivebase, mainController));
+
+    //
   }
 
   public Command getAutonomousCommand() {

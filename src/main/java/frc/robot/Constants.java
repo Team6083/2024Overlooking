@@ -198,7 +198,7 @@ public final class Constants {
 
         public static final double kPRotationController = kMaxModuleTuringVoltage / kMaxSpeedTurningDegree;
         public static final double kIRotationController = 0.0;
-        public static final double kDRotController = 0.0004;
+        public static final double kDRotationController = 0.0004;
 
         public static final boolean kTurningMotorInverted = true;
     }
