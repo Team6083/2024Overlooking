@@ -54,7 +54,7 @@ public class RobotContainer {
     mainController.x().whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
 
     // shooter
-    mainController.b().toggleOnTrue(shooterSubsystem.shootPIDRateCmd());
+    mainController.b().toggleOnTrue(shooterSubsystem.shootPIDRateCmd().alongWith(rotateShooterSubsystem.setModeCmd(1))).toggleOnFalse(rotateShooterSubsystem.setModeCmd(4));
     // mainController.a().whileTrue(shooterSubsystem.setRateModeCmd(1).alongWith(rotateShooterSubsystem.setModeCmd(1)))
     // .whileFalse(shooterSubsystem.setRateModeCmd(2).alongWith(rotateShooterSubsystem.setModeCmd(2)));
     // mainController.leftBumper()
@@ -62,7 +62,7 @@ public class RobotContainer {
     // .whileFalse(shooterSubsystem.setRateModeCmd(1).alongWith(rotateShooterSubsystem.setModeCmd(4)));
 
     // transport
-    mainController.a().toggleOnTrue(new TransportShootCmd(transportSubsystem, shooterSubsystem));
+    mainController.a().whileTrue(new TransportShootCmd(transportSubsystem, shooterSubsystem));
 
     // hook
 

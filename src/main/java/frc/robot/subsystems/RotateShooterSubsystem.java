@@ -25,7 +25,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
   private double rotateDegreeError = 0.0;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
   private final TagTracking apriltagTracking;
-  private int switchMode = 0;
+  private int switchMode = 4;
   // private final SparkMaxRelativeEncoder riseEncoderSPX;
 
   public RotateShooterSubsystem(PowerDistributionSubsystem powerDistributionSubsystem,

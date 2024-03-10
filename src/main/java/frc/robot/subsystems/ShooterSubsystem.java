@@ -24,7 +24,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final SimpleMotorFeedforward upMotorFeedForwardController;
   private final SimpleMotorFeedforward downMotorFeedForwardController;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
-  private int rateMode;
+  private int rateMode=1;
 
   public ShooterSubsystem(PowerDistributionSubsystem powerDistribution) {
     upMotor = new VictorSPX(ShooterConstants.kUpMotorChannel);
@@ -171,6 +171,8 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("downMotorRate", getDownEncoderRate());
     SmartDashboard.putBoolean("isEnoughRate", isEnoughRate());
     SmartDashboard.putNumber("shooterRateMode", rateMode);
+    SmartDashboard.putNumber("upMotorVoltage", upMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("downMotorVoltage", downMotor.getMotorOutputVoltage());
   }
 
   public Command setRateModeCmd(int mode) {

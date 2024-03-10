@@ -20,28 +20,28 @@ public final class Constants {
     public static class ShooterConstants {
         public static final int kUpMotorChannel = 26;
         public static final int kDownMotorChannel = 25;
-        public static final int kUpEncoderChannelA = 0;
-        public static final int kUpEncoderChannelB = 1;
-        public static final int kDownEncoderChannelA = 8;
-        public static final int kDownEncoderChannelB = 9;
+        public static final int kUpEncoderChannelA = 8;
+        public static final int kUpEncoderChannelB = 9;
+        public static final int kDownEncoderChannelA = 0;
+        public static final int kDownEncoderChannelB = 1;
         public static final Boolean kUpMotorInverted = false;
         public static final Boolean kDownMotorInverted = false;
         public static final Boolean kUpEncoderInverted = true;
         public static final Boolean kDownEncoderInverted = true;
         public static final double kUpMotorManualVoltage = 10.0;
         public static final double kDownMotorManualVoltage = 10.0;
-        public static final double[] kSpeakerShootRate = { 70.0, 70.0 };
+        public static final double[] kSpeakerShootRate = { 60.0, 60.0 };
         public static final double[] kAmpShootRate = { 30.0, 45.0 };
         public static final double[] kCarryShooterRate = { 30.0, 30.0 };
-        public static final double kShooterRateOffset = 5;
+        public static final double kShooterRateOffset = 15;
         public static final double kP = 0.0;
         public static final double kI = 0.0;
         public static final double kD = 0.0;
-        public static final double kUpMotorS = 1.65;
+        public static final double kUpMotorS = 2.35;
         public static final double kUpMotorV = 0.123;
         public static final double kUpMotorA = 0.0;
         public static final double kDownMotorS = 0.681;
-        public static final double kDownMotorV = 0.165;
+        public static final double kDownMotorV = 0.145;
         public static final double kDownMotorA = 0.0;
     }
 
