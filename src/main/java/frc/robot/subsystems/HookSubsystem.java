@@ -270,7 +270,7 @@ public class HookSubsystem extends SubsystemBase {
     Command cmd = Commands.run(
         () -> setLineSetpoint(getLineSetpoint() - HookConstants.kLineSetpointModify),
         this);
-    cmd.setName("downKineCmd");
+    cmd.setName("downLineCmd");
     return cmd;
   }
 
