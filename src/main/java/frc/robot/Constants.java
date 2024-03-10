@@ -142,7 +142,8 @@ public final class Constants {
 
         public static final double kMaxSpeed = 5;
         public static final double kMinSpeed = 0.25;
-        public static final double kMinJoyStickValue = 0.3;
+        public static final double kMinRot = 0.1;
+        public static final double kMinJoyStickValue = 0.35;
         public static final double kMaxAngularSpeed = 2.5 * Math.PI; // 1/2 rotation per second
 
         public static final double kXLimiterRateLimit = 3.0;
@@ -159,6 +160,11 @@ public final class Constants {
 
         public static final double kDefaultMagnification = 0.8;
         public static final double kHighMagnification = 1.0;
+
+        public static final double kTrackingP = 0.08;
+        public static final double kTrackingI = 0.0;
+        public static final double kTrackingD = 0.0;
+
     }
 
     public static final class ModuleConstants {
@@ -168,7 +174,7 @@ public final class Constants {
 
         public static final double kMaxModuleDriveVoltage = 8.0;
 
-        public static final double kDriveClosedLoopRampRate = 0.8;// 1 second 1 unit
+        public static final double kDriveClosedLoopRampRate = 0.5;// 1 second 1 unit
         public static final double kTurningClosedLoopRampRate = 0.25;
 
         public static final double kDesireSpeedtoMotorVoltage = kMaxModuleDriveVoltage / DrivebaseConstants.kMaxSpeed;

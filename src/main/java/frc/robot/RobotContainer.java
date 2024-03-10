@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NTSendable;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
@@ -20,6 +21,7 @@ import frc.robot.subsystems.RotateShooterSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TransportSubsystem;
 import frc.robot.subsystems.drive.Drivebase;
+import frc.robot.subsystems.visionProcessing.NoteTracking;
 import frc.robot.subsystems.visionProcessing.TagTracking;
 
 public class RobotContainer {
@@ -33,14 +35,16 @@ public class RobotContainer {
   private final RotateShooterSubsystem rotateShooterSubsystem;
   private final HookSubsystem hookSubsystem;
   private final TagTracking tagTracking;
+  private final NoteTracking noteTracking;
 
   public RobotContainer() {
     tagTracking = new TagTracking();
+    noteTracking = new NoteTracking();
     // define subsystems
     mainController = new CommandXboxController(DriveControllerConstants.kMainController);
     controlPanel = new CommandGenericHID(DriveControllerConstants.kControlPanel);
     powerDistributionSubsystem = new PowerDistributionSubsystem();
-    drivebase = new Drivebase();
+    drivebase = new Drivebase(tagTracking, noteTracking);
     rotateShooterSubsystem = new RotateShooterSubsystem(powerDistributionSubsystem, tagTracking);
     intakeSubsystem = new IntakeSubsystem(powerDistributionSubsystem);
     shooterSubsystem = new ShooterSubsystem(powerDistributionSubsystem);

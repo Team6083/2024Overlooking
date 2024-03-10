@@ -6,6 +6,7 @@ package frc.robot.subsystems.drive;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -19,8 +20,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.Constants.DriveControllerConstants;
 import frc.robot.Constants.DrivebaseConstants;
+import frc.robot.subsystems.visionProcessing.NoteTracking;
+import frc.robot.subsystems.visionProcessing.TagTracking;
 
 public class Drivebase extends SubsystemBase {
   /** Creates a new Drivetain. */
@@ -37,6 +40,11 @@ public class Drivebase extends SubsystemBase {
   private final SwerveDriveKinematics kinematics;
   private final SwerveDriveOdometry odometry;
 
+  private final TagTracking tagTracking;
+  private final NoteTracking noteTracking;
+
+  private final PIDController trackingPID;
+
   // private final AHRS gyro;
   private final Pigeon2 gyro;
 
@@ -46,7 +54,9 @@ public class Drivebase extends SubsystemBase {
 
   private SwerveModuleState[] swerveModuleStates = new SwerveModuleState[4];
 
-  public Drivebase() {
+  public Drivebase(TagTracking tagTracking, NoteTracking noteTracking) {
+    this.tagTracking = tagTracking;
+    this.noteTracking = noteTracking;
     frontLeftLocation = new Translation2d(0.3, 0.3);
     frontRightLocation = new Translation2d(0.3, -0.3);
     backLeftLocation = new Translation2d(-0.3, 0.3);
@@ -65,6 +75,9 @@ public class Drivebase extends SubsystemBase {
     backRight = new SwerveModule(DrivebaseConstants.kBackRightDriveMotorChannel,
         DrivebaseConstants.kBackRightTurningMotorChannel, DrivebaseConstants.kBackRightTurningEncoderChannel,
         DrivebaseConstants.kBackRightDriveMotorInverted, DrivebaseConstants.kBackRightCanCoderMagOffset, "backRight");
+
+    trackingPID = new PIDController(DrivebaseConstants.kTrackingP, DrivebaseConstants.kTrackingI,
+        DrivebaseConstants.kTrackingD);
 
     SmartDashboard.putData("frontLeft", frontLeft);
     SmartDashboard.putData("frontRight", frontRight);
@@ -132,16 +145,16 @@ public class Drivebase extends SubsystemBase {
    * 
    *                      using the wpi function to set the speed of the swerve
    */
-  public void drive(double ySpeed, double xSpeed, double rot, boolean fieldRelative) {
+  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     swerveModuleStates = kinematics.toSwerveModuleStates(
         fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, xSpeed, rot, gyro.getRotation2d())
-            : new ChassisSpeeds(ySpeed, xSpeed, rot));
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
+            : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DrivebaseConstants.kMaxSpeed);
-    frontLeft.setDesiredState(swerveModuleStates[0]);
-    frontRight.setDesiredState(swerveModuleStates[1]);
-    backLeft.setDesiredState(swerveModuleStates[2]);
-    backRight.setDesiredState(swerveModuleStates[3]);
+    frontLeft.setDesiredStateCmd(swerveModuleStates[0]);
+    frontRight.setDesiredStateCmd(swerveModuleStates[1]);
+    backLeft.setDesiredStateCmd(swerveModuleStates[2]);
+    backRight.setDesiredStateCmd(swerveModuleStates[3]);
   }
 
   public void driveRobotRelative(ChassisSpeeds speeds) {
@@ -149,10 +162,34 @@ public class Drivebase extends SubsystemBase {
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds() {
-    return kinematics.toChassisSpeeds(frontLeft.getState(),
+    return kinematics.toChassisSpeeds(
+        frontLeft.getState(),
         frontRight.getState(),
         backLeft.getState(),
         backRight.getState());
+  }
+
+  public void tagTracking(double xSpeed, double ySpeed, double rot) {
+    double robotRot = rot;
+    if (tagTracking.getTv() == 1 && tagTracking.getTID() != 3.0 && tagTracking.getTID() != 8.0) {
+      robotRot = -trackingPID.calculate(tagTracking.getTx(), 0.0);
+    }
+    if (Math.abs(rot) > DrivebaseConstants.kMinRot) {
+      robotRot = rot;
+    }
+    drive(xSpeed, ySpeed, robotRot, true);
+  }
+
+  public void noteTracking(double xSpeed, double ySpeed, double rot) {
+    double robotRot = rot;
+    if (noteTracking.getTx().size() != 0) {
+      double yaw = noteTracking.getTx().indexOf(0);
+      robotRot = -trackingPID.calculate(yaw, 0);
+    }
+    if (Math.abs(rot) > DrivebaseConstants.kMinRot) {
+      robotRot = rot;
+    }
+    drive(xSpeed, ySpeed, robotRot, true);
   }
 
   public Command accelerateCmd() {
