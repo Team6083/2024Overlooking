@@ -21,6 +21,7 @@ public class PowerDistributionSubsystem {
     SmartDashboard.putNumber("lineCurrent", 0);
     SmartDashboard.putNumber("transportCurrent", 0);
     SmartDashboard.putNumber("rotateShooterCurrent", 0);
+    SmartDashboard.putNumber("rotateIntakeCurrent", 0);
     SmartDashboard.putBoolean("isIntakeOverCurren", false);
     SmartDashboard.putBoolean("isHookLeftOverCurrent", false);
     SmartDashboard.putBoolean("isHookRightOverCurrent", false);
@@ -29,6 +30,7 @@ public class PowerDistributionSubsystem {
     SmartDashboard.putBoolean("isTransportOverCurrent", false);
     SmartDashboard.putBoolean("isLineMoterOverCurrent", false);
     SmartDashboard.putBoolean("isRotateShooterOverCurrent", false);
+    SmartDashboard.putBoolean("isRotateIntakeOverCurrent", false);
   }
 
   public double intakeCurrent() {
@@ -137,7 +139,7 @@ public class PowerDistributionSubsystem {
 
   public boolean isRotateIntakeOverCurrent() {
     boolean isOverCurrent = rotateIntakeCurrent() > PowerDistributionConstants.kRotateIntakeMaxCurrent;
+    SmartDashboard.putBoolean("isRotateIntakeOverCurrent", isOverCurrent);
     return isOverCurrent;
   }
-
 }
