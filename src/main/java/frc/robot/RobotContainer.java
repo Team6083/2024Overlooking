@@ -70,7 +70,7 @@ public class RobotContainer {
         .whileFalse(rotateShooterSubsystem.changeMaunalModeCmd(false));
 
     // transport
-    mainController.a().whileTrue(new TransportToShootCmd(transportSubsystem, shooterSubsystem));
+    mainController.a().toggleOnTrue(new TransportToShootCmd(transportSubsystem, shooterSubsystem));
 
     // hook
     mainController.rightTrigger(0.5).whileTrue(hookSubsystem.upAllCmd());
