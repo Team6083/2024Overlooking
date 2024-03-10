@@ -4,10 +4,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import frc.robot.commands.transportCmds.TransportIntakeCmd;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.TransportSubsystem;
 
@@ -19,7 +16,7 @@ public class ReIntakeWithTransportCmd extends ParallelCommandGroup {
   public ReIntakeWithTransportCmd(TransportSubsystem transportSubsystem, IntakeSubsystem intakeSubsystem) {
     addCommands(
         transportSubsystem.reTransportIntakeCmd(),
-        intakeSubsystem.setReIntakingCmd());
+        intakeSubsystem.reIntakeCmd());
   
   }
 }

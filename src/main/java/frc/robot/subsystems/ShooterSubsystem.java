@@ -12,6 +12,7 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
@@ -25,6 +26,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final SimpleMotorFeedforward upMotorFeedForwardController;
   private final SimpleMotorFeedforward downMotorFeedForwardController;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
+  private int rateMode;
 
   public ShooterSubsystem(PowerDistributionSubsystem powerDistribution) {
     upMotor = new VictorSPX(ShooterConstants.kUpMotorChannel);
@@ -47,33 +49,11 @@ public class ShooterSubsystem extends SubsystemBase {
         ShooterConstants.kDownMotorV,
         ShooterConstants.kDownMotorA);
 
+    rateMode = 0;
+
     resetEncoder();
 
     this.powerDistributionSubsystem = powerDistribution;
-  }
-
-  public Command speakerShootPIDCmd() {
-    Command cmd = runEnd(
-        this::speakerRate,
-        this::stopAllMotor);
-    cmd.setName("speakerShootPIDCmd");
-    return cmd;
-  }
-
-  public Command ampShootPIDCmd() {
-    Command cmd = runEnd(
-        this::ampRate,
-        this::stopAllMotor);
-    cmd.setName("ampShootPIDCmd");
-    return cmd;
-  }
-
-  public Command carryShootPIDCmd() {
-    Command cmd = runEnd(
-        this::carryRate,
-        this::stopAllMotor);
-    cmd.setName("carryShootPIDCmd");
-    return cmd;
   }
 
   public void stopAllMotor() {
@@ -86,22 +66,21 @@ public class ShooterSubsystem extends SubsystemBase {
     downEncoder.reset();
   }
 
-  public void speakerRate() {
+  public void setSpeakerRate() {
     double upRate = ShooterConstants.kSpeakerShootRate[0];
     double downRate = ShooterConstants.kSpeakerShootRate[1];
     setRateControl(upRate, downRate);
   }
 
-  public void ampRate() {
+  public void setAmpRate() {
     double upRate = ShooterConstants.kAmpShootRate[0];
     double downRate = ShooterConstants.kAmpShootRate[1];
     setRateControl(upRate, downRate);
   }
 
-  public void carryRate() {
+  public void setCarryRate() {
     double upRate = ShooterConstants.kCarryShooterRate[0];
     double downRate = ShooterConstants.kCarryShooterRate[1];
-
     setRateControl(upRate, downRate);
   }
 
@@ -112,8 +91,6 @@ public class ShooterSubsystem extends SubsystemBase {
         + ratePID.calculate(getDownEncoderRate(), downRate);
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
-    // SmartDashboard.putNumber("upMotorVoltage", upMotorVoltage);
-    // SmartDashboard.putNumber("downMotorVoltage", downMotorVoltage);
   }
 
   public void stopUpMotor() {
@@ -173,39 +150,66 @@ public class ShooterSubsystem extends SubsystemBase {
   public boolean isEnoughRate(int mode) {
     switch (mode) {
       case 0:
-        return (getUpEncoderRate() >= 50.0
-            && getDownEncoderRate() >= 50.0);
+        return (getUpEncoderRate() >= ShooterConstants.kSpeakerShootRate[0] - ShooterConstants.kShooterRateOffset
+            && getDownEncoderRate() >= ShooterConstants.kSpeakerShootRate[1] - ShooterConstants.kShooterRateOffset);
       case 1:
-        return (getUpEncoderRate() >= ShooterConstants.kAmpShootRate[0]
-            && getDownEncoderRate() >= ShooterConstants.kAmpShootRate[1]);
+        return (getUpEncoderRate() >= ShooterConstants.kAmpShootRate[0] - ShooterConstants.kShooterRateOffset
+            && getDownEncoderRate() >= ShooterConstants.kAmpShootRate[1] - ShooterConstants.kShooterRateOffset);
       case 2:
-        return (getUpEncoderRate() >= ShooterConstants.kCarryShooterRate[0]
-            && getDownEncoderRate() >= ShooterConstants.kCarryShooterRate[1]);
+        return (getUpEncoderRate() >= ShooterConstants.kCarryShooterRate[0] - ShooterConstants.kShooterRateOffset
+            && getDownEncoderRate() >= ShooterConstants.kCarryShooterRate[1] - ShooterConstants.kShooterRateOffset);
       default:
         return false;
     }
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    // SmartDashboard.putNumber("upRate", getUpEncoderRate());
-    // SmartDashboard.putNumber("downRate", getDownEncoderRate());
-    // SmartDashboard.putNumber("upPower", upMotor.getMotorOutputPercent());
-    // SmartDashboard.putNumber("downPower", downMotor.getMotorOutputPercent());
-    SmartDashboard.putNumber("up rate", getUpEncoderRate());
-    SmartDashboard.putNumber("down rate", getDownEncoderRate());
-    SmartDashboard.putBoolean("isEnoughRate", isEnoughRate(0));
+  public void setRateMode(int mode) {
+    rateMode = mode;
   }
 
   @Override
-  public void initSendable(SendableBuilder builder) {
-    // builder.setSmartDashboardType("ShooterSubsystem");
-    // builder.addDoubleProperty("upRate", this::getUpEncoderRate, null);
-    // builder.addDoubleProperty("downRate", this::getDownEncoderRate, null);
-    // builder.addDoubleProperty("upVoltage", upMotor::getMotorOutputVoltage, null);
-    // builder.addDoubleProperty("downVoltage", downMotor::getMotorOutputVoltage,
-    // null);
-    // ratePID.initSendable(builder);
+  public void periodic() {
+    SmartDashboard.putNumber("upMotorRate", getUpEncoderRate());
+    SmartDashboard.putNumber("downMotorRate", getDownEncoderRate());
+    SmartDashboard.putBoolean("isEnoughSpeakerRate", isEnoughRate(0));
+    SmartDashboard.putBoolean("isEnoughAmpRate", isEnoughRate(1));
+    SmartDashboard.putBoolean("isEnoughCarryRate", isEnoughRate(2));
+  }
+
+  public Command shootPIDRateCmd() {
+    switch (rateMode) {
+      case 0:
+        return shootPIDRateCmd();
+      case 1:
+        return ampShootPIDCmd();
+      case 2:
+        return carryShootPIDCmd();
+      default:
+        return Commands.none();
+    }
+  }
+
+  public Command speakerShootPIDCmd() {
+    Command cmd = runEnd(
+        this::setSpeakerRate,
+        this::stopAllMotor);
+    cmd.setName("speakerShootPIDCmd");
+    return cmd;
+  }
+
+  public Command ampShootPIDCmd() {
+    Command cmd = runEnd(
+        this::setAmpRate,
+        this::stopAllMotor);
+    cmd.setName("ampShootPIDCmd");
+    return cmd;
+  }
+
+  public Command carryShootPIDCmd() {
+    Command cmd = runEnd(
+        this::setCarryRate,
+        this::stopAllMotor);
+    cmd.setName("carryShootPIDCmd");
+    return cmd;
   }
 }

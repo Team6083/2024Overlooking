@@ -9,7 +9,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.Rev2mDistanceSensor.Port;
 
-import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,41 +24,31 @@ public class TransportSubsystem extends SubsystemBase {
 
     transportMotor = new CANSparkMax(TransportConstants.kTransportChannel, MotorType.kBrushless);
     transportMotor.setInverted(TransportConstants.kTransportInverted);
-    distanceSensor = new Rev2mDistanceSensor( Port.kOnboard);
+    distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
     distanceSensor.setAutomaticMode(true);
     this.powerDistributionSubsystem = powerDistribution;
   }
 
-  public Command transportIntakeCmd() {
-    return this.runEnd(this::setTransport, this::stopMotor);
-  }
-
-  public Command reTransportIntakeCmd() {
-    return this.runEnd(() -> this.setReTransport(), () -> this.stopMotor());
-  }
-
   public void setTransport() {
-    setMotor(TransportConstants.kTransVoltage);
+    setVoltage(TransportConstants.kTransVoltage);
   }
 
   public void setReTransport() {
-    setMotor(TransportConstants.kReTransVoltage);
-  }
-
-  public boolean isGetNote() {
-    if (distanceSensor.isRangeValid()) {
-      // SmartDashboard.putNumber("Range dist", distanceSensor.getRange());
-      // SmartDashboard.putNumber("Timestamp dist", distanceSensor.getTimestamp());
-      return distanceSensor.getRange() <= TransportConstants.kDistanceRange;
-    }
-    return false;
+    setVoltage(TransportConstants.kReTransVoltage);
   }
 
   public void stopMotor() {
     transportMotor.set(0);
   }
 
-  public void setMotor(double voltage) {
+  public boolean isGetNote() {
+    if (distanceSensor.isRangeValid()) {
+      return distanceSensor.getRange() <= TransportConstants.kDistanceRange;
+    }
+    return false;
+  }
+
+  public void setVoltage(double voltage) {
     if (powerDistributionSubsystem.isTransportOverCurrent()) {
       stopMotor();
       return;
@@ -69,15 +58,15 @@ public class TransportSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("distance", distanceSensor.GetRange());
-    SmartDashboard.putBoolean("isGet", distanceSensor.isRangeValid());
+    SmartDashboard.putNumber("rangeDistance", distanceSensor.getRange());
+    SmartDashboard.putBoolean("isGetNote", isGetNote());
   }
 
-  @Override
-  public void initSendable(SendableBuilder builder) {
-    // builder.setSmartDashboardType(" transportSubsystem");
-    // builder.addDoubleProperty("rangeDistance", distanceSensor::getRange, null);
-    // builder.addDoubleProperty("timestampDistance", distanceSensor::getTimestamp, null);
+  public Command transportIntakeCmd() {
+    return this.runEnd(this::setTransport, this::stopMotor);
+  }
+
+  public Command reTransportIntakeCmd() {
+    return this.runEnd(this::setReTransport, this::stopMotor);
   }
 }

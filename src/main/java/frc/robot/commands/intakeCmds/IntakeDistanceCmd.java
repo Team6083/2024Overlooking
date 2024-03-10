@@ -28,7 +28,7 @@ public class IntakeDistanceCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intakeSubsystem.setIntaking();
+    intakeSubsystem.intakeCmd();
   }
 
   // Called once the command ends or is interrupted.
