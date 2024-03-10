@@ -55,9 +55,15 @@ public final class Constants {
 
     public static class IntakeConstants {
         public static final int kIntakeChannel = 24;
+        public static final int kRotateIntakeChannel = 29;
+        public static final int kRotateEncoderChannel = 7;
         public static final Boolean kIntakeInverted = true;
+        public static final Boolean kRotateIntakeInverted = false;
+        public static final Boolean kRotateEncoderInverted = false;
+        public static final double kRotateOffset = 0.0;
         public static final double kIntakeVoltage = 7.0;
-        public static final double kThrowPrecentage = -4.0;
+        public static final double kThrowVoltage = -4.0;
+        public static final double kDownVoltage = -10.0;
     }
 
     public static class RotateShooterConstants {
@@ -68,8 +74,8 @@ public final class Constants {
         public static final double kInitDegree = 57.0;
         public static final double kEndDegree = 0;
         public static final double kRotateVoltLimit = 5.0;
-        public static final double kRotateAngleMin = -5.0;
-        public static final double kRotateAngleMax = 65.0;
+        public static final double kRotateAngleMin = -3.0;
+        public static final double kRotateAngleMax = 60.0;
         public static final double kRotateDegreeErrorPoint = 3;
         public static final double kRotateTriggerValue = 0.15;
         public static final double kSpeakerHeight = 2.0;
@@ -78,26 +84,6 @@ public final class Constants {
         public static final double kP = 0.05;
         public static final double kI = 0.00001;
         public static final double kD = 0.0001;
-    }
-
-    public static class RotateIntakeConstants {
-        public static final int kRotateIntakeChannel = 29;
-        public static final boolean kRotateIntakeInverted = false;
-        public static final boolean kEncoderInverted = false;
-        public static final int kRotateEncoderChannel = 4;
-        public static final double kRotateIntakeMaxDegree = 89.0;
-        public static final double kRotateIntakeMinDegree = 0.01;
-        public static final double kRotateDownVoltage = 5.0;
-        public static final double kRotateUpVoltage = -5.0;
-        public static final double kP = 0.05;
-        public static final double kI = 0.0;
-        public static final double kD = 0.0;
-        public static final double kInitDegree = 90.0;
-        public static final double kUpDegree = 30.0;
-        public static final double kDownDegree = 0.0;
-        public static final double kMaxDegree = 92.0;
-        public static final double kMinDegree = 0.0;
-        public static final double kRotateVoltLimit = 5.0;
     }
 
     public static class HookConstants {
