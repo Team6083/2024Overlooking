@@ -4,17 +4,19 @@
 
 package frc.robot.commands.transportCmds;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TransportSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TransportShootCmd extends SequentialCommandGroup {
+public class TransportShootCmd extends ParallelDeadlineGroup {
 
   /** Creates a new TransCmd. */
   public TransportShootCmd(TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem) {
+    super(new WaitCommand(3).onlyWhile(shooterSubsystem::isEnoughRate));
     addCommands(
         transportSubsystem.setTransportCmd().onlyWhile(shooterSubsystem::isEnoughRate));
   }
