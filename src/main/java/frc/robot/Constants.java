@@ -101,39 +101,32 @@ public final class Constants {
     }
 
     public static class HookConstants {
-        public static final int kHookLineChannel = 23;
-        public static final int kHookLeftMotorChannel = 28;
-        public static final int kHookRightMotorChannel = 27;
-        public static final boolean kHookMotorLeftInverted = true;
-        public static final boolean kHookMotorRightInverted = false;
+        public static final int kLineChannel = 23;
+        public static final int kLeftChannel = 5;
+        public static final int kRightChannel = 3;
+        public static final boolean kLeftMotorInverted = true;
+        public static final boolean kRightMotorInverted = false;
         public static final boolean kLineMotorInverted = false;
-        public static final int kHookLeftEncoderChannel = 0;
-        public static final int kHookLeftEncoderChannelB = 1;
-        public static final int kHookRightEncoderChannelA = 2;
-        public static final int kHookRightEncoderChannelB = 3;
-        public static final double kP = 0.0;
-        public static final double kI = 0.0;
-        public static final double kD = 0.0;
+        public static final double kPHook = 2.0;
+        public static final double kIHook = 0.0001;
+        public static final double kDHook = 0.001;
+        public static final double kPLine = 2.0;
+        public static final double kILine = 0.0001;
+        public static final double kDLine = 0.001;
+        public static final int kLeftEncoderChannel = 3;
+        public static final int kRightEncoderChannel = 2;
+        public static final double kHookPositionConversionfactor = 1.0;
         public static final double kLinePositionMax = 60.0;
         public static final double kLinePositionMin = 0.0;
-        public static final double kLeftPositionMax = 60.0;
-        public static final double kLeftPositionMin = 0.0;
-        public static final double kRightPositionMax = 60.0;
-        public static final double kRightPositionMin = 0.0;
-        public static final double kHookleftToTopPositionMax = 45.0;
-        public static final double kHookRightToTopPositionMax = 45.0;
-        public static final double kHooklineToTopPositionMax = 45.0;
-        public static final double kHookPositionConversionfactor = 1.0;
-        public static final double kLinePower = 0;
-        public static final double kHookMotorLeftVoltage = 0.0;
-        public static final double kHookMotorRightVoltage = 0.0;
-        public static final double kManualControlLineMotorPower = 0.25;
-        public static final double kManualControlLeftHookMotorPower = 0.25;
-        public static final double kManualControlRightHookMotorPower = 0.25;
-        public static final double kInitSetpoint = 0.0;
-        public static final double kLeftMotorModify = 0.0; // TO DO
-        public static final double kRightMotorModify = 0.0; // TO DO
-        public static final double kLineMotorModify = 0.0; // TO DO
+        public static final double kHookPositionMax = 60.0;
+        public static final double kHookPositionMin = 0.0;
+        public static final double kLineVoltageLimit = 5.0;
+        public static final double kLeftVoltageLimit = 5.0;
+        public static final double kRightVoltageLimit = 5.0;
+        public static final double kLeftSetpointModify = 3; // TO DO
+        public static final double kRightSetpointModify = 3; // TO DO
+        public static final double kLineSetpointModify = 3; // TO DO
+        public static final double kOffsetLimit = 20; // TO DO
     }
 
     public static class DrivebaseConstants {

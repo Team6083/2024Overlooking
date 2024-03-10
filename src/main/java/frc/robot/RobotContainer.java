@@ -6,12 +6,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.controllerCmds.SwerveJoystickCmd;
 import frc.robot.commands.transportCmds.TransportShootCmd;
+import frc.robot.subsystems.HookSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionSubsystem;
 import frc.robot.subsystems.RotateShooterSubsystem;
@@ -22,24 +24,28 @@ import frc.robot.subsystems.visionProcessing.TagTracking;
 
 public class RobotContainer {
   private final CommandXboxController mainController;
+  private final CommandGenericHID controlPanel;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
   private final Drivebase drivebase;
   private final IntakeSubsystem intakeSubsystem;
   private final ShooterSubsystem shooterSubsystem;
   private final TransportSubsystem transportSubsystem;
   private final RotateShooterSubsystem rotateShooterSubsystem;
+  private final HookSubsystem hookSubsystem;
   private final TagTracking tagTracking;
 
   public RobotContainer() {
     tagTracking = new TagTracking();
     // define subsystems
     mainController = new CommandXboxController(DriveControllerConstants.kMainController);
+    controlPanel = new CommandGenericHID(DriveControllerConstants.kControlPanel);
     powerDistributionSubsystem = new PowerDistributionSubsystem();
     drivebase = new Drivebase();
     rotateShooterSubsystem = new RotateShooterSubsystem(powerDistributionSubsystem, tagTracking);
     intakeSubsystem = new IntakeSubsystem(powerDistributionSubsystem);
     shooterSubsystem = new ShooterSubsystem(powerDistributionSubsystem);
     transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
+    hookSubsystem = new HookSubsystem(powerDistributionSubsystem);
     configureBindings();
   }
 
@@ -65,6 +71,12 @@ public class RobotContainer {
     mainController.a().whileTrue(new TransportShootCmd(transportSubsystem, shooterSubsystem));
 
     // hook
+    mainController.rightTrigger(0.5).whileTrue(hookSubsystem.upAllCmd());
+    mainController.leftTrigger(0.5).whileTrue(hookSubsystem.downAllCmd());
+    controlPanel.button(5).whileTrue(hookSubsystem.leftUpIndivisual());
+    controlPanel.button(6).whileTrue(hookSubsystem.leftDownIndivisual());
+    controlPanel.button(7).whileTrue(hookSubsystem.rightUpIndivisual());
+    controlPanel.button(8).whileTrue(hookSubsystem.rightDownIndivisual());
 
     // semi-automatic
 

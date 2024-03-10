@@ -91,13 +91,13 @@ public class PowerDistributionSubsystem {
     return isOverCurrent;
   }
 
-  public boolean isHookLeftOverCurrent() {
+  public boolean isLeftOverCurrent() {
     boolean isOverCurrent = hookLeftCurrent() > PowerDistributionConstants.kHookMotor1MaxCurrent;
     SmartDashboard.putBoolean("isHookLeftOverCurrent", isOverCurrent);
     return isOverCurrent;
   }
 
-  public boolean isHookRightOverCurrent() {
+  public boolean isRightOverCurrent() {
     boolean isOverCurrent = hookRightCurrent() > PowerDistributionConstants.kHookMotor2MaxCurrent;
     SmartDashboard.putBoolean("isHookRightOverCurrent", isOverCurrent);
     return isOverCurrent;
