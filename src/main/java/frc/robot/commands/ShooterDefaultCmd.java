@@ -16,6 +16,6 @@ public class ShooterDefaultCmd extends ParallelCommandGroup {
   public ShooterDefaultCmd(ShooterSubsystem shooterSubsystem,RotateShooterSubsystem rotateShooterSubsystem) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(shooterSubsystem.setRateModeCmd(3), rotateShooterSubsystem.setModeCmd(3));
+    addCommands(shooterSubsystem.setShootModeCmd(3), rotateShooterSubsystem.setModeCmd(3));
   }
 }

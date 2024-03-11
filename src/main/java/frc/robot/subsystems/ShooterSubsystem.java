@@ -6,13 +6,19 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.RotateShooterConstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.subsystems.visionProcessing.TagTracking;
 
 public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new Shooter. */
@@ -21,12 +27,20 @@ public class ShooterSubsystem extends SubsystemBase {
   private final Encoder upEncoder;
   private final Encoder downEncoder;
   private final PIDController ratePID;
+  private final CANSparkMax rotateMotor;
+  private final DutyCycleEncoder rotateEncoder;
+  private final PIDController rotatePID;
   private final SimpleMotorFeedforward upMotorFeedForwardController;
   private final SimpleMotorFeedforward downMotorFeedForwardController;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
-  private int rateMode = 1;
+  private final TagTracking tagTracking;
+  private int shootMode = 1;
+  private boolean isMaunal = false;
+  private boolean isAutoAim = false;
+  private double manualVoltage = 0;
+  private double rotateDegreeError = 0.0;
 
-  public ShooterSubsystem(PowerDistributionSubsystem powerDistribution) {
+  public ShooterSubsystem(PowerDistributionSubsystem powerDistribution, TagTracking tagTracking) {
     upMotor = new VictorSPX(ShooterConstants.kUpMotorChannel);
     downMotor = new VictorSPX(ShooterConstants.kDownMotorChannel);
     upEncoder = new Encoder(ShooterConstants.kUpEncoderChannelA, ShooterConstants.kUpEncoderChannelB);
@@ -37,6 +51,7 @@ public class ShooterSubsystem extends SubsystemBase {
     downEncoder.setReverseDirection(ShooterConstants.kDownEncoderInverted);
 
     ratePID = new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD);
+    rotatePID = new PIDController(RotateShooterConstants.kP, RotateShooterConstants.kI, RotateShooterConstants.kD);
 
     upMotor.setInverted(ShooterConstants.kUpMotorInverted);
     downMotor.setInverted(ShooterConstants.kDownMotorInverted);
@@ -48,8 +63,95 @@ public class ShooterSubsystem extends SubsystemBase {
         ShooterConstants.kDownMotorA);
 
     resetEncoder();
-
+    rotateMotor = new CANSparkMax(RotateShooterConstants.kRotateShooterChannel, MotorType.kBrushless);
+    rotateMotor.setInverted(RotateShooterConstants.kRotateShooterInverted);
+    rotateEncoder = new DutyCycleEncoder(RotateShooterConstants.kEncoderChannel);
     this.powerDistributionSubsystem = powerDistribution;
+    this.tagTracking = tagTracking;
+    rotatePID.enableContinuousInput(-180.0, 180.0);
+    setSetpoint(RotateShooterConstants.kInitDegree);
+  }
+
+  public double getSetpoint() {
+    return rotatePID.getSetpoint();
+  }
+
+  public void setSetpoint(double setpoint) {
+    final double currentSetpoint = getSetpoint() + rotateDegreeError;
+    if (hasExceedPhysicalLimit(currentSetpoint) != 0) {
+
+      return;
+    }
+    if (hasExceedPhysicalLimit(setpoint) == -1) {
+      setpoint = RotateShooterConstants.kRotateAngleMin;
+    } else if (hasExceedPhysicalLimit(setpoint) == 1) {
+      setpoint = RotateShooterConstants.kRotateAngleMax;
+    }
+    rotatePID.setSetpoint(setpoint);
+  }
+
+  private void setPIDControl() {
+    double rotateVoltage = rotatePID.calculate(getAngle());
+    double modifiedRotateVoltage = rotateVoltage;
+    if (Math.abs(modifiedRotateVoltage) > RotateShooterConstants.kRotateVoltLimit) {
+      modifiedRotateVoltage = RotateShooterConstants.kRotateVoltLimit * (rotateVoltage > 0 ? 1 : -1);
+    }
+    setMotor(modifiedRotateVoltage);
+  }
+
+  public double getAngle() {
+    double degree = (RotateShooterConstants.kEncoderInverted ? -1.0 : 1.0)
+        * ((rotateEncoder.getAbsolutePosition() * 360.0) - RotateShooterConstants.kRotateOffset
+            - RotateShooterConstants.kShooterOffset)
+        % 360.0;
+    if (Math.abs(degree) > 180) {
+      degree -= 360;
+    }
+    return degree;
+  }
+
+  public double getSpeakerDegree(double currentDegree) {
+    if (tagTracking.getTv() == 1 && tagTracking.getTID() != 3.0
+        && tagTracking.getTID() != 8.0 && tagTracking.getHorDistanceByCal() > 1.1) {
+      double horizonDistance = tagTracking.getHorizontalDistanceByCT();
+      double speakerToShooterHeight = RotateShooterConstants.kSpeakerHeight - RotateShooterConstants.kShooterHeight;
+      double degree = Math.toDegrees(Math.atan(speakerToShooterHeight / horizonDistance));
+      return degree + 9.0 * horizonDistance / 2.9;
+    }
+    return currentDegree;
+  }
+
+  public double getAmpDegree(double currentDegree) {
+    if (tagTracking.getTv() == 1) {
+      double ampToShooterHeight = RotateShooterConstants.kAMPHeight - RotateShooterConstants.kShooterHeight;
+      double degree = Math.toDegrees(Math.atan(ampToShooterHeight / tagTracking.getHorizontalDistanceByCT()));
+      return degree;
+    }
+    return currentDegree;
+  }
+
+  public void autoAimOn() {
+    this.isAutoAim = true;
+  }
+
+  public void autoAimOff() {
+    this.isAutoAim = false;
+  }
+
+  public Command setAutoAimCmd() {
+    Command cmd = runEnd(() -> autoAimOn(), () -> autoAimOff()).onlyWhile(() -> shootMode != 2);
+    cmd.setName("setAutoAimCmd");
+    return cmd;
+  }
+
+  private void setManualVoltage(double voltage) {
+    manualVoltage = voltage;
+  }
+
+  public Command setManualVoltageCmd(double voltage) {
+    Command cmd = runOnce(() -> setManualVoltage(voltage));
+    cmd.setName("SetManualVoltageCmd");
+    return cmd;
   }
 
   /**
@@ -69,13 +171,33 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   /**
+   * @param 1 aim degree
+   * @param 2 carry degree
+   * @param 3 init degree
+   */
+  public void setModeSetpoint() {
+    switch (shootMode) {
+      case 1:
+        setSetpoint(getSpeakerDegree(getSetpoint()));
+        break;
+      case 2:
+        setSetpoint(RotateShooterConstants.kCarryDegree);
+        break;
+      case 3:
+        setSetpoint(RotateShooterConstants.kInitDegree);
+      default:
+        break;
+    }
+  }
+
+  /**
    * Set up and down voltage by using both feedforward controller and
    * pidcontroller to calculate the rate.
    */
   private void setRateControl() {
     double upRate;
     double downRate;
-    switch (rateMode) {
+    switch (shootMode) {
       case 1:
         upRate = ShooterConstants.kSpeakerShootRate[0];
         downRate = ShooterConstants.kSpeakerShootRate[1];
@@ -84,12 +206,9 @@ public class ShooterSubsystem extends SubsystemBase {
         upRate = ShooterConstants.kCarryShooterRate[0];
         downRate = ShooterConstants.kCarryShooterRate[1];
         break;
-      case 3:
+      default:
         upRate = ShooterConstants.kInitShooterRate[0];
         downRate = ShooterConstants.kInitShooterRate[1];
-      default:
-        upRate = 0;
-        downRate = 0;
         break;
     }
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upRate)
@@ -203,7 +322,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param 3    carry mode
    */
   public boolean isEnoughRate() {
-    switch (rateMode) {
+    switch (shootMode) {
       case 1:
         return (getUpEncoderRate() >= ShooterConstants.kSpeakerShootRate[0] - ShooterConstants.kShooterRateOffset
             && getDownEncoderRate() >= ShooterConstants.kSpeakerShootRate[1] - ShooterConstants.kShooterRateOffset);
@@ -223,18 +342,40 @@ public class ShooterSubsystem extends SubsystemBase {
    * 
    * @param mode 1, 2, 3
    */
-  public void setRateMode(int mode) {
-    rateMode = mode;
+  public void setShootMode(int mode) {
+    shootMode = mode;
   }
 
   @Override
   public void periodic() {
+    setPIDControl();
     SmartDashboard.putNumber("upMotorRate", getUpEncoderRate());
     SmartDashboard.putNumber("downMotorRate", getDownEncoderRate());
     SmartDashboard.putBoolean("isEnoughRate", isEnoughRate());
-    SmartDashboard.putNumber("shooterRateMode", rateMode);
+    SmartDashboard.putNumber("shooterRateMode", shootMode);
     SmartDashboard.putNumber("upMotorVoltage", upMotor.getMotorOutputVoltage());
     SmartDashboard.putNumber("downMotorVoltage", downMotor.getMotorOutputVoltage());
+  }
+
+  public void stopMotor() {
+    rotateMotor.setVoltage(0.0);
+  }
+
+  public void setMotor(double voltage) {
+    if (powerDistributionSubsystem.isRotateShooterOverCurrent()) {
+      stopMotor();
+      return;
+    }
+    rotateMotor.setVoltage(voltage);
+  }
+
+  private int hasExceedPhysicalLimit(double angle) {
+    return (angle < RotateShooterConstants.kRotateAngleMin ? -1
+        : (angle > RotateShooterConstants.kRotateAngleMax ? 1 : 0));
+  }
+
+  public void changeMaunalMode(boolean isManual) {
+    this.isMaunal = isManual;
   }
 
   /**
@@ -243,9 +384,9 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param mode 1, 2, 3
    * @return setRateModeCmd
    */
-  public Command setRateModeCmd(int mode) {
-    Command cmd = runOnce(() -> setRateMode(mode));
-    cmd.setName("setRateModeCmd");
+  public Command setShootModeCmd(int mode) {
+    Command cmd = runOnce(() -> setShootMode(mode));
+    cmd.setName("SetShootModeCmd");
     return cmd;
   }
 
@@ -254,11 +395,23 @@ public class ShooterSubsystem extends SubsystemBase {
    * 
    * @return shootRateControlCmd
    */
-  public Command shootRateControlCmd() {
+  public Command shootPIDRateCmd() {
     Command cmd = runEnd(
         this::setRateControl,
         this::stopAllMotor);
     cmd.setName("shootPIDRateCmd");
+    return cmd;
+  }
+
+  /**
+   * Reverse current manual mode.
+   * 
+   * @param mode
+   * @return changeManualModeCmd
+   */
+  public Command changeMaunalModeCmd(boolean mode) {
+    Command cmd = runOnce(() -> changeMaunalMode(mode));
+    cmd.setName("changeMaunalModeCmd");
     return cmd;
   }
 

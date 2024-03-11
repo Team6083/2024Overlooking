@@ -43,7 +43,7 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsystem;
   private final ShooterSubsystem shooterSubsystem;
   private final TransportSubsystem transportSubsystem;
-  private final RotateShooterSubsystem rotateShooterSubsystem;
+  // private final RotateShooterSubsystem rotateShooterSubsystem;
   private final HookSubsystem hookSubsystem;
   private final TagTracking tagTracking;
   private final NoteTracking noteTracking;
@@ -59,9 +59,9 @@ public class RobotContainer {
     controlPanel = new CommandGenericHID(DriveControllerConstants.kControlPanel);
     powerDistributionSubsystem = new PowerDistributionSubsystem();
     drivebase = new Drivebase(tagTracking, noteTracking);
-    rotateShooterSubsystem = new RotateShooterSubsystem(powerDistributionSubsystem, tagTracking);
+    // rotateShooterSubsystem = new RotateShooterSubsystem(powerDistributionSubsystem, tagTracking);
     intakeSubsystem = new IntakeSubsystem(powerDistributionSubsystem);
-    shooterSubsystem = new ShooterSubsystem(powerDistributionSubsystem);
+    shooterSubsystem = new ShooterSubsystem(powerDistributionSubsystem, tagTracking);
     transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
     hookSubsystem = new HookSubsystem(powerDistributionSubsystem);
     configureBindings();
@@ -77,8 +77,8 @@ public class RobotContainer {
     SmartDashboard.putString("auto", "0");
     SmartDashboard.putData(initialChooser);
 
-    NamedCommands.registerCommand("AutoAim", rotateShooterSubsystem.setAutoAim());
-    NamedCommands.registerCommand("AutoShootRate", shooterSubsystem.shootRateControlCmd());
+    // NamedCommands.registerCommand("AutoAim", rotateShooterSubsystem.setAutoAim());
+    NamedCommands.registerCommand("AutoShootRate", shooterSubsystem.shootPIDRateCmd());
     NamedCommands.registerCommand("AutoTransportToShoot",
         new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
     NamedCommands.registerCommand("AutoIntakeWithTransport",
@@ -97,21 +97,12 @@ public class RobotContainer {
     mainController.x().whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
 
     // shooter
-    rotateShooterSubsystem.setDefaultCommand(rotateShooterSubsystem.setModeCmd(3));
-    shooterSubsystem.setDefaultCommand(shooterSubsystem.setRateModeCmd(3));
+    shooterSubsystem.setDefaultCommand(shooterSubsystem.setShootModeCmd(3));
     mainController.b()
-        .toggleOnTrue(shooterSubsystem.shootRateControlCmd().alongWith(rotateShooterSubsystem.setModeCmd(1))
+        .toggleOnTrue(shooterSubsystem.shootPIDRateCmd().alongWith(shooterSubsystem.setAutoAimCmd())
             .alongWith(new TagDriveCmd(drivebase, mainController)));
-
-    rotateShooterSubsystem.addErrorCmd(controlPanel.getRawAxis(4));///
-    controlPanel.button(7)
-        .whileTrue(shooterSubsystem.setRateModeCmd(2));
-    controlPanel.button(1)///
-        .whileTrue(rotateShooterSubsystem.changeMaunalModeCmd(true))
-        .whileFalse(rotateShooterSubsystem.changeMaunalModeCmd(false));
-    mainController.pov(0).whileTrue(rotateShooterSubsystem.setManualVoltageCmd(RotateShooterConstants.kManualVoltage));
-    mainController.pov(180)
-        .whileTrue(rotateShooterSubsystem.setManualVoltageCmd(-RotateShooterConstants.kManualVoltage));///
+    controlPanel.button(7).whileTrue(shooterSubsystem.setShootModeCmd(2));
+    
     // limelight
     controlPanel.button(3).whileTrue(drivebase.setTagVisionModeCmd());////
     // transport
@@ -147,7 +138,6 @@ public class RobotContainer {
     if (isRed) {
       initial = (initial == "left" ? "right" : (initial == "right" ? "left" : "middle"));
     }
-    return Autos.autoOptimize(drivebase, rotateShooterSubsystem, shooterSubsystem, transportSubsystem, intakeSubsystem,
-        autoNumber, initial);
+    return null;
   }
 }
