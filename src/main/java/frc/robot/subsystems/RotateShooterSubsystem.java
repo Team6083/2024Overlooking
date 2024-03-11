@@ -147,6 +147,13 @@ public class RotateShooterSubsystem extends SubsystemBase {
     return cmd;
   }
 
+  public Command setAutoAim() {
+    Command cmd = Commands.runOnce(
+        () -> setSetpoint(getAimDegree(getSetpoint())), this);
+    cmd.setName("autoAimCmd");
+    return cmd;
+  }
+
   public void addError(double error) {
     rotateDegreeError = error * RotateShooterConstants.kRotateDegreeErrorPoint;
   }
