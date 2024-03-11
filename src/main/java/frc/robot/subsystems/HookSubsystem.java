@@ -216,9 +216,9 @@ public class HookSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    linePIDControl();
-    leftPIDControl();
-    rightPIDControl();
+    // linePIDControl();
+    // leftPIDControl();
+    // rightPIDControl();
     SmartDashboard.putData(linePID);
     SmartDashboard.putData(leftPID);
     SmartDashboard.putData(rightPID);

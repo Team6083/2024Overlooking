@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.TagTrackingConstants;
 
 public class TagTracking {
@@ -159,6 +160,7 @@ public class TagTracking {
     public double getHorizontalDistanceByCT() {
         double horDis = Math.sqrt(
                 (Math.pow(getCT()[2] + TagTrackingConstants.camToShooterDistance, 2.0) + Math.pow(getCT()[0], 2.0)));
+                SmartDashboard.putNumber("Robottotagdistance", horDis);
         return horDis;
     }
 
