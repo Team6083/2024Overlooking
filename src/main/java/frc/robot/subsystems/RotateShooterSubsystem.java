@@ -65,7 +65,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
     rotatePID.setSetpoint(setpoint);
   }
 
-  public void setPIDControl() {
+  private void setPIDControl() {
     double rotateVoltage = rotatePID.calculate(getAngle());
     double modifiedRotateVoltage = rotateVoltage;
     if (Math.abs(modifiedRotateVoltage) > RotateShooterConstants.kRotateVoltLimit) {
@@ -80,7 +80,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
     return degree;
   }
 
-  public double getAimDegree(double currentDegree) {
+  public double getSpeakerDegree(double currentDegree) {
     if (tagTracking.getTv() == 1 && tagTracking.getTID() != 3.0
         && tagTracking.getTID() != 8.0) {
       double speakerToShooterHeight = RotateShooterConstants.kSpeakerHeight - RotateShooterConstants.kShooterHeight;
@@ -107,7 +107,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
   public void setModeSetpoint() {
     switch (mode) {
       case 1:
-        setSetpoint(getAimDegree(getSetpoint()));
+        setSetpoint(getSpeakerDegree(getSetpoint()));
         break;
       case 2:
         setSetpoint(RotateShooterConstants.kCarryDegree);
@@ -119,7 +119,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
     }
   }
 
-  public void setManualVoltage(double voltage) {
+  private void setManualVoltage(double voltage) {
     manualVoltage = voltage;
   }
 
@@ -172,7 +172,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
 
   public Command setAutoAim() {
     Command cmd = Commands.runOnce(
-        () -> setSetpoint(getAimDegree(getSetpoint())), this);
+        () -> setSetpoint(getSpeakerDegree(getSetpoint())), this);
     cmd.setName("autoAimCmd");
     return cmd;
   }
@@ -220,13 +220,5 @@ public class RotateShooterSubsystem extends SubsystemBase {
     setPIDControl();
     SmartDashboard.putData("rotate_PID", rotatePID);
     SmartDashboard.putNumber("encoderDegree", getAngle());
-  }
-
-  public Command setInherentSetpoint() {
-    Command cmd = Commands.run(
-        () -> setSetpoint(RotateShooterConstants.kInitDegree),
-        this);
-    cmd.setName("setInherentSetpoint");
-    return cmd;
   }
 }
