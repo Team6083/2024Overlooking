@@ -38,20 +38,11 @@ public class NoteTracking {
      * 
      * @return {@link Pose2d} note pose
      */
-    public List<Pose2d> getNotes() {
+    public List<Pose2d> getNotePose() {
         List<Pose2d> poses = new ArrayList<Pose2d>();
 
-        if (!noteCamera.isConnected()) {
-            System.out.println("Camera not connected");
-            return poses;
-        }
+        List<PhotonTrackedTarget> targets = getTargetList();
 
-        var results = noteCamera.getLatestResult();
-        if (!results.hasTargets()) {
-            System.out.println("No target");
-            return poses;
-        }
-        List<PhotonTrackedTarget> targets = results.getTargets();
 
         for (PhotonTrackedTarget trackedTarget : targets) {
             double pitch = trackedTarget.getPitch();
@@ -74,8 +65,36 @@ public class NoteTracking {
         return poses;
     }
 
+    public List<PhotonTrackedTarget> getTargetList() {
+        if (!noteCamera.isConnected()) {
+            System.out.println("Camera not connected");
+            return null;
+        }
+
+        var results = noteCamera.getLatestResult();
+        if (!results.hasTargets()) {
+            System.out.println("No target");
+            return null;
+        }
+        return results.getTargets();
+    }
+
+    public List<Double> getTx(){
+        List<PhotonTrackedTarget> targets = getTargetList();
+        List<Double> notesYaw = new ArrayList<Double>();
+        double yaw;
+        for (PhotonTrackedTarget trackedTarget : targets) {
+            yaw = trackedTarget.getYaw();
+            notesYaw.add(yaw);
+            SmartDashboard.putNumber("noteYaw", trackedTarget.getYaw());
+            SmartDashboard.putNumber("notePitch", trackedTarget.getPitch());
+            SmartDashboard.putNumber("noteSkew", trackedTarget.getSkew());
+        }
+        return notesYaw;
+    }
+
     public Pose2d getLastPose() {
-        return getNotes().get(0);
+        return getNotePose().get(0);
     }
 
     public void clearTagSolutions(Field2d field) {

@@ -54,7 +54,7 @@ public class Drivebase extends SubsystemBase {
   private final TagTracking tagTracking;
   private final NoteTracking noteTracking;
 
-  private final PIDController visionTrackingPID;
+  private final PIDController trackingPID;
 
   private boolean noteTrackingCondition = false;
   private boolean tagTrackingCondition = false;
@@ -122,7 +122,9 @@ public class Drivebase extends SubsystemBase {
     // set the swerve speed equal 0
     drive(0, 0, 0, false);
 
-    visionTrackingPID = new PIDController(DrivebaseConstants.kTrackingP, DrivebaseConstants.kTrackingI, DrivebaseConstants.kTrackingD);
+    trackingPID = new PIDController(DrivebaseConstants.kTrackingP, DrivebaseConstants.kTrackingI,
+        DrivebaseConstants.kTrackingD);
+
   }
 
   public void resetGyro() {
@@ -159,12 +161,7 @@ public class Drivebase extends SubsystemBase {
    *                      using the wpi function to set the speed of the swerve
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    if (noteTrackingCondition) {
-      rot = facingNoteRot(rot);
-    }
-    if (tagTrackingCondition) {
-      rot = facingTag(rot);
-    }
+
     swerveModuleStates = kinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
@@ -192,83 +189,27 @@ public class Drivebase extends SubsystemBase {
     return noteTracking.hasTargets();
   }
 
-  public double facingNoteRot(double currentRot) {
-    var target = noteTracking.getNotes();
-    if (target.size() > 0) {
-      var pose = target.get(0);
-      double rot = -visionTrackingPID.calculate(pose.getX(), 0);
-      return rot;
-    } else {
-      return currentRot;
+  public void tagTracking(double xSpeed, double ySpeed, double rot) {
+    double robotRot = rot;
+    if (tagTracking.getTv() == 1 && tagTracking.getTID() != 3.0 && tagTracking.getTID() != 8.0) {
+      robotRot = -trackingPID.calculate(tagTracking.getTx(), 0.0);
     }
-  }
-
-  public double[] followingNoteSpeed() {
-    var target = noteTracking.getNotes();
-    double[] speed = new double[3];
-    speed[0] = 0;
-    speed[1] = 0;
-    speed[2] = 0;
-    if (target.size() > 0) {
-      var pose = target.get(0);
-      double XSpeed = visionTrackingPID.calculate(pose.getY(), NoteTrackingConstants.minNoteDistance);
-      double YSpeed = 0;
-      double rot = -visionTrackingPID.calculate(pose.getX(), 0);
-      speed[0] = XSpeed;
-      speed[1] = YSpeed;
-      speed[2] = rot;
+    if (Math.abs(rot) > DrivebaseConstants.kMinRot) {
+      robotRot = rot;
     }
-    return speed;
+    drive(xSpeed, ySpeed, robotRot, true);
   }
 
-  public double facingTag(double currentRot) {
-    double offset = tagTracking.getTx();
-    double hasTarget = tagTracking.getTv();
-    double targetID = tagTracking.getTID();
-    if (hasTarget == 1 && targetID != 3.0 && targetID != 8.0) {
-      double rot = -visionTrackingPID.calculate(offset, 0);
-      return rot;
+  public void noteTracking(double xSpeed, double ySpeed, double rot) {
+    double robotRot = rot;
+    if (noteTracking.getTx().size() != 0) {
+      double yaw = noteTracking.getTx().indexOf(0);
+      robotRot = -trackingPID.calculate(yaw, 0);
     }
-    return currentRot;
-  }
-
-  /**
-   * Return a double array. [0] xSpeed, [1] ySpeed, [2] rot
-   * 
-   * @return follow (double array)
-   */
-  public double[] followingTag() {
-    double offset = tagTracking.getTx();
-    double hasTarget = tagTracking.getTv();
-    double[] speed = new double[3];
-    double xSpeed = 0;
-    double ySpeed = 0;
-    double rot = 0;
-    double x_dis = tagTracking.getBT()[2];
-    if (hasTarget == 1) {
-      rot = visionTrackingPID.calculate(offset, 0);
-      xSpeed = -visionTrackingPID.calculate(x_dis, 0.5);
+    if (Math.abs(rot) > DrivebaseConstants.kMinRot) {
+      robotRot = rot;
     }
-    speed[0] = xSpeed;
-    speed[1] = ySpeed;
-    speed[2] = rot;
-    return speed;
-  }
-
-  public void switchNoteTrackCondition() {
-    noteTrackingCondition = !noteTrackingCondition;
-  }
-
-  public void switchTagTrackCondition() {
-    tagTrackingCondition = !tagTrackingCondition;
-  }
-
-  public Command noteTrackCondition() {
-    return Commands.runOnce(() -> switchNoteTrackCondition());
-  }
-
-  public Command tagTrackConditionCmd() {
-    return Commands.runOnce(() -> switchTagTrackCondition());
+    drive(xSpeed, ySpeed, robotRot, true);
   }
 
   public Command accelerateCmd() {
@@ -311,8 +252,6 @@ public class Drivebase extends SubsystemBase {
     return odometry.getPoseMeters();
   }
 
-  
-
   public void resetPose2dAndEncoder() {
     frontLeft.resetAllEncoder();
     frontRight.resetAllEncoder();
@@ -328,6 +267,7 @@ public class Drivebase extends SubsystemBase {
     SmartDashboard.putNumber("backRight_speed", swerveModuleStates[3].speedMetersPerSecond);
     SmartDashboard.putNumber("gyro_heading", gyro.getRotation2d().getDegrees());
     tagTracking.putDashboard();
+    // noteTracking.putDashboard();
   }
 
   public double calShooterAngleByPose2d() {
