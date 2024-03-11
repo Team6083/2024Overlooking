@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -20,6 +21,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
   /** Creates a new RiseShooterSubsytem. */
   private final CANSparkMax rotateMotor;
   private final DutyCycleEncoder rotateEncoder;
+
   private final PIDController rotatePID;
   private double rotateDegreeError = 0.0;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
@@ -31,7 +33,6 @@ public class RotateShooterSubsystem extends SubsystemBase {
   public RotateShooterSubsystem(PowerDistributionSubsystem powerDistributionSubsystem,
       TagTracking tagTracking) {
     rotateMotor = new CANSparkMax(RotateShooterConstants.kRotateShooterChannel, MotorType.kBrushless);
-
     rotateEncoder = new DutyCycleEncoder(RotateShooterConstants.kEncoderChannel);
 
     rotatePID = new PIDController(RotateShooterConstants.kP, RotateShooterConstants.kI, RotateShooterConstants.kD);
@@ -55,6 +56,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
   public void setSetpoint(double setpoint) {
     final double currentSetpoint = getSetpoint() + rotateDegreeError;
     if (hasExceedPhysicalLimit(currentSetpoint) != 0) {
+
       return;
     }
     if (hasExceedPhysicalLimit(setpoint) == -1) {
@@ -76,9 +78,11 @@ public class RotateShooterSubsystem extends SubsystemBase {
 
   public double getAngle() {
     double degree = (RotateShooterConstants.kEncoderInverted ? -1.0 : 1.0)
-        * ((rotateEncoder.getAbsolutePosition() * 360.0) - RotateShooterConstants.kRotateOffset)%360.0;
-    if(Math.abs(degree)>180){
-      degree-=360;
+        * ((rotateEncoder.getAbsolutePosition() * 360.0) - RotateShooterConstants.kRotateOffset
+            - RotateShooterConstants.kShooterOffset)
+        % 360.0;
+    if (Math.abs(degree) > 180) {
+      degree -= 360;
     }
     return degree;
   }
@@ -86,9 +90,10 @@ public class RotateShooterSubsystem extends SubsystemBase {
   public double getSpeakerDegree(double currentDegree) {
     if (tagTracking.getTv() == 1 && tagTracking.getTID() != 3.0
         && tagTracking.getTID() != 8.0) {
+      double horizonDistance = tagTracking.getHorizontalDistanceByCT();
       double speakerToShooterHeight = RotateShooterConstants.kSpeakerHeight - RotateShooterConstants.kShooterHeight;
-      double degree = Math.toDegrees(Math.atan(speakerToShooterHeight / tagTracking.getHorizontalDistanceByCT()));
-      return degree;
+      double degree = Math.toDegrees(Math.atan(speakerToShooterHeight / horizonDistance));
+      return degree + 5.0;
     }
     return currentDegree;
   }
@@ -110,7 +115,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
   public void setModeSetpoint() {
     switch (mode) {
       case 1:
-        setSetpoint(getSpeakerDegree(getSetpoint())+3.0);
+        setSetpoint(getSpeakerDegree(getSetpoint()));
         break;
       case 2:
         setSetpoint(RotateShooterConstants.kCarryDegree);
@@ -226,5 +231,6 @@ public class RotateShooterSubsystem extends SubsystemBase {
     SmartDashboard.putData("rotate_PID", rotatePID);
     SmartDashboard.putNumber("encoderDegree", getAngle());
     SmartDashboard.putNumber("shooterSpeakerDegree", getSpeakerDegree(getAngle()));
+    SmartDashboard.putNumber("PID_error", rotatePID.getPositionError());
   }
 }
