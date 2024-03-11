@@ -54,24 +54,7 @@ public class Drivebase extends SubsystemBase {
   private final TagTracking tagTracking;
   private final NoteTracking noteTracking;
 
-  private final PIDController facingNotePID;
-  private final PIDController facingTagPID;
-  private final PIDController followingTagPID;
-
-  // face method value maybe correct
-  private final double kP = 0.08;
-  private final double kI = 0;
-  private final double kD = 0;
-
-  // fix distance value not determined yet
-  private final double kfP = 0.8;
-  private final double kfI = 0;
-  private final double kfD = 0.006;
-
-  // fix position
-  public static final double kPP = 0.03;
-  public static final double kII = 0;
-  public static final double kDD = 0;
+  private final PIDController visionTrackingPID;
 
   private boolean noteTrackingCondition = false;
   private boolean tagTrackingCondition = false;
@@ -139,9 +122,7 @@ public class Drivebase extends SubsystemBase {
     // set the swerve speed equal 0
     drive(0, 0, 0, false);
 
-    facingNotePID = new PIDController(kP, kI, kD);
-    followingTagPID = new PIDController(kfP, kfI, kfD);
-    facingTagPID = new PIDController(kP, kI, kD);
+    visionTrackingPID = new PIDController(DrivebaseConstants.kTrackingP, DrivebaseConstants.kTrackingI, DrivebaseConstants.kTrackingD);
   }
 
   public void resetGyro() {
@@ -215,7 +196,7 @@ public class Drivebase extends SubsystemBase {
     var target = noteTracking.getNotes();
     if (target.size() > 0) {
       var pose = target.get(0);
-      double rot = -facingNotePID.calculate(pose.getX(), 0);
+      double rot = -visionTrackingPID.calculate(pose.getX(), 0);
       return rot;
     } else {
       return currentRot;
@@ -230,9 +211,9 @@ public class Drivebase extends SubsystemBase {
     speed[2] = 0;
     if (target.size() > 0) {
       var pose = target.get(0);
-      double XSpeed = facingNotePID.calculate(pose.getY(), NoteTrackingConstants.minNoteDistance);
+      double XSpeed = visionTrackingPID.calculate(pose.getY(), NoteTrackingConstants.minNoteDistance);
       double YSpeed = 0;
-      double rot = -facingNotePID.calculate(pose.getX(), 0);
+      double rot = -visionTrackingPID.calculate(pose.getX(), 0);
       speed[0] = XSpeed;
       speed[1] = YSpeed;
       speed[2] = rot;
@@ -245,7 +226,7 @@ public class Drivebase extends SubsystemBase {
     double hasTarget = tagTracking.getTv();
     double targetID = tagTracking.getTID();
     if (hasTarget == 1 && targetID != 3.0 && targetID != 8.0) {
-      double rot = -facingTagPID.calculate(offset, 0);
+      double rot = -visionTrackingPID.calculate(offset, 0);
       return rot;
     }
     return currentRot;
@@ -265,8 +246,8 @@ public class Drivebase extends SubsystemBase {
     double rot = 0;
     double x_dis = tagTracking.getBT()[2];
     if (hasTarget == 1) {
-      rot = facingTagPID.calculate(offset, 0);
-      xSpeed = -followingTagPID.calculate(x_dis, 0.5);
+      rot = visionTrackingPID.calculate(offset, 0);
+      xSpeed = -visionTrackingPID.calculate(x_dis, 0.5);
     }
     speed[0] = xSpeed;
     speed[1] = ySpeed;
@@ -330,6 +311,8 @@ public class Drivebase extends SubsystemBase {
     return odometry.getPoseMeters();
   }
 
+  
+
   public void resetPose2dAndEncoder() {
     frontLeft.resetAllEncoder();
     frontRight.resetAllEncoder();
@@ -344,6 +327,7 @@ public class Drivebase extends SubsystemBase {
     SmartDashboard.putNumber("backLeft_speed", swerveModuleStates[2].speedMetersPerSecond);
     SmartDashboard.putNumber("backRight_speed", swerveModuleStates[3].speedMetersPerSecond);
     SmartDashboard.putNumber("gyro_heading", gyro.getRotation2d().getDegrees());
+    tagTracking.putDashboard();
   }
 
   public double calShooterAngleByPose2d() {

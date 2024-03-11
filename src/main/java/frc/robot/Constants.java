@@ -32,7 +32,7 @@ public final class Constants {
         public static final double kDownMotorManualVoltage = 10.0;
         public static final double[] kSpeakerShootRate = { 60.0, 60.0 };
         public static final double[] kCarryShooterRate = { 30.0, 30.0 };
-        public static final double[] kInitShooterRate = {60.0,60.0};
+        public static final double[] kInitShooterRate = { 60.0, 60.0 };
         public static final double kShooterRateOffset = 15;
         public static final double kP = 0.0;
         public static final double kI = 0.0;
@@ -164,7 +164,6 @@ public final class Constants {
         public static final double kTrackingP = 0.08;
         public static final double kTrackingI = 0.0;
         public static final double kTrackingD = 0.0;
-
     }
 
     public static final class ModuleConstants {

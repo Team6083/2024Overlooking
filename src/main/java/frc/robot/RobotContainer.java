@@ -110,7 +110,7 @@ public class RobotContainer {
     controlPanel.button(7).whileTrue(hookSubsystem.rightDownIndivisual());
 
     // semi-automatic
-    controlPanel.button(0).whileTrue(rotateShooterSubsystem.setAutoAim());
+    controlPanel.axisGreaterThan(0, 0).whileTrue(rotateShooterSubsystem.setAutoAim());
 
     // reset
     mainController.back().onTrue(drivebase.gyroResetCmd());
