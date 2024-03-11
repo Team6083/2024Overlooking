@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.networktables.NTSendable;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -16,11 +17,16 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
-import frc.robot.commands.Autos;
+// import frc.robot.commands.Autos;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.TransportToShootCmd;
+// import frc.robot.commands.autoCmds.AutoAimAndShootCmd;
+import frc.robot.commands.autoCmds.AutoRotateShooterCmd;
+// import frc.robot.commands.autoCmds.AutoTransportShootCmd;
+import frc.robot.commands.driveControls.NoteDriveCmd;
 import frc.robot.commands.driveControls.SwerveJoystickCmd;
+import frc.robot.commands.driveControls.TagDriveCmd;
 import frc.robot.subsystems.HookSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionSubsystem;
@@ -72,6 +78,13 @@ public class RobotContainer {
     initialChooser.addOption("right", "right");
     SmartDashboard.putString("auto", null);
     SmartDashboard.putData(initialChooser);
+
+    NamedCommands.registerCommand("AutoAim", new AutoRotateShooterCmd(rotateShooterSubsystem));
+    NamedCommands.registerCommand("AutoShootRate", shooterSubsystem.shootPIDRateCmd());
+    // NamedCommands.registerCommand("AutoTransport", new AutoTransportShootCmd(drivebase, shooterSubsystem, transportSubsystem));
+    NamedCommands.registerCommand("AutoIntakeWithTransport", new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+    // NamedCommands.registerCommand("AutoFaceAndShoot",
+    //     new AutoAimAndShootCmd(drivebase, rotateShooterSubsystem, shooterSubsystem, transportSubsystem));
   }
 
   private void configureBindings() {
@@ -97,7 +110,7 @@ public class RobotContainer {
         .whileFalse(rotateShooterSubsystem.changeMaunalModeCmd(false));
 
     // limelight
-    controlPanel.button(3).whileTrue(drivebase.tagTrackConditionCmd());
+    controlPanel.button(3).whileTrue(new TagDriveCmd(drivebase, mainController));
     // transport
     mainController.a().toggleOnTrue(new TransportToShootCmd(transportSubsystem, shooterSubsystem));
 
@@ -117,20 +130,20 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    String autoNumber = SmartDashboard.getString("auto", null);
-    String initial = initialChooser.getSelected();
-    var alliance = DriverStation.getAlliance();
-    if (initial == null && alliance.isPresent())
-      return new InstantCommand();
-    Boolean isRed = alliance.get() == DriverStation.Alliance.Red;
-    if (isRed) {
-      initial = (initial == "left" ? "right" : (initial == "right" ? "left" : "middle"));
-    }
-    // return Autos.auto(drivebase, riseShooter, shooter, transport, intake,
-    // autoNumber, initial);
-    return Autos.autoOptimize(drivebase, rotateShooterSubsystem, shooterSubsystem, transportSubsystem, intakeSubsystem,
-        autoNumber, initial);
-    // return Commands.none();
-    // return Commands.print("No autonomous command configured");
+    // String autoNumber = SmartDashboard.getString("auto", null);
+    // String initial = initialChooser.getSelected();
+    // var alliance = DriverStation.getAlliance();
+    // if (initial == null && alliance.isPresent())
+    //   return new InstantCommand();
+    // Boolean isRed = alliance.get() == DriverStation.Alliance.Red;
+    // if (isRed) {
+    //   initial = (initial == "left" ? "right" : (initial == "right" ? "left" : "middle"));
+    // }
+    // // return Autos.auto(drivebase, riseShooter, shooter, transport, intake,
+    // // autoNumber, initial);
+    // return Autos.autoOptimize(drivebase, rotateShooterSubsystem, shooterSubsystem, transportSubsystem, intakeSubsystem,
+    //     autoNumber, initial);
+    // // return Commands.none();
+    return Commands.print("No autonomous command configured");
   }
 }
