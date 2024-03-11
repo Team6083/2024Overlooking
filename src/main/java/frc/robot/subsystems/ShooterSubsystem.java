@@ -52,16 +52,25 @@ public class ShooterSubsystem extends SubsystemBase {
     this.powerDistributionSubsystem = powerDistribution;
   }
 
+  /**
+   * Stop both up and down shooter motor.
+   */
   public void stopAllMotor() {
     stopDownMotor();
     stopUpMotor();
   }
 
+  /**
+   * Reset both up and down encoders.
+   */
   private void resetEncoder() {
     upEncoder.reset();
     downEncoder.reset();
   }
 
+  /**
+   * Set up and down voltage by using both feedforward controller and pidcontroller to calculate. Have different mode, see {@link }
+   */
   private void setRateControl() {
     double upRate;
     double downRate;
