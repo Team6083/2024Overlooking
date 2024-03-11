@@ -282,8 +282,6 @@ public class Drivebase extends SubsystemBase {
     SmartDashboard.putNumber("backLeft_speed", swerveModuleStates[2].speedMetersPerSecond);
     SmartDashboard.putNumber("backRight_speed", swerveModuleStates[3].speedMetersPerSecond);
     SmartDashboard.putNumber("gyro_heading", gyro.getRotation2d().getDegrees());
-    tagTracking.putDashboard();
-    // noteTracking.putDashboard();
   }
 
   public double calShooterAngleByPose2d() {
