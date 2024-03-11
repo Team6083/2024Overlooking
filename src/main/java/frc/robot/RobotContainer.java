@@ -7,23 +7,18 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.networktables.NTSendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
-// import frc.robot.commands.Autos;
+import frc.robot.commands.Autos;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.TransportToShootCmd;
-// import frc.robot.commands.autoCmds.AutoAimAndShootCmd;
-import frc.robot.commands.autoCmds.AutoRotateShooterCmd;
-// import frc.robot.commands.autoCmds.AutoTransportShootCmd;
 import frc.robot.commands.driveControls.NoteDriveCmd;
 import frc.robot.commands.driveControls.SwerveJoystickCmd;
 import frc.robot.commands.driveControls.TagDriveCmd;
@@ -79,12 +74,13 @@ public class RobotContainer {
     SmartDashboard.putString("auto", null);
     SmartDashboard.putData(initialChooser);
 
-    NamedCommands.registerCommand("AutoAim", new AutoRotateShooterCmd(rotateShooterSubsystem));
+    NamedCommands.registerCommand("AutoAim", rotateShooterSubsystem.setAutoAim());
     NamedCommands.registerCommand("AutoShootRate", shooterSubsystem.shootPIDRateCmd());
-    // NamedCommands.registerCommand("AutoTransport", new AutoTransportShootCmd(drivebase, shooterSubsystem, transportSubsystem));
-    NamedCommands.registerCommand("AutoIntakeWithTransport", new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-    // NamedCommands.registerCommand("AutoFaceAndShoot",
-    //     new AutoAimAndShootCmd(drivebase, rotateShooterSubsystem, shooterSubsystem, transportSubsystem));
+    NamedCommands.registerCommand("AutoTransportToShoot",
+        new TransportToShootCmd(transportSubsystem, shooterSubsystem));
+    NamedCommands.registerCommand("AutoIntakeWithTransport",
+        new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+    NamedCommands.registerCommand("AutoFace", drivebase.tagTrackingCmd(0, 0, 0));
   }
 
   private void configureBindings() {
@@ -130,20 +126,19 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    // String autoNumber = SmartDashboard.getString("auto", null);
-    // String initial = initialChooser.getSelected();
-    // var alliance = DriverStation.getAlliance();
-    // if (initial == null && alliance.isPresent())
-    //   return new InstantCommand();
-    // Boolean isRed = alliance.get() == DriverStation.Alliance.Red;
-    // if (isRed) {
-    //   initial = (initial == "left" ? "right" : (initial == "right" ? "left" : "middle"));
-    // }
-    // // return Autos.auto(drivebase, riseShooter, shooter, transport, intake,
-    // // autoNumber, initial);
-    // return Autos.autoOptimize(drivebase, rotateShooterSubsystem, shooterSubsystem, transportSubsystem, intakeSubsystem,
-    //     autoNumber, initial);
-    // // return Commands.none();
-    return Commands.print("No autonomous command configured");
+    if (autoChooser.getSelected().isScheduled()) {
+      return autoChooser.getSelected();
+    }
+    String autoNumber = SmartDashboard.getString("auto", null);
+    String initial = initialChooser.getSelected();
+    var alliance = DriverStation.getAlliance();
+    if (initial == null && alliance.isPresent())
+      return Commands.none();
+    boolean isRed = alliance.get() == DriverStation.Alliance.Red;
+    if (isRed) {
+      initial = (initial == "left" ? "right" : (initial == "right" ? "left" : "middle"));
+    }
+    return Autos.autoOptimize(drivebase, rotateShooterSubsystem, shooterSubsystem, transportSubsystem, intakeSubsystem,
+        autoNumber, initial);
   }
 }

@@ -189,11 +189,23 @@ public class Drivebase extends SubsystemBase {
     return noteTracking.hasTargets();
   }
 
-  public void tagTracking(double xSpeed, double ySpeed, double rot) {
-    double robotRot = rot;
+  public double getFacingTagRot(double currentRot) {
     if (tagTracking.getTv() == 1 && tagTracking.getTID() != 3.0 && tagTracking.getTID() != 8.0) {
-      robotRot = -trackingPID.calculate(tagTracking.getTx(), 0.0);
+      return -trackingPID.calculate(tagTracking.getTx(), 0.0);
     }
+    return currentRot;
+  }
+
+  public double getFacingNoteRot(double currentRot) {
+    if (noteTracking.getTx().size() != 0) {
+      double yaw = noteTracking.getTx().indexOf(0);
+      return -trackingPID.calculate(yaw, 0);
+    }
+    return currentRot;
+  }
+
+  public void tagTracking(double xSpeed, double ySpeed, double rot) {
+    double robotRot = getFacingTagRot(rot);
     if (Math.abs(rot) > DrivebaseConstants.kMinRot) {
       robotRot = rot;
     }
@@ -201,15 +213,19 @@ public class Drivebase extends SubsystemBase {
   }
 
   public void noteTracking(double xSpeed, double ySpeed, double rot) {
-    double robotRot = rot;
-    if (noteTracking.getTx().size() != 0) {
-      double yaw = noteTracking.getTx().indexOf(0);
-      robotRot = -trackingPID.calculate(yaw, 0);
-    }
+    double robotRot = getFacingNoteRot(rot);
     if (Math.abs(rot) > DrivebaseConstants.kMinRot) {
       robotRot = rot;
     }
     drive(xSpeed, ySpeed, robotRot, true);
+  }
+
+  public Command tagTrackingCmd(double xSpeed, double ySpeed, double rot){
+    Command cmd = runEnd(
+    () -> tagTracking(xSpeed, ySpeed ,rot),
+    () -> drive(0, 0, 0, false));
+    cmd.setName("TagTrackingCmd");
+    return cmd;
   }
 
   public Command accelerateCmd() {

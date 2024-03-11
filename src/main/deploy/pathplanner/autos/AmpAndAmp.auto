@@ -22,19 +22,26 @@
                 }
               },
               {
-                "type": "named",
-                "data": {
-                  "name": "AutoShootRate"
-                }
-              },
-              {
                 "type": "sequential",
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
+                      "type": "deadline",
                       "data": {
-                        "name": "AutoTransport"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "AutoTransportToShoot"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "AutoShootRate"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
@@ -57,9 +64,22 @@
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "deadline",
                       "data": {
-                        "name": "AutoTransport"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "AutoTransportToShoot"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "AutoShootRate"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
@@ -95,9 +115,41 @@
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "deadline",
                       "data": {
-                        "name": "AutoFaceAndShoot"
+                        "commands": [
+                          {
+                            "type": "sequential",
+                            "data": {
+                              "commands": [
+                                {
+                                  "type": "wait",
+                                  "data": {
+                                    "waitTime": 0.3
+                                  }
+                                },
+                                {
+                                  "type": "named",
+                                  "data": {
+                                    "name": "AutoTransportToShoot"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "AutoShootRate"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "AutoFace"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
@@ -133,9 +185,22 @@
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "deadline",
                       "data": {
-                        "name": "AutoFaceAndShoot"
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "AutoTransportToShoot"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "AutoShootRate"
+                            }
+                          }
+                        ]
                       }
                     }
                   ]
