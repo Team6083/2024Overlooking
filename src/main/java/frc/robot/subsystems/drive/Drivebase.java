@@ -365,4 +365,9 @@ public class Drivebase extends SubsystemBase {
         Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration));
     return AutoBuilder.pathfindToPose(targetPose, constraints, goalEndVelocity, rotationDelayDistance);
   }
+
+  public Command setTagVisionModeCmd(){
+    Command cmd = Commands.runEnd(()->tagTracking.isVisionOn(), ()->tagTracking.setCamMode());
+    return cmd;
+  }
 }

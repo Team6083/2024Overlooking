@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.TagTrackingConstants;
 
 public class TagTracking {
@@ -27,10 +28,12 @@ public class TagTracking {
     private double[] ids;
 
     private double distance;
+    private double CamMode;
+    private boolean isCamOn = true;
 
     public TagTracking() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
-        setCamMode(0);
+        setCamMode();
         setLedMode(0);
         setPipeline(0);
         try {
@@ -47,8 +50,12 @@ public class TagTracking {
      * 
      * @param camMode set 0 plz
      */
-    private void setCamMode(int camMode) {
-        table.getEntry("camMode").setNumber(camMode);
+    public void setCamMode() {
+        if (isCamOn) {
+            table.getEntry("camMode").setNumber(0);
+        } else {
+            table.getEntry("camMode").setNumber(1);
+        }
     }
 
     /**
@@ -239,6 +246,10 @@ public class TagTracking {
 
     public double getLastID() {
         return getIDs()[2];
+    }
+
+    public void isVisionOn() {
+        isCamOn = !isCamOn;
     }
 
     public void putDashboard() {
