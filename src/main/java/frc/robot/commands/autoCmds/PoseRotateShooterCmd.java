@@ -30,13 +30,11 @@ public class PoseRotateShooterCmd extends Command {
   @Override
   public void execute() {
     rotateShooterSubsystem.setSetpoint(drivebase.calShooterAngleByPose2d());
-    rotateShooterSubsystem.setPIDControl();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    rotateShooterSubsystem.setPIDControl();
   }
 
   // Returns true when the command should end.

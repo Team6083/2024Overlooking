@@ -30,26 +30,26 @@ public class IntakeSubsystem extends SubsystemBase {
     rotateEncoder = new DutyCycleEncoder(IntakeConstants.kRotateEncoderChannel);
   }
 
-  public void setIntake() {
+  private void setIntake() {
     setIntakeMotorVoltage(IntakeConstants.kIntakeVoltage);
   }
 
-  public void setReIntake() {
+  private void setReIntake() {
     setIntakeMotorVoltage(IntakeConstants.kThrowVoltage);
   }
 
-  public void setDownIntake() {
+  private void setDownIntake() {
     if(getAngle()<0.0){
       stopRotateIntakeMotor();
     }
     setRotateMotorVoltage(IntakeConstants.kDownVoltage);
   }
 
-  public void stopIntakeMotor() {
+  private void stopIntakeMotor() {
     intakeMotor.set(VictorSPXControlMode.PercentOutput, 0.0);
   }
 
-  public void stopRotateIntakeMotor(){
+  private void stopRotateIntakeMotor(){
     rotateIntake.set(VictorSPXControlMode.PercentOutput, 0.0);
   }
 
