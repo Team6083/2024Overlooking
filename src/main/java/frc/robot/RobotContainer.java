@@ -15,11 +15,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
+import frc.robot.Constants.RotateShooterConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
+import frc.robot.commands.ShooterDefaultCmd;
 import frc.robot.commands.TransportToShootCmd;
-import frc.robot.commands.driveControls.NoteDriveCmd;
 import frc.robot.commands.driveControls.SwerveJoystickCmd;
 import frc.robot.commands.driveControls.TagDriveCmd;
 import frc.robot.subsystems.HookSubsystem;
@@ -94,17 +95,20 @@ public class RobotContainer {
     mainController.x().whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
 
     // shooter
-    mainController.b().toggleOnTrue(shooterSubsystem.shootRateControlCmd().alongWith(rotateShooterSubsystem.setModeCmd(1)))
-        .toggleOnFalse(rotateShooterSubsystem.setModeCmd(4));
-    mainController.pov(0).whileTrue(rotateShooterSubsystem.addErrorCmd(1));
-    mainController.pov(180).whileTrue(rotateShooterSubsystem.addErrorCmd(-1));
+    mainController.b()
+        .toggleOnTrue(shooterSubsystem.shootRateControlCmd().alongWith(rotateShooterSubsystem.setModeCmd(1))
+            .alongWith(new TagDriveCmd(drivebase, mainController)))
+        .toggleOnFalse(new ShooterDefaultCmd(shooterSubsystem, rotateShooterSubsystem));
+    rotateShooterSubsystem.addErrorCmd(controlPanel.getRawAxis(0));///
     controlPanel.button(1)
-        .whileTrue(shooterSubsystem.setRateModeCmd(3).alongWith(rotateShooterSubsystem.setModeCmd(3)))
-        .whileFalse(shooterSubsystem.setRateModeCmd(1).alongWith(rotateShooterSubsystem.setModeCmd(1)));
-    controlPanel.button(2)
+        .whileTrue(shooterSubsystem.setRateModeCmd(2).alongWith(rotateShooterSubsystem.setModeCmd(2)))
+        .whileFalse(new ShooterDefaultCmd(shooterSubsystem, rotateShooterSubsystem));
+    controlPanel.button(2)///
         .whileTrue(rotateShooterSubsystem.changeMaunalModeCmd(true))
         .whileFalse(rotateShooterSubsystem.changeMaunalModeCmd(false));
-
+    mainController.pov(0).whileTrue(rotateShooterSubsystem.setManualVoltageCmd(RotateShooterConstants.kManualVoltage));
+    mainController.pov(180)
+        .whileTrue(rotateShooterSubsystem.setManualVoltageCmd(-RotateShooterConstants.kManualVoltage));///
     // limelight
     controlPanel.button(3).whileTrue(new TagDriveCmd(drivebase, mainController));
     // transport

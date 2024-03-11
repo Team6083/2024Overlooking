@@ -199,8 +199,8 @@ public class ShooterSubsystem extends SubsystemBase {
   /**
    * @param mode set shooter rate mode
    * @param 1    speaker mode
-   * @param 2    carry mode
-   * @param 3    init mode
+   * @param 2    amp mode
+   * @param 3    carry mode
    */
   public boolean isEnoughRate() {
     switch (rateMode) {

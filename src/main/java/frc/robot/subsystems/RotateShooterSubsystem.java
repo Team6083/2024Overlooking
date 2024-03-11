@@ -24,9 +24,9 @@ public class RotateShooterSubsystem extends SubsystemBase {
   private double rotateDegreeError = 0.0;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
   private final TagTracking tagTracking;
-  private int switchMode = 4;
+  private int mode = 4;
   private boolean isMaunal = false;
-  // private final SparkMaxRelativeEncoder riseEncoderSPX;
+  private double manualVoltage = 0;
 
   public RotateShooterSubsystem(PowerDistributionSubsystem powerDistributionSubsystem,
       TagTracking tagTracking) {
@@ -43,8 +43,8 @@ public class RotateShooterSubsystem extends SubsystemBase {
     setSetpoint(RotateShooterConstants.kInitDegree);
   }
 
-  public void setManualControl(double rotateSpeed) {
-    setMotor(rotateSpeed);
+  public void setManualControl() {
+    setMotor(manualVoltage);
     rotatePID.setSetpoint(getAngle());
   }
 
@@ -100,32 +100,37 @@ public class RotateShooterSubsystem extends SubsystemBase {
   }
 
   /**
-   * @param 0 init degree
    * @param 1 aim degree
    * @param 2 carry degree
-   * @param 3
+   * @param 3 init degree
    */
-  public void switchMode() {
-    switch (switchMode) {
-      case 0:
-        setSetpoint(RotateShooterConstants.kInitDegree);
-        break;
+  public void setModeSetpoint() {
+    switch (mode) {
       case 1:
         setSetpoint(getAimDegree(getSetpoint()));
         break;
       case 2:
         setSetpoint(RotateShooterConstants.kCarryDegree);
+        break;
+      case 3:
+        setSetpoint(RotateShooterConstants.kInitDegree);
       default:
         break;
     }
   }
 
-  /**
-   * Reverse chageManualMode boolean.
-   * @param mode
-   */
-  public void changeMaunalMode(boolean mode) {
-    isMaunal = mode;
+  public void setManualVoltage(double voltage) {
+    manualVoltage = voltage;
+  }
+
+  public Command setManualVoltageCmd(double voltage) {
+    Command cmd = runOnce(() -> setManualVoltage(voltage));
+    cmd.setName("SetManualVoltageCmd");
+    return cmd;
+  }
+
+  public void changeMaunalMode(boolean isManual) {
+    this.isMaunal = isManual;
   }
 
   /**
@@ -144,7 +149,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
    * @param mode
    */
   public void setMode(int mode) {
-    switchMode = mode;
+    this.mode = mode;
   }
 
   /**
@@ -203,14 +208,16 @@ public class RotateShooterSubsystem extends SubsystemBase {
 
   private void changeRotateMode() {
     if (!isMaunal) {
-      switchMode();
-      setPIDControl();
+      setModeSetpoint();
+    } else {
+      setManualControl();
     }
   }
 
   @Override
   public void periodic() {
     changeRotateMode();
+    setPIDControl();
     SmartDashboard.putData("rotate_PID", rotatePID);
     SmartDashboard.putNumber("encoderDegree", getAngle());
   }
