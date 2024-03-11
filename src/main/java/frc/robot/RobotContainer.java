@@ -21,6 +21,7 @@ import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.ShooterDefaultCmd;
 import frc.robot.commands.TransportToShootCmd;
+import frc.robot.commands.autoCmds.AutoTransportToShootCmd;
 import frc.robot.commands.driveControls.SwerveJoystickCmd;
 import frc.robot.commands.driveControls.TagDriveCmd;
 import frc.robot.subsystems.HookSubsystem;
@@ -79,7 +80,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("AutoAim", rotateShooterSubsystem.setAutoAim());
     NamedCommands.registerCommand("AutoShootRate", shooterSubsystem.shootRateControlCmd());
     NamedCommands.registerCommand("AutoTransportToShoot",
-        new TransportToShootCmd(transportSubsystem, shooterSubsystem));
+        new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
     NamedCommands.registerCommand("AutoIntakeWithTransport",
         new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
     NamedCommands.registerCommand("AutoFace", drivebase.tagTrackingCmd(0, 0, 0));
