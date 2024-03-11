@@ -120,20 +120,38 @@ public class RotateShooterSubsystem extends SubsystemBase {
     }
   }
 
+  /**
+   * Reverse chageManualMode boolean.
+   * @param mode
+   */
   public void changeMaunalMode(boolean mode) {
     isMaunal = mode;
   }
 
+  /**
+   * Reverse current manual mode.
+   * @param mode
+   * @return changeManualModeCmd
+   */
   public Command changeMaunalModeCmd(boolean mode) {
     Command cmd = runOnce(() -> changeMaunalMode(mode));
     cmd.setName("changeMaunalModeCmd");
     return cmd;
   }
 
+  /**
+   * Set shooter mode.
+   * @param mode
+   */
   public void setMode(int mode) {
     switchMode = mode;
   }
 
+  /**
+   * 
+   * @param mode
+   * @return
+   */
   public Command setModeCmd(int mode) {
     Command cmd = runOnce(() -> setMode(mode));
     cmd.setName("setModeCmd");
