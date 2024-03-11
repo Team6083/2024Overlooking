@@ -24,9 +24,9 @@ public class RotateShooterSubsystem extends SubsystemBase {
   private double rotateDegreeError = 0.0;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
   private final TagTracking tagTracking;
-  private int switchMode = 4;
+  private int mode = 4;
   private boolean isMaunal = false;
-  // private final SparkMaxRelativeEncoder riseEncoderSPX;
+  private double manualVoltage = 0;
 
   public RotateShooterSubsystem(PowerDistributionSubsystem powerDistributionSubsystem,
       TagTracking tagTracking) {
@@ -43,8 +43,8 @@ public class RotateShooterSubsystem extends SubsystemBase {
     setSetpoint(RotateShooterConstants.kInitDegree);
   }
 
-  public void setManualControl(double rotateSpeed) {
-    setMotor(rotateSpeed);
+  public void setManualControl() {
+    setMotor(manualVoltage);
     rotatePID.setSetpoint(getAngle());
   }
 
@@ -65,7 +65,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
     rotatePID.setSetpoint(setpoint);
   }
 
-  public void setPIDControl() {
+  private void setPIDControl() {
     double rotateVoltage = rotatePID.calculate(getAngle());
     double modifiedRotateVoltage = rotateVoltage;
     if (Math.abs(modifiedRotateVoltage) > RotateShooterConstants.kRotateVoltLimit) {
@@ -80,7 +80,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
     return degree;
   }
 
-  public double getAimDegree(double currentDegree) {
+  public double getSpeakerDegree(double currentDegree) {
     if (tagTracking.getTv() == 1 && tagTracking.getTID() != 3.0
         && tagTracking.getTID() != 8.0) {
       double speakerToShooterHeight = RotateShooterConstants.kSpeakerHeight - RotateShooterConstants.kShooterHeight;
@@ -100,36 +100,42 @@ public class RotateShooterSubsystem extends SubsystemBase {
   }
 
   /**
-   * @param 0 init degree
    * @param 1 aim degree
    * @param 2 carry degree
-   * @param 3
+   * @param 3 init degree
    */
-  public void switchMode() {
-    switch (switchMode) {
-      case 0:
-        setSetpoint(RotateShooterConstants.kInitDegree);
-        break;
+  public void setModeSetpoint() {
+    switch (mode) {
       case 1:
-        setSetpoint(getAimDegree(getSetpoint()));
+        setSetpoint(getSpeakerDegree(getSetpoint()));
         break;
       case 2:
         setSetpoint(RotateShooterConstants.kCarryDegree);
+        break;
+      case 3:
+        setSetpoint(RotateShooterConstants.kInitDegree);
       default:
         break;
     }
   }
 
-  /**
-   * Reverse chageManualMode boolean.
-   * @param mode
-   */
-  public void changeMaunalMode(boolean mode) {
-    isMaunal = mode;
+  private void setManualVoltage(double voltage) {
+    manualVoltage = voltage;
+  }
+
+  public Command setManualVoltageCmd(double voltage) {
+    Command cmd = runOnce(() -> setManualVoltage(voltage));
+    cmd.setName("SetManualVoltageCmd");
+    return cmd;
+  }
+
+  public void changeMaunalMode(boolean isManual) {
+    this.isMaunal = isManual;
   }
 
   /**
    * Reverse current manual mode.
+   * 
    * @param mode
    * @return changeManualModeCmd
    */
@@ -141,10 +147,11 @@ public class RotateShooterSubsystem extends SubsystemBase {
 
   /**
    * Set shooter mode.
+   * 
    * @param mode
    */
   public void setMode(int mode) {
-    switchMode = mode;
+    this.mode = mode;
   }
 
   /**
@@ -167,7 +174,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
 
   public Command setAutoAim() {
     Command cmd = Commands.runOnce(
-        () -> setSetpoint(getAimDegree(getSetpoint())), this);
+        () -> setSetpoint(getSpeakerDegree(getSetpoint())), this);
     cmd.setName("autoAimCmd");
     return cmd;
   }
@@ -203,23 +210,17 @@ public class RotateShooterSubsystem extends SubsystemBase {
 
   private void changeRotateMode() {
     if (!isMaunal) {
-      switchMode();
-      setPIDControl();
+      setModeSetpoint();
+    } else {
+      setManualControl();
     }
   }
 
   @Override
   public void periodic() {
     changeRotateMode();
+    setPIDControl();
     SmartDashboard.putData("rotate_PID", rotatePID);
     SmartDashboard.putNumber("encoderDegree", getAngle());
-  }
-
-  public Command setInherentSetpoint() {
-    Command cmd = Commands.run(
-        () -> setSetpoint(RotateShooterConstants.kInitDegree),
-        this);
-    cmd.setName("setInherentSetpoint");
-    return cmd;
   }
 }

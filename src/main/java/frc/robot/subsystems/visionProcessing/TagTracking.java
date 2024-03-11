@@ -9,7 +9,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.TagTrackingConstants;
 
 public class TagTracking {
@@ -20,17 +19,17 @@ public class TagTracking {
     private double x;
     private double y;
     private double ID;
-    private double latency;
 
     private double[] bt; // botpose_targetspace
     private double[] ct; // camerapose_targetspace
     private double[] ids;
 
     private double distance;
+    private boolean isCamOn = true;
 
     public TagTracking() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
-        setCamMode(0);
+        setCamMode();
         setLedMode(0);
         setPipeline(0);
         try {
@@ -47,8 +46,12 @@ public class TagTracking {
      * 
      * @param camMode set 0 plz
      */
-    private void setCamMode(int camMode) {
-        table.getEntry("camMode").setNumber(camMode);
+    public void setCamMode() {
+        if (isCamOn) {
+            table.getEntry("camMode").setNumber(0);
+        } else {
+            table.getEntry("camMode").setNumber(1);
+        }
     }
 
     /**
@@ -108,16 +111,6 @@ public class TagTracking {
     public double getTID() {
         ID = table.getEntry("tid").getDouble(0);
         return ID;
-    }
-
-    /**
-     * Returns the pipeline's total latency.
-     * 
-     * @return latency (double)
-     */
-    private double getTl() {
-        latency = table.getEntry("tl").getDouble(0) + table.getEntry("cl").getDouble(0);
-        return latency;
     }
 
     /**
@@ -241,14 +234,8 @@ public class TagTracking {
         return getIDs()[2];
     }
 
-    public void putDashboard() {
-        SmartDashboard.putNumber("LimelightX", getTx());
-        SmartDashboard.putNumber("LimelightY", getTy());
-        SmartDashboard.putNumber("LimelightID", getTID());
-        SmartDashboard.putNumber("latency", getTl());
-        SmartDashboard.putNumber("horDistance", getHorizontalDistanceByCT());
-        SmartDashboard.putNumber("RealDistance", getDistance());
-        SmartDashboard.putNumber("LastID", getLastID());
+    public void isVisionOn() {
+        isCamOn = !isCamOn;
     }
 
 }

@@ -194,7 +194,7 @@ public class Drivebase extends SubsystemBase {
 
   public double getFacingNoteRot(double currentRot) {
     if (noteTracking.getTx().size() != 0) {
-      double yaw = noteTracking.getTx().indexOf(0);
+      double yaw = noteTracking.getTx().get(0);
       return -trackingPID.calculate(yaw, 0);
     }
     return currentRot;
@@ -282,8 +282,6 @@ public class Drivebase extends SubsystemBase {
     SmartDashboard.putNumber("backLeft_speed", swerveModuleStates[2].speedMetersPerSecond);
     SmartDashboard.putNumber("backRight_speed", swerveModuleStates[3].speedMetersPerSecond);
     SmartDashboard.putNumber("gyro_heading", gyro.getRotation2d().getDegrees());
-    tagTracking.putDashboard();
-    // noteTracking.putDashboard();
   }
 
   public double calShooterAngleByPose2d() {
@@ -364,5 +362,10 @@ public class Drivebase extends SubsystemBase {
         maxVelocity, maxAcceleration,
         Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration));
     return AutoBuilder.pathfindToPose(targetPose, constraints, goalEndVelocity, rotationDelayDistance);
+  }
+
+  public Command setTagVisionModeCmd(){
+    Command cmd = Commands.runEnd(()->tagTracking.isVisionOn(), ()->tagTracking.setCamMode());
+    return cmd;
   }
 }

@@ -20,6 +20,7 @@ public class IntakeSubsystem extends SubsystemBase {
   private final VictorSPX rotateIntake;
   private final DutyCycleEncoder rotateEncoder;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
+  private boolean isDownIntake = false;
 
   public IntakeSubsystem(PowerDistributionSubsystem powerDistributionSubsystem) {
     this.powerDistributionSubsystem = powerDistributionSubsystem;
@@ -30,22 +31,23 @@ public class IntakeSubsystem extends SubsystemBase {
     rotateEncoder = new DutyCycleEncoder(IntakeConstants.kRotateEncoderChannel);
   }
 
-  public void setIntake() {
+  private void setIntake() {
     setIntakeMotorVoltage(IntakeConstants.kIntakeVoltage);
   }
 
-  public void setReIntake() {
+  private void setReIntake() {
     setIntakeMotorVoltage(IntakeConstants.kThrowVoltage);
   }
 
-  public void setDownIntake() {
-    if(getAngle()<0.0){
+  private void setDownIntake() {
+    if (getAngle() < 0.0 || isDownIntake) {
       stopRotateIntakeMotor();
+      isDownIntake = true;
     }
     setRotateMotorVoltage(IntakeConstants.kDownVoltage);
   }
 
-  public void stopIntakeMotor() {
+  private void stopIntakeMotor() {
     intakeMotor.set(VictorSPXControlMode.PercentOutput, 0.0);
   }
 
@@ -77,7 +79,7 @@ public class IntakeSubsystem extends SubsystemBase {
     return rotateIntake.getBusVoltage();
   }
 
-  private double getAngle(){
+  private double getAngle() {
     double degree = (IntakeConstants.kRotateEncoderInverted ? -1.0 : 1.0)
         * ((rotateEncoder.getAbsolutePosition() * 360.0) - IntakeConstants.kRotateOffset);
     return degree;
@@ -85,6 +87,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    setDownIntake();
     SmartDashboard.putNumber("IntakeVoltage", intakeMotor.getMotorOutputVoltage());
   }
 

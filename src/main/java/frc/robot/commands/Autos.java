@@ -238,7 +238,6 @@ public final class Autos {
         Command runPeriodicCommand = new PoseRotateShooterCmd(rotateShooterSubsystem, drivebase);
         Command runAutoCommand = new TransportToShootCmd(transportSubsystem, shooterSubsystem);
         char pre = '0';
-        boolean firstTime = true;
 
         // initial setting
         switch (initial) {

@@ -37,11 +37,11 @@ public final class Constants {
         public static final double kP = 0.0;
         public static final double kI = 0.0;
         public static final double kD = 0.0;
-        public static final double kUpMotorS = 2.35;
+        public static final double kUpMotorS = 2.37;
         public static final double kUpMotorV = 0.123;
         public static final double kUpMotorA = 0.0;
         public static final double kDownMotorS = 0.681;
-        public static final double kDownMotorV = 0.145;
+        public static final double kDownMotorV = 0.142;
         public static final double kDownMotorA = 0.0;
     }
 
@@ -73,6 +73,7 @@ public final class Constants {
         public static final int kEncoderChannel = 2;
         public static final double kInitDegree = 57.0;
         public static final double kCarryDegree = 0;
+        public static final double kManualVoltage = 4.0;
         public static final double kRotateVoltLimit = 5.0;
         public static final double kRotateAngleMin = -3.0;
         public static final double kRotateAngleMax = 60.0;
