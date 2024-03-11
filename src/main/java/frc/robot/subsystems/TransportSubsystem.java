@@ -13,18 +13,28 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TransportConstants;
+import frc.robot.lib.DistanceSensor;
+import frc.robot.lib.DistanceSensorInterface;
+import frc.robot.lib.SimDistanceSensor;
 
 public class TransportSubsystem extends SubsystemBase {
   /** Creates a new TransportSubsystem. */
   private final CANSparkMax transportMotor;
-  private final Rev2mDistanceSensor distanceSensor;
+  private DistanceSensorInterface distanceSensor;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
 
   public TransportSubsystem(PowerDistributionSubsystem powerDistribution) {
 
     transportMotor = new CANSparkMax(TransportConstants.kTransportChannel, MotorType.kBrushless);
     transportMotor.setInverted(TransportConstants.kTransportInverted);
-    distanceSensor = new Rev2mDistanceSensor(Port.kOnboard);
+    try {
+      distanceSensor = new DistanceSensor(Port.kOnboard);
+
+    } catch (Exception e) {
+      distanceSensor = new SimDistanceSensor();
+      System.out.println("distance sensor not detected");
+    }
+
     distanceSensor.setAutomaticMode(true);
     this.powerDistributionSubsystem = powerDistribution;
   }
@@ -33,8 +43,8 @@ public class TransportSubsystem extends SubsystemBase {
     setVoltage(TransportConstants.kTransVoltage);
   }
 
-  public Command setTransportCmd(){
-    Command cmd = runEnd(()->setTransport(), ()->stopMotor());
+  public Command setTransportCmd() {
+    Command cmd = runEnd(() -> setTransport(), () -> stopMotor());
     return cmd;
   }
 
@@ -47,8 +57,8 @@ public class TransportSubsystem extends SubsystemBase {
   }
 
   public boolean isGetNote() {
-    if (distanceSensor.isRangeValid()) {
-      return distanceSensor.getRange() <= TransportConstants.kDistanceRange;
+    if (distanceSensor.isGetTarget()) {
+      return distanceSensor.getTargetDistance() <= TransportConstants.kDistanceRange;
     }
     return false;
   }
@@ -63,7 +73,7 @@ public class TransportSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("rangeDistance", distanceSensor.getRange());
+    SmartDashboard.putNumber("rangeDistance", distanceSensor.getTargetDistance());
     SmartDashboard.putBoolean("isGetNote", isGetNote());
   }
 
