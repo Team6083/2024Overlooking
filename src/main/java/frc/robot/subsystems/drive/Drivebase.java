@@ -194,7 +194,7 @@ public class Drivebase extends SubsystemBase {
 
   public double getFacingNoteRot(double currentRot) {
     if (noteTracking.getTx().size() != 0) {
-      double yaw = noteTracking.getTx().indexOf(0);
+      double yaw = noteTracking.getTx().get(0);
       return -trackingPID.calculate(yaw, 0);
     }
     return currentRot;
