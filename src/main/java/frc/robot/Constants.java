@@ -60,7 +60,7 @@ public final class Constants {
         public static final Boolean kIntakeInverted = true;
         public static final Boolean kRotateIntakeInverted = false;
         public static final Boolean kRotateEncoderInverted = false;
-        public static final double kRotateOffset = 0.0;
+        public static final double kRotateOffset = 113;
         public static final double kIntakeVoltage = 7.0;
         public static final double kThrowVoltage = -4.0;
         public static final double kDownVoltage = -10.0;
@@ -75,10 +75,11 @@ public final class Constants {
         public static final double kCarryDegree = 0;
         public static final double kManualVoltage = 4.0;
         public static final double kRotateVoltLimit = 5.0;
-        public static final double kRotateAngleMin = -3.0;
-        public static final double kRotateAngleMax = 60.0;
+        public static final double kRotateAngleMin = 0.0;
+        public static final double kRotateAngleMax = 65.0;
         public static final double kRotateDegreeErrorPoint = 3;
         public static final double kRotateTriggerValue = 0.15;
+        public static final double kRotateOffset = 367.0;        
         public static final double kSpeakerHeight = 2.0;
         public static final double kAMPHeight = 0.89;
         public static final double kShooterHeight = 0.31;
@@ -100,8 +101,8 @@ public final class Constants {
         public static final double kPLine = 2.0;
         public static final double kILine = 0.0001;
         public static final double kDLine = 0.001;
-        public static final int kLeftEncoderChannel = 3;
-        public static final int kRightEncoderChannel = 2;
+        public static final int kLeftEncoderChannel = 4;
+        public static final int kRightEncoderChannel = 3;
         public static final double kHookPositionConversionfactor = 1.0;
         public static final double kLinePositionMax = 60.0;
         public static final double kLinePositionMin = 0.0;

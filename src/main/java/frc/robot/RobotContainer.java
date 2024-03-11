@@ -36,6 +36,7 @@ import frc.robot.subsystems.visionProcessing.TagTracking;
 public class RobotContainer {
   private final CommandXboxController mainController;
   private final CommandGenericHID controlPanel;
+  private final CommandXboxController vice;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
   private final Drivebase drivebase;
   private final IntakeSubsystem intakeSubsystem;
@@ -45,7 +46,6 @@ public class RobotContainer {
   private final HookSubsystem hookSubsystem;
   private final TagTracking tagTracking;
   private final NoteTracking noteTracking;
-
   private SendableChooser<Command> autoChooser;
   private SendableChooser<String> initialChooser;
 
@@ -54,6 +54,7 @@ public class RobotContainer {
     noteTracking = new NoteTracking();
     // define subsystems
     mainController = new CommandXboxController(DriveControllerConstants.kMainController);
+    vice = new CommandXboxController(2);
     controlPanel = new CommandGenericHID(DriveControllerConstants.kControlPanel);
     powerDistributionSubsystem = new PowerDistributionSubsystem();
     drivebase = new Drivebase(tagTracking, noteTracking);
@@ -68,11 +69,11 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
     initialChooser = new SendableChooser<String>();
-    initialChooser.setDefaultOption("none", null);
+    initialChooser.setDefaultOption("none", "0");
     initialChooser.addOption("left", "left");
     initialChooser.addOption("middle", "middle");
     initialChooser.addOption("right", "right");
-    SmartDashboard.putString("auto", null);
+    SmartDashboard.putString("auto", "0");
     SmartDashboard.putData(initialChooser);
 
     NamedCommands.registerCommand("AutoAim", rotateShooterSubsystem.setAutoAim());
@@ -115,13 +116,18 @@ public class RobotContainer {
     mainController.a().toggleOnTrue(
         transportSubsystem.transportIntakeCmd().onlyWhile(() -> shooterSubsystem.isEnoughRate()).withTimeout(0.5));
 
-    // hook
-    mainController.rightTrigger(0.5).whileTrue(hookSubsystem.upAllCmd());
-    mainController.leftTrigger(0.5).whileTrue(hookSubsystem.downAllCmd());
+    // // hook
+    // mainController.rightTrigger(0.5).whileTrue(hookSubsystem.upAllCmd());
+    // mainController.leftTrigger(0.5).whileTrue(hookSubsystem.downAllCmd());
     controlPanel.button(4).whileTrue(hookSubsystem.leftUpIndivisualCmd());
     controlPanel.button(5).whileTrue(hookSubsystem.leftDownIndivisualCmd());
     controlPanel.button(6).whileTrue(hookSubsystem.rightUpIndivisualCmd());
     controlPanel.button(7).whileTrue(hookSubsystem.rightDownIndivisualCmd());
+    vice.a().whileTrue(hookSubsystem.leftUpIndivisualCmd());
+    vice.b().whileTrue(hookSubsystem.leftDownIndivisualCmd());
+    vice.x().whileTrue(hookSubsystem.rightUpIndivisualCmd());
+    vice.y().whileTrue(hookSubsystem.rightDownIndivisualCmd());
+    
 
     // reset
     mainController.back().onTrue(drivebase.gyroResetCmd());

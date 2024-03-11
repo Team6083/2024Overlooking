@@ -120,7 +120,36 @@ public class Drivebase extends SubsystemBase {
 
     trackingPID = new PIDController(DrivebaseConstants.kTrackingP, DrivebaseConstants.kTrackingI,
         DrivebaseConstants.kTrackingD);
-
+    AutoBuilder.configureHolonomic(
+        this::getPose2d, // Robot pose suppier
+        this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+            new PIDConstants(AutoConstants.kPTranslation, AutoConstants.kITranslation, AutoConstants.kDTranslation), // Translation
+                                                                                                                     // PID
+                                                                                                                     // constants
+            new PIDConstants(AutoConstants.kPRotation, AutoConstants.kIRotation, AutoConstants.kDRotation), // Rotation
+                                                                                                            // PID
+                                                                                                            // constants
+            DrivebaseConstants.kMaxSpeed, // Max module speed, in m/s
+            AutoConstants.kDrivebaseRadius, // Drive base radius in meters. Distance from robot center to furthest
+                                            // module.
+            new ReplanningConfig() // Default path replanning config. See the API for the options here
+        ),
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
   }
 
   public void resetGyro() {
@@ -220,10 +249,10 @@ public class Drivebase extends SubsystemBase {
     drive(xSpeed, ySpeed, robotRot, true);
   }
 
-  public Command tagTrackingCmd(double xSpeed, double ySpeed, double rot){
+  public Command tagTrackingCmd(double xSpeed, double ySpeed, double rot) {
     Command cmd = runEnd(
-    () -> tagTracking(xSpeed, ySpeed ,rot),
-    () -> drive(0, 0, 0, false));
+        () -> tagTracking(xSpeed, ySpeed, rot),
+        () -> drive(0, 0, 0, false));
     cmd.setName("TagTrackingCmd");
     return cmd;
   }
@@ -364,8 +393,8 @@ public class Drivebase extends SubsystemBase {
     return AutoBuilder.pathfindToPose(targetPose, constraints, goalEndVelocity, rotationDelayDistance);
   }
 
-  public Command setTagVisionModeCmd(){
-    Command cmd = Commands.runEnd(()->tagTracking.isVisionOn(), ()->tagTracking.setCamMode());
+  public Command setTagVisionModeCmd() {
+    Command cmd = Commands.runEnd(() -> tagTracking.isVisionOn(), () -> tagTracking.setCamMode());
     return cmd;
   }
 }

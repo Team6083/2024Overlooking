@@ -76,7 +76,10 @@ public class RotateShooterSubsystem extends SubsystemBase {
 
   public double getAngle() {
     double degree = (RotateShooterConstants.kEncoderInverted ? -1.0 : 1.0)
-        * ((rotateEncoder.getAbsolutePosition() * 360.0) - 120.0);
+        * ((rotateEncoder.getAbsolutePosition() * 360.0) - RotateShooterConstants.kRotateOffset)%360.0;
+    if(Math.abs(degree)>180){
+      degree-=360;
+    }
     return degree;
   }
 

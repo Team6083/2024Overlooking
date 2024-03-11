@@ -29,6 +29,8 @@ public class IntakeSubsystem extends SubsystemBase {
     rotateIntake = new VictorSPX(IntakeConstants.kRotateIntakeChannel);
     rotateIntake.setInverted(IntakeConstants.kRotateIntakeInverted);
     rotateEncoder = new DutyCycleEncoder(IntakeConstants.kRotateEncoderChannel);
+
+    rotateEncoder.reset();
   }
 
   private void setIntake() {
@@ -43,6 +45,7 @@ public class IntakeSubsystem extends SubsystemBase {
     if (getAngle() < 0.0 || isDownIntake) {
       stopRotateIntakeMotor();
       isDownIntake = true;
+      return;
     }
     setRotateMotorVoltage(IntakeConstants.kDownVoltage);
   }
@@ -89,6 +92,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public void periodic() {
     setDownIntake();
     SmartDashboard.putNumber("IntakeVoltage", intakeMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("intakeDegree", getAngle());
   }
 
   public Command intakeCmd() {

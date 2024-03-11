@@ -145,7 +145,7 @@ public class HookSubsystem extends SubsystemBase {
   }
 
   public double getLeftPosition() {
-    return (leftEncoder.getAbsolutePosition() * 360);
+    return (-leftEncoder.getAbsolutePosition() * 360);
   }
 
   public double getRightPosition() {
@@ -230,17 +230,17 @@ public class HookSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("hookRightPosition", getRightPosition());
   }
 
-  public Command upAllCmd() {
-    Command cmd = new ParallelCommandGroup(upLineCmd(), upRightCmd(), upLeftCmd());
-    cmd.setName("upAllCmd");
-    return cmd;
-  }
+  // public Command upAllCmd() {
+  //   Command cmd = Commands.parallel(upLineCmd(), upRightCmd(), upLeftCmd());
+  //   cmd.setName("upAllCmd");
+  //   return cmd;
+  // }
 
-  public Command downAllCmd() {
-    Command cmd = new ParallelCommandGroup(downLineCmd(), downRightCmd(), downLeftCmd());
-    cmd.setName("downAllCmd");
-    return cmd;
-  }
+  // public Command downAllCmd() {
+  //   Command cmd =Commands.parallel(downLineCmd(), downRightCmd(), downLeftCmd());
+  //   cmd.setName("downAllCmd");
+  //   return cmd;
+  // }
 
   private Command upLineCmd() {
     Command cmd = Commands.run(
