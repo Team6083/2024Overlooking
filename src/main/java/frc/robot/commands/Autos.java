@@ -25,7 +25,7 @@ public final class Autos {
         Command runPeriodicCommand = rotateShooterSubsystem.setAutoAim();
         Command runAutoCommand = Commands.deadline(
                 new TransportToShootCmd(transportSubsystem, shooterSubsystem),
-                shooterSubsystem.shootPIDRateCmd());
+                shooterSubsystem.shootRateControlCmd());
         char pre = '0';
         boolean firstTime = true;
 
@@ -173,16 +173,16 @@ public final class Autos {
                 case '1':
                     runAutoCommand
                             .andThen(Commands.deadline(new TransportToShootCmd(transportSubsystem, shooterSubsystem),
-                                    shooterSubsystem.shootPIDRateCmd()));
+                                    shooterSubsystem.shootRateControlCmd()));
                     break;
                 case '2':
                     runAutoCommand
                             .andThen(Commands.deadline(new TransportToShootCmd(transportSubsystem, shooterSubsystem),
-                                    shooterSubsystem.shootPIDRateCmd()));
+                                    shooterSubsystem.shootRateControlCmd()));
                 case '3':
                     runAutoCommand
                             .andThen(Commands.deadline(new TransportToShootCmd(transportSubsystem, shooterSubsystem),
-                                    shooterSubsystem.shootPIDRateCmd()));
+                                    shooterSubsystem.shootRateControlCmd()));
                     break;
                 case '4':
                     runAutoCommand.andThen(drivebase.pathFindingThenFollowPath(AutoConstants.topRelayToRTS,
@@ -190,7 +190,7 @@ public final class Autos {
                             AutoConstants.kMaxAngularVelocity,
                             AutoConstants.kMaxAngularAcceleration, 0.0))
                             .andThen(Commands.deadline(new TransportToShootCmd(transportSubsystem, shooterSubsystem),
-                                    shooterSubsystem.shootPIDRateCmd()));
+                                    shooterSubsystem.shootRateControlCmd()));
                     break;
                 case '5':
                     runAutoCommand.andThen(drivebase.pathFindingThenFollowPath(AutoConstants.topRelayToRTS,
@@ -198,7 +198,7 @@ public final class Autos {
                             AutoConstants.kMaxAngularVelocity,
                             AutoConstants.kMaxAngularAcceleration, 0.0))
                             .andThen(Commands.deadline(new TransportToShootCmd(transportSubsystem, shooterSubsystem),
-                                    shooterSubsystem.shootPIDRateCmd()));
+                                    shooterSubsystem.shootRateControlCmd()));
                     break;
                 case '6':
                     runAutoCommand.andThen(drivebase.pathFindingThenFollowPath(AutoConstants.topRelayToRTS,
@@ -206,7 +206,7 @@ public final class Autos {
                             AutoConstants.kMaxAngularVelocity,
                             AutoConstants.kMaxAngularAcceleration, 0.0))
                             .andThen(Commands.deadline(new TransportToShootCmd(transportSubsystem, shooterSubsystem),
-                                    shooterSubsystem.shootPIDRateCmd()));
+                                    shooterSubsystem.shootRateControlCmd()));
                     break;
                 case '7':
                     runAutoCommand.andThen(drivebase.pathFindingThenFollowPath(AutoConstants.bottomRelayToRBS,
@@ -214,7 +214,7 @@ public final class Autos {
                             AutoConstants.kMaxAngularVelocity,
                             AutoConstants.kMaxAngularAcceleration, 0.0))
                             .andThen(Commands.deadline(new TransportToShootCmd(transportSubsystem, shooterSubsystem),
-                                    shooterSubsystem.shootPIDRateCmd()));
+                                    shooterSubsystem.shootRateControlCmd()));
                     break;
                 case '8':
                     runAutoCommand.andThen(drivebase.pathFindingThenFollowPath(AutoConstants.bottomRelayToRBS,
@@ -222,7 +222,7 @@ public final class Autos {
                             AutoConstants.kMaxAngularVelocity,
                             AutoConstants.kMaxAngularAcceleration, 0.0))
                             .andThen(Commands.deadline(new TransportToShootCmd(transportSubsystem, shooterSubsystem),
-                                    shooterSubsystem.shootPIDRateCmd()));
+                                    shooterSubsystem.shootRateControlCmd()));
                     break;
             }
         }
