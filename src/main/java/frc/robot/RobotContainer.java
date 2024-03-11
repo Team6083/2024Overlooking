@@ -4,12 +4,19 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.networktables.NTSendable;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
+import frc.robot.commands.Autos;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.TransportToShootCmd;
@@ -37,6 +44,9 @@ public class RobotContainer {
   private final TagTracking tagTracking;
   private final NoteTracking noteTracking;
 
+  private SendableChooser<Command> autoChooser;
+  private SendableChooser<String> initialChooser;
+
   public RobotContainer() {
     tagTracking = new TagTracking();
     noteTracking = new NoteTracking();
@@ -51,6 +61,17 @@ public class RobotContainer {
     transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
     hookSubsystem = new HookSubsystem(powerDistributionSubsystem);
     configureBindings();
+    autoChooser = AutoBuilder.buildAutoChooser();
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+
+    initialChooser = new SendableChooser<String>();
+    initialChooser.setDefaultOption("none", null);
+    initialChooser.addOption("left", "left");
+    initialChooser.addOption("middle", "middle");
+    initialChooser.addOption("right", "right");
+    SmartDashboard.putString("auto", null);
+    SmartDashboard.putData(initialChooser);
   }
 
   private void configureBindings() {
@@ -75,8 +96,8 @@ public class RobotContainer {
         .whileTrue(rotateShooterSubsystem.changeMaunalModeCmd(true))
         .whileFalse(rotateShooterSubsystem.changeMaunalModeCmd(false));
 
-    //limelight
-    controlPanel.button(3).whileTrue(drivebase.tagTrackConditionCmd())
+    // limelight
+    controlPanel.button(3).whileTrue(drivebase.tagTrackConditionCmd());
     // transport
     mainController.a().toggleOnTrue(new TransportToShootCmd(transportSubsystem, shooterSubsystem));
 
@@ -89,12 +110,27 @@ public class RobotContainer {
     controlPanel.button(7).whileTrue(hookSubsystem.rightDownIndivisual());
 
     // semi-automatic
+    controlPanel.button(0).whileTrue(rotateShooterSubsystem.setAutoAim());
 
     // reset
     mainController.back().onTrue(drivebase.gyroResetCmd());
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    String autoNumber = SmartDashboard.getString("auto", null);
+    String initial = initialChooser.getSelected();
+    var alliance = DriverStation.getAlliance();
+    if (initial == null && alliance.isPresent())
+      return new InstantCommand();
+    Boolean isRed = alliance.get() == DriverStation.Alliance.Red;
+    if (isRed) {
+      initial = (initial == "left" ? "right" : (initial == "right" ? "left" : "middle"));
+    }
+    // return Autos.auto(drivebase, riseShooter, shooter, transport, intake,
+    // autoNumber, initial);
+    return Autos.autoOptimize(drivebase, rotateShooterSubsystem, shooterSubsystem, transportSubsystem, intakeSubsystem,
+        autoNumber, initial);
+    // return Commands.none();
+    // return Commands.print("No autonomous command configured");
   }
 }
