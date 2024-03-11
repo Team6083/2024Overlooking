@@ -39,7 +39,7 @@ public class IntakeSubsystem extends SubsystemBase {
     setIntakeMotorVoltage(IntakeConstants.kThrowVoltage);
   }
 
-  public void setDownIntake() {
+  private void setDownIntake() {
     if (getAngle() < 0.0 || isDownIntake) {
       stopRotateIntakeMotor();
       isDownIntake = true;
