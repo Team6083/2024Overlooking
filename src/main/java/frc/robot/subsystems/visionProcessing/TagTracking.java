@@ -186,17 +186,6 @@ public class TagTracking {
     }
 
     /**
-     * Returns goal height in metres
-     * 
-     * @param offset tag to goal (metres)
-     * @return goal height (metres)
-     */
-    public double getTagHeight() {
-        double goalHeight = Math.abs(getBT()[1]);
-        return goalHeight;
-    }
-
-    /**
      * Gets the tag's pose in 2 dimension
      * 
      * @return tagPose
@@ -236,15 +225,6 @@ public class TagTracking {
         }
     }
 
-    /**
-     * Set priority tag iD
-     * 
-     * @param priorityID the priority tag ID (int)
-     */
-    public void setPriorityInViewTag(int priorityID) {
-        table.getEntry("priorityid").setNumber(priorityID);
-    }
-
     private double[] getIDs() {
         int i = 0;
         while (i < 3) {
@@ -268,6 +248,7 @@ public class TagTracking {
         SmartDashboard.putNumber("latency", getTl());
         SmartDashboard.putNumber("horDistance", getHorizontalDistanceByCT());
         SmartDashboard.putNumber("RealDistance", getDistance());
+        SmartDashboard.putNumber("LastID", getLastID());
     }
 
 }
