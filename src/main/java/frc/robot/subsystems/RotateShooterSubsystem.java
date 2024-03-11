@@ -110,7 +110,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
   public void setModeSetpoint() {
     switch (mode) {
       case 1:
-        setSetpoint(getSpeakerDegree(getSetpoint()));
+        setSetpoint(getSpeakerDegree(getSetpoint())+3.0);
         break;
       case 2:
         setSetpoint(RotateShooterConstants.kCarryDegree);
@@ -225,5 +225,6 @@ public class RotateShooterSubsystem extends SubsystemBase {
     setPIDControl();
     SmartDashboard.putData("rotate_PID", rotatePID);
     SmartDashboard.putNumber("encoderDegree", getAngle());
+    SmartDashboard.putNumber("shooterSpeakerDegree", getSpeakerDegree(getAngle()));
   }
 }

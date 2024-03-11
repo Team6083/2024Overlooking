@@ -42,7 +42,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   private void setDownIntake() {
-    if (getAngle() < 0.0 || isDownIntake) {
+    if (getAngle() <1.0 || isDownIntake) {
       stopRotateIntakeMotor();
       isDownIntake = true;
       return;

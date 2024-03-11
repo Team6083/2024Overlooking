@@ -33,7 +33,7 @@ import frc.robot.subsystems.TransportSubsystem;
 import frc.robot.subsystems.drive.Drivebase;
 import frc.robot.subsystems.visionProcessing.NoteTracking;
 import frc.robot.subsystems.visionProcessing.TagTracking;
-
+  
 public class RobotContainer {
   private final CommandXboxController mainController;
   private final CommandGenericHID controlPanel;
@@ -97,10 +97,11 @@ public class RobotContainer {
     mainController.x().whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
 
     // shooter
+    rotateShooterSubsystem.setDefaultCommand(rotateShooterSubsystem.setModeCmd(3));
     mainController.b()
         .toggleOnTrue(shooterSubsystem.shootRateControlCmd().alongWith(rotateShooterSubsystem.setModeCmd(1))
-            .alongWith(new TagDriveCmd(drivebase, mainController)))
-        .toggleOnFalse(new ShooterDefaultCmd(shooterSubsystem, rotateShooterSubsystem));
+            .alongWith(new TagDriveCmd(drivebase, mainController)));
+
     rotateShooterSubsystem.addErrorCmd(controlPanel.getRawAxis(0));///
     controlPanel.button(1)
         .whileTrue(shooterSubsystem.setRateModeCmd(2).alongWith(rotateShooterSubsystem.setModeCmd(2)))

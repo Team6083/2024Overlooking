@@ -192,10 +192,10 @@ public class Drivebase extends SubsystemBase {
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DrivebaseConstants.kMaxSpeed);
-    frontLeft.setDesiredStateCmd(swerveModuleStates[0]);
-    frontRight.setDesiredStateCmd(swerveModuleStates[1]);
-    backLeft.setDesiredStateCmd(swerveModuleStates[2]);
-    backRight.setDesiredStateCmd(swerveModuleStates[3]);
+    frontLeft.setDesiredState(swerveModuleStates[0]);
+    frontRight.setDesiredState(swerveModuleStates[1]);
+    backLeft.setDesiredState(swerveModuleStates[2]);
+    backRight.setDesiredState(swerveModuleStates[3]);
   }
 
   public void driveRobotRelative(ChassisSpeeds speeds) {

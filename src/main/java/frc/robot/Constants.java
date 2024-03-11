@@ -80,7 +80,7 @@ public final class Constants {
         public static final double kRotateDegreeErrorPoint = 3;
         public static final double kRotateTriggerValue = 0.15;
         public static final double kRotateOffset = 367.0;        
-        public static final double kSpeakerHeight = 2.0;
+        public static final double kSpeakerHeight = 2.13;
         public static final double kAMPHeight = 0.89;
         public static final double kShooterHeight = 0.31;
         public static final double kP = 0.05;
@@ -90,8 +90,8 @@ public final class Constants {
 
     public static class HookConstants {
         public static final int kLineChannel = 23;
-        public static final int kLeftChannel = 5;
-        public static final int kRightChannel = 3;
+        public static final int kLeftChannel = 28;
+        public static final int kRightChannel = 27;
         public static final boolean kLeftMotorInverted = true;
         public static final boolean kRightMotorInverted = false;
         public static final boolean kLineMotorInverted = false;
