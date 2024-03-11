@@ -110,17 +110,17 @@ public class RobotContainer {
     mainController.pov(180)
         .whileTrue(rotateShooterSubsystem.setManualVoltageCmd(-RotateShooterConstants.kManualVoltage));///
     // limelight
-    controlPanel.button(3).whileTrue(new TagDriveCmd(drivebase, mainController));
+    controlPanel.button(3).whileTrue(drivebase.setTagVisionModeCmd());
     // transport
     mainController.a().toggleOnTrue(new TransportToShootCmd(transportSubsystem, shooterSubsystem));
 
     // hook
     mainController.rightTrigger(0.5).whileTrue(hookSubsystem.upAllCmd());
     mainController.leftTrigger(0.5).whileTrue(hookSubsystem.downAllCmd());
-    controlPanel.button(4).whileTrue(hookSubsystem.leftUpIndivisual());
-    controlPanel.button(5).whileTrue(hookSubsystem.leftDownIndivisual());
-    controlPanel.button(6).whileTrue(hookSubsystem.rightUpIndivisual());
-    controlPanel.button(7).whileTrue(hookSubsystem.rightDownIndivisual());
+    controlPanel.button(4).whileTrue(hookSubsystem.leftUpIndivisualCmd());
+    controlPanel.button(5).whileTrue(hookSubsystem.leftDownIndivisualCmd());
+    controlPanel.button(6).whileTrue(hookSubsystem.rightUpIndivisualCmd());
+    controlPanel.button(7).whileTrue(hookSubsystem.rightDownIndivisualCmd());
 
     // reset
     mainController.back().onTrue(drivebase.gyroResetCmd());

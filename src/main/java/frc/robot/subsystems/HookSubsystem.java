@@ -290,7 +290,7 @@ public class HookSubsystem extends SubsystemBase {
     return cmd;
   }
 
-  public Command leftUpIndivisual() {
+  public Command leftUpIndivisualCmd() {
     Command cmd = Commands.run(
         () -> setLeftSetpointOffset(leftSetpointOffset + HookConstants.kLeftSetpointModify),
         this);
@@ -298,7 +298,7 @@ public class HookSubsystem extends SubsystemBase {
     return cmd;
   }
 
-  public Command rightUpIndivisual() {
+  public Command rightUpIndivisualCmd() {
     Command cmd = Commands.run(
         () -> setRightSetpointOffset(rightSetpointOffset + HookConstants.kRightSetpointModify),
         this);
@@ -306,7 +306,7 @@ public class HookSubsystem extends SubsystemBase {
     return cmd;
   }
 
-  public Command leftDownIndivisual() {
+  public Command leftDownIndivisualCmd() {
     Command cmd = Commands.run(
         () -> setLeftSetpointOffset(leftSetpointOffset - HookConstants.kLeftSetpointModify),
         this);
@@ -314,7 +314,7 @@ public class HookSubsystem extends SubsystemBase {
     return cmd;
   }
 
-  public Command rightDownIndivisual() {
+  public Command rightDownIndivisualCmd() {
     Command cmd = Commands.run(
         () -> setRightSetpointOffset(rightSetpointOffset + HookConstants.kRightSetpointModify),
         this);
