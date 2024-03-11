@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.networktables.NTSendable;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -20,6 +21,9 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.TransportToShootCmd;
+import frc.robot.commands.autoCmds.AutoAimAndShootCmd;
+import frc.robot.commands.autoCmds.AutoRotateShooterCmd;
+import frc.robot.commands.autoCmds.AutoTransportShootCmd;
 import frc.robot.commands.driveControls.NoteDriveCmd;
 import frc.robot.commands.driveControls.SwerveJoystickCmd;
 import frc.robot.commands.driveControls.TagDriveCmd;
@@ -74,6 +78,13 @@ public class RobotContainer {
     initialChooser.addOption("right", "right");
     SmartDashboard.putString("auto", null);
     SmartDashboard.putData(initialChooser);
+
+    NamedCommands.registerCommand("AutoAim", new AutoRotateShooterCmd(rotateShooterSubsystem));
+    NamedCommands.registerCommand("AutoShootRate", shooterSubsystem.shootPIDRateCmd());
+    NamedCommands.registerCommand("AutoTransport", new AutoTransportShootCmd(drivebase, shooterSubsystem, transportSubsystem));
+    NamedCommands.registerCommand("AutoIntakeWithTransport", new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+    NamedCommands.registerCommand("AutoFaceAndShoot",
+        new AutoAimAndShootCmd(drivebase, rotateShooterSubsystem, shooterSubsystem, transportSubsystem));
   }
 
   private void configureBindings() {
