@@ -24,7 +24,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final SimpleMotorFeedforward upMotorFeedForwardController;
   private final SimpleMotorFeedforward downMotorFeedForwardController;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
-  private int rateMode=1;
+  private int rateMode = 1;
 
   public ShooterSubsystem(PowerDistributionSubsystem powerDistribution) {
     upMotor = new VictorSPX(ShooterConstants.kUpMotorChannel);
@@ -69,7 +69,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   /**
-   * Set up and down voltage by using both feedforward controller and pidcontroller to calculate. Have different mode, see {@link }
+   * Set up and down voltage by using both feedforward controller and
+   * pidcontroller to calculate the rate.
    */
   private void setRateControl() {
     double upRate;
@@ -99,38 +100,81 @@ public class ShooterSubsystem extends SubsystemBase {
     setDownMotorVoltage(downMotorVoltage);
   }
 
+  /**
+   * Stop up motor.
+   */
   private void stopUpMotor() {
     upMotor.set(VictorSPXControlMode.PercentOutput, 0.0);
   }
 
+  /**
+   * Stop down motor.
+   */
   private void stopDownMotor() {
     downMotor.set(VictorSPXControlMode.PercentOutput, 0.0);
   }
 
+  /**
+   * Get up encoder rate.
+   * 
+   * @return rate/2048 (double)
+   */
   private double getUpEncoderRate() {
     return upEncoder.getRate() / 2048.0;
   }
 
+  /**
+   * Get down encoder rate.
+   * 
+   * @return rate/2048 (double)
+   */
   private double getDownEncoderRate() {
     return downEncoder.getRate() / 2048.0;
   }
 
+  /**
+   * Set up motor voltage to a specific rate, so the speed won't be affected by
+   * the busvoltage now.
+   * 
+   * @param voltage
+   */
   private void setUpMotorVoltage(double voltage) {
     setUpMotor(voltage / getUpMotorBusVoltage());
   }
 
+  /**
+   * Set down motor voltage to a specific rate, so the speed won't be affected by
+   * the busvoltage now.
+   * 
+   * @param voltage
+   */
   private void setDownMotorVoltage(double voltage) {
     setDownMotor(voltage / getDownMotorBusVoltage());
   }
 
+  /**
+   * Get up motor bus voltage.
+   * 
+   * @return voltage
+   */
   private double getUpMotorBusVoltage() {
     return upMotor.getBusVoltage();
   }
 
+  /**
+   * Get down motor bus voltage.
+   * 
+   * @return voltage
+   */
   private double getDownMotorBusVoltage() {
     return downMotor.getBusVoltage();
   }
 
+  /**
+   * Set up motor voltage, stop the motor if maximum/minimum power exceeded.
+   * 
+   * @param power
+   */
   private void setUpMotor(double power) {
     if (powerDistributionSubsystem.isShooterUpOverCurrent()) {
       stopUpMotor();
@@ -139,6 +183,11 @@ public class ShooterSubsystem extends SubsystemBase {
     upMotor.set(VictorSPXControlMode.PercentOutput, power);
   }
 
+  /**
+   * Set up motor voltage, stop the motor if maximum/minimum power exceeded.
+   * 
+   * @param power
+   */
   private void setDownMotor(double power) {
     if (powerDistributionSubsystem.isShooterDownOverCurrent()) {
       stopDownMotor();
@@ -149,9 +198,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /**
    * @param mode set shooter rate mode
-   * @param 0    speaker mode
-   * @param 1    amp mode
+   * @param 1    speaker mode
    * @param 2    carry mode
+   * @param 3    init mode
    */
   public boolean isEnoughRate() {
     switch (rateMode) {
@@ -169,6 +218,10 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
 
+  /**
+   * Set shooter rate mode.
+   * @param mode 1, 2, 3
+   */
   public void setRateMode(int mode) {
     rateMode = mode;
   }
@@ -183,13 +236,22 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("downMotorVoltage", downMotor.getMotorOutputVoltage());
   }
 
+  /**
+   * Command of setting rate mode.
+   * @param mode 1, 2, 3
+   * @return setRateModeCmd
+   */
   public Command setRateModeCmd(int mode) {
     Command cmd = runOnce(() -> setRateMode(mode));
     cmd.setName("setRateModeCmd");
     return cmd;
   }
 
-  public Command shootPIDRateCmd() {
+  /**
+   * Command of setting shooter voltage by PID and feedforward.
+   * @return shootRateControlCmd
+   */
+  public Command shootRateControlCmd() {
     Command cmd = runEnd(
         this::setRateControl,
         this::stopAllMotor);
@@ -197,6 +259,10 @@ public class ShooterSubsystem extends SubsystemBase {
     return cmd;
   }
 
+  /**
+   * Command of resetting encoder.
+   * @return resetEncoderCmd
+   */
   public Command resetEncoderCmd() {
     Command cmd = runOnce(
         this::resetEncoderCmd);
