@@ -68,13 +68,15 @@ public class RobotContainer {
         .toggleOnFalse(rotateShooterSubsystem.setModeCmd(4));
     mainController.pov(0).whileTrue(rotateShooterSubsystem.addErrorCmd(1));
     mainController.pov(180).whileTrue(rotateShooterSubsystem.addErrorCmd(-1));
-    controlPanel.button(0)
+    controlPanel.button(1)
         .whileTrue(shooterSubsystem.setRateModeCmd(3).alongWith(rotateShooterSubsystem.setModeCmd(3)))
         .whileFalse(shooterSubsystem.setRateModeCmd(1).alongWith(rotateShooterSubsystem.setModeCmd(1)));
-    controlPanel.button(1)
+    controlPanel.button(2)
         .whileTrue(rotateShooterSubsystem.changeMaunalModeCmd(true))
         .whileFalse(rotateShooterSubsystem.changeMaunalModeCmd(false));
 
+    //limelight
+    controlPanel.button(3).whileTrue(drivebase.tagTrackConditionCmd())
     // transport
     mainController.a().toggleOnTrue(new TransportToShootCmd(transportSubsystem, shooterSubsystem));
 
