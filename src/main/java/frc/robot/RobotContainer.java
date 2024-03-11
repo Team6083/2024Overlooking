@@ -20,7 +20,9 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.TransportToShootCmd;
+import frc.robot.commands.driveControls.NoteDriveCmd;
 import frc.robot.commands.driveControls.SwerveJoystickCmd;
+import frc.robot.commands.driveControls.TagDriveCmd;
 import frc.robot.subsystems.HookSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionSubsystem;
@@ -97,7 +99,7 @@ public class RobotContainer {
         .whileFalse(rotateShooterSubsystem.changeMaunalModeCmd(false));
 
     // limelight
-    controlPanel.button(3).whileTrue(drivebase.tagTrackConditionCmd());
+    controlPanel.button(3).whileTrue(new TagDriveCmd(drivebase, mainController));
     // transport
     mainController.a().toggleOnTrue(new TransportToShootCmd(transportSubsystem, shooterSubsystem));
 
