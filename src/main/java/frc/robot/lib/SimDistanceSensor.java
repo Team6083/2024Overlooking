@@ -3,7 +3,7 @@ package frc.robot.lib;
 public class SimDistanceSensor implements DistanceSensorInterface {
 
     public SimDistanceSensor(){
-
+        super();
     }
 
     @Override
