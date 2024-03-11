@@ -71,21 +71,21 @@ public final class Constants {
         public static final Boolean kRotateShooterInverted = true;
         public static final Boolean kEncoderInverted = true;
         public static final int kEncoderChannel = 2;
-        public static final double kInitDegree = 65.0;
-        public static final double kCarryDegree = 0;
+        public static final double kInitDegree = 62.0;
+        public static final double kCarryDegree = 2.0;
         public static final double kManualVoltage = 4.0;
         public static final double kRotateVoltLimit = 5.0;
         public static final double kRotateAngleMin = -0.1;
-        public static final double kRotateAngleMax = 78.0;
+        public static final double kRotateAngleMax = 74.0;
         public static final double kRotateDegreeErrorPoint = 3;
         public static final double kRotateTriggerValue = 0.15;
-        public static final double kRotateOffset = 371.0;
+        public static final double kRotateOffset = 367.0;
         public static final double kShooterOffset = 4.32;    
         public static final double kSpeakerHeight = 2.18;
         public static final double kAMPHeight = 0.89;
         public static final double kShooterHeight = 0.3;
         public static final double kP = 0.09;
-        public static final double kI = 0.0;
+        public static final double kI = 0.0002;
         public static final double kD = 0.0008;
     }
 

@@ -21,7 +21,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
   /** Creates a new RiseShooterSubsytem. */
   private final CANSparkMax rotateMotor;
   private final DutyCycleEncoder rotateEncoder;
-
+  private final RelativeEncoder motorEncoder;
   private final PIDController rotatePID;
   private double rotateDegreeError = 0.0;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
@@ -34,9 +34,8 @@ public class RotateShooterSubsystem extends SubsystemBase {
       TagTracking tagTracking) {
     rotateMotor = new CANSparkMax(RotateShooterConstants.kRotateShooterChannel, MotorType.kBrushless);
     rotateEncoder = new DutyCycleEncoder(RotateShooterConstants.kEncoderChannel);
-
+    motorEncoder = rotateMotor.getEncoder();
     rotatePID = new PIDController(RotateShooterConstants.kP, RotateShooterConstants.kI, RotateShooterConstants.kD);
-
     rotateMotor.setInverted(RotateShooterConstants.kRotateShooterInverted);
     this.powerDistributionSubsystem = powerDistributionSubsystem;
     this.tagTracking = tagTracking;
@@ -89,11 +88,11 @@ public class RotateShooterSubsystem extends SubsystemBase {
 
   public double getSpeakerDegree(double currentDegree) {
     if (tagTracking.getTv() == 1 && tagTracking.getTID() != 3.0
-        && tagTracking.getTID() != 8.0) {
+        && tagTracking.getTID() != 8.0&&tagTracking.getHorDistanceByCal()>1.1) {
       double horizonDistance = tagTracking.getHorizontalDistanceByCT();
       double speakerToShooterHeight = RotateShooterConstants.kSpeakerHeight - RotateShooterConstants.kShooterHeight;
       double degree = Math.toDegrees(Math.atan(speakerToShooterHeight / horizonDistance));
-      return degree + 5.0;
+      return degree + 9.0*horizonDistance/2.9;
     }
     return currentDegree;
   }
@@ -114,6 +113,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
    */
   public void setModeSetpoint() {
     switch (mode) {
+
       case 1:
         setSetpoint(getSpeakerDegree(getSetpoint()));
         break;

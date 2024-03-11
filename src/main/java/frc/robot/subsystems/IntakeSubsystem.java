@@ -90,7 +90,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    setDownIntake();
+    // setDownIntake();
     SmartDashboard.putNumber("IntakeVoltage", intakeMotor.getMotorOutputVoltage());
     SmartDashboard.putNumber("intakeDegree", getAngle());
   }

@@ -33,7 +33,7 @@ import frc.robot.subsystems.TransportSubsystem;
 import frc.robot.subsystems.drive.Drivebase;
 import frc.robot.subsystems.visionProcessing.NoteTracking;
 import frc.robot.subsystems.visionProcessing.TagTracking;
-  
+
 public class RobotContainer {
   private final CommandXboxController mainController;
   private final CommandGenericHID controlPanel;
@@ -98,15 +98,15 @@ public class RobotContainer {
 
     // shooter
     rotateShooterSubsystem.setDefaultCommand(rotateShooterSubsystem.setModeCmd(3));
+    shooterSubsystem.setDefaultCommand(shooterSubsystem.setRateModeCmd(3));
     mainController.b()
         .toggleOnTrue(shooterSubsystem.shootRateControlCmd().alongWith(rotateShooterSubsystem.setModeCmd(1))
             .alongWith(new TagDriveCmd(drivebase, mainController)));
 
-    rotateShooterSubsystem.addErrorCmd(controlPanel.getRawAxis(0));///
-    controlPanel.button(1)
-        .whileTrue(shooterSubsystem.setRateModeCmd(2).alongWith(rotateShooterSubsystem.setModeCmd(2)))
-        .whileFalse(new ShooterDefaultCmd(shooterSubsystem, rotateShooterSubsystem));
-    controlPanel.button(2)///
+    rotateShooterSubsystem.addErrorCmd(controlPanel.getRawAxis(4));///
+    controlPanel.button(7)
+        .whileTrue(shooterSubsystem.setRateModeCmd(2));
+    controlPanel.button(1)///
         .whileTrue(rotateShooterSubsystem.changeMaunalModeCmd(true))
         .whileFalse(rotateShooterSubsystem.changeMaunalModeCmd(false));
     mainController.pov(0).whileTrue(rotateShooterSubsystem.setManualVoltageCmd(RotateShooterConstants.kManualVoltage));
@@ -124,12 +124,11 @@ public class RobotContainer {
     controlPanel.button(4).whileTrue(hookSubsystem.leftUpIndivisualCmd());
     controlPanel.button(5).whileTrue(hookSubsystem.leftDownIndivisualCmd());
     controlPanel.button(6).whileTrue(hookSubsystem.rightUpIndivisualCmd());
-    controlPanel.button(7).whileTrue(hookSubsystem.rightDownIndivisualCmd());
+    controlPanel.button(2).whileTrue(hookSubsystem.rightDownIndivisualCmd());
     vice.a().whileTrue(hookSubsystem.leftUpIndivisualCmd());
     vice.b().whileTrue(hookSubsystem.leftDownIndivisualCmd());
     vice.x().whileTrue(hookSubsystem.rightUpIndivisualCmd());
     vice.y().whileTrue(hookSubsystem.rightDownIndivisualCmd());
-    
 
     // reset
     mainController.back().onTrue(drivebase.gyroResetCmd());
