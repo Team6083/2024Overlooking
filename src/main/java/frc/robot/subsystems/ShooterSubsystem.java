@@ -220,6 +220,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /**
    * Set shooter rate mode.
+   * 
    * @param mode 1, 2, 3
    */
   public void setRateMode(int mode) {
@@ -238,6 +239,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /**
    * Command of setting rate mode.
+   * 
    * @param mode 1, 2, 3
    * @return setRateModeCmd
    */
@@ -249,6 +251,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /**
    * Command of setting shooter voltage by PID and feedforward.
+   * 
    * @return shootRateControlCmd
    */
   public Command shootRateControlCmd() {
@@ -261,6 +264,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /**
    * Command of resetting encoder.
+   * 
    * @return resetEncoderCmd
    */
   public Command resetEncoderCmd() {

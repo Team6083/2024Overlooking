@@ -135,6 +135,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
 
   /**
    * Reverse current manual mode.
+   * 
    * @param mode
    * @return changeManualModeCmd
    */
@@ -146,6 +147,7 @@ public class RotateShooterSubsystem extends SubsystemBase {
 
   /**
    * Set shooter mode.
+   * 
    * @param mode
    */
   public void setMode(int mode) {
