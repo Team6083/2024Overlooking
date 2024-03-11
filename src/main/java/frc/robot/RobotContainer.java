@@ -112,7 +112,8 @@ public class RobotContainer {
     // limelight
     controlPanel.button(3).whileTrue(drivebase.setTagVisionModeCmd());////
     // transport
-    mainController.a().toggleOnTrue(new TransportToShootCmd(transportSubsystem, shooterSubsystem));
+    mainController.a().toggleOnTrue(
+        transportSubsystem.transportIntakeCmd().onlyWhile(() -> shooterSubsystem.isEnoughRate()).withTimeout(0.5));
 
     // hook
     mainController.rightTrigger(0.5).whileTrue(hookSubsystem.upAllCmd());
