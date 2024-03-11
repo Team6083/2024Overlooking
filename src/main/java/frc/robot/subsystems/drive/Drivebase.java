@@ -32,7 +32,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.Constants.FieldConstants;
-import frc.robot.Constants.NoteTrackingConstants;
 import frc.robot.subsystems.visionProcessing.NoteTracking;
 import frc.robot.subsystems.visionProcessing.TagTracking;
 
@@ -55,9 +54,6 @@ public class Drivebase extends SubsystemBase {
   private final NoteTracking noteTracking;
 
   private final PIDController trackingPID;
-
-  private boolean noteTrackingCondition = false;
-  private boolean tagTrackingCondition = false;
 
   // private final AHRS gyro;
   private final Pigeon2 gyro;
@@ -203,7 +199,7 @@ public class Drivebase extends SubsystemBase {
   public void noteTracking(double xSpeed, double ySpeed, double rot) {
     double robotRot = rot;
     if (noteTracking.getTx().size() != 0) {
-      double yaw = noteTracking.getTx().indexOf(0);
+      double yaw = noteTracking.getTx().indexOf(0.0);
       robotRot = -trackingPID.calculate(yaw, 0);
     }
     if (Math.abs(rot) > DrivebaseConstants.kMinRot) {

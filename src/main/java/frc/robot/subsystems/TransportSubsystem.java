@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.Rev2mDistanceSensor.Port;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -39,23 +38,32 @@ public class TransportSubsystem extends SubsystemBase {
     this.powerDistributionSubsystem = powerDistribution;
   }
 
+  /**
+   * Transport from intake to shooter.
+   */
   public void setTransport() {
     setVoltage(TransportConstants.kTransVoltage);
   }
 
-  public Command setTransportCmd() {
-    Command cmd = runEnd(() -> setTransport(), () -> stopMotor());
-    return cmd;
-  }
-
+  /**
+   * Transport from shooter to intake.
+   */
   public void setReTransport() {
     setVoltage(TransportConstants.kReTransVoltage);
   }
 
+  /**
+   * Stop transporting.
+   */
   public void stopMotor() {
     transportMotor.set(0);
   }
 
+  /**
+   * Detect note. Returns true if note is detected.
+   * 
+   * @return boolean
+   */
   public boolean isGetNote() {
     if (distanceSensor.isGetTarget()) {
       return distanceSensor.getTargetDistance() <= TransportConstants.kDistanceRange;
@@ -63,6 +71,11 @@ public class TransportSubsystem extends SubsystemBase {
     return false;
   }
 
+  /**
+   * Set motor voltage. Stop motor if maximum/minimum voltage isexceeded.
+   * 
+   * @param voltage
+   */
   private void setVoltage(double voltage) {
     if (powerDistributionSubsystem.isTransportOverCurrent()) {
       stopMotor();
@@ -77,10 +90,20 @@ public class TransportSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("isGetNote", isGetNote());
   }
 
+  /**
+   * Command of transporting to shooter then stop motor.
+   * 
+   * @return transportIntakeCmd
+   */
   public Command transportIntakeCmd() {
     return this.runEnd(this::setTransport, this::stopMotor);
   }
 
+  /**
+   * Command of transporting to intake then stop motor.
+   * 
+   * @return reTransportIntakeCmd
+   */
   public Command reTransportIntakeCmd() {
     return this.runEnd(this::setReTransport, this::stopMotor);
   }
