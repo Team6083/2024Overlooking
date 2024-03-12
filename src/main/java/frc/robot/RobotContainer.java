@@ -19,7 +19,6 @@ import frc.robot.Constants.RotateShooterConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
-import frc.robot.commands.ShooterDefaultCmd;
 import frc.robot.commands.TransportToShootCmd;
 import frc.robot.commands.autoCmds.AutoTransportToShootCmd;
 import frc.robot.commands.driveControls.SwerveJoystickCmd;
