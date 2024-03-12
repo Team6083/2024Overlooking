@@ -8,22 +8,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.commands.autoCmds.PoseRotateShooterCmd;
+// import frc.robot.commands.autoCmds.PoseRotateShooterCmd;
 import frc.robot.commands.autoCmds.AutoTransportToShootCmd;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.RotateShooterSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TransportSubsystem;
 import frc.robot.subsystems.drive.Drivebase;
 
 public final class Autos {
 
-    public static Command autoOptimize(Drivebase drivebase, RotateShooterSubsystem rotateShooterSubsystem,
+    public static Command autoOptimize(Drivebase drivebase,
             ShooterSubsystem shooterSubsystem, TransportSubsystem transportSubsystem, IntakeSubsystem intakeSubsystem,
             String autoNumber, String initial) {
 
         int length = autoNumber.length();
-        Command runPeriodicCommand = rotateShooterSubsystem.setAutoAim();
+        Command runPeriodicCommand = shooterSubsystem.setAutoAimCmd();
         Command runAutoCommand = Commands.deadline(
                 new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem),
                 shooterSubsystem.setSpeakerRateControlCmd());
@@ -231,12 +230,12 @@ public final class Autos {
         return new ParallelCommandGroup(runAutoCommand, runPeriodicCommand);
     }
 
-    public static Command autoWithOnlyPose(Drivebase drivebase, RotateShooterSubsystem rotateShooterSubsystem,
+    public static Command autoWithOnlyPose(Drivebase drivebase,
             ShooterSubsystem shooterSubsystem, TransportSubsystem transportSubsystem, IntakeSubsystem intakeSubsystem,
             String autoNumber, String initial) {
 
         int length = autoNumber.length();
-        Command runPeriodicCommand = new PoseRotateShooterCmd(rotateShooterSubsystem, drivebase);
+        Command runPeriodicCommand = null;
         Command runAutoCommand = new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem);
         char pre = '0';
 

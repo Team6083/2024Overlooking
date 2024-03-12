@@ -56,7 +56,6 @@ public class RobotContainer {
     controlPanel = new CommandGenericHID(DriveControllerConstants.kControlPanel);
     powerDistributionSubsystem = new PowerDistributionSubsystem();
     drivebase = new Drivebase(tagTracking, noteTracking);
-    rotateShooterSubsystem = new RotateShooterSubsystem(powerDistributionSubsystem, tagTracking);
     intakeSubsystem = new IntakeSubsystem(powerDistributionSubsystem);
     shooterSubsystem = new ShooterSubsystem(powerDistributionSubsystem, tagTracking);
     transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
@@ -135,6 +134,6 @@ public class RobotContainer {
     if (isRed) {
       initial = (initial == "left" ? "right" : (initial == "right" ? "left" : "middle"));
     }
-    return Autos.autoOptimize(drivebase, rotateShooterSubsystem, shooterSubsystem, transportSubsystem, intakeSubsystem, autoNumber, initial);
+    return Autos.autoOptimize(drivebase, shooterSubsystem, transportSubsystem, intakeSubsystem, autoNumber, initial);
   }
 }
