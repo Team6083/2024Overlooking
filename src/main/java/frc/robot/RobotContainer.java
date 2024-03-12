@@ -78,7 +78,7 @@ public class RobotContainer {
     SmartDashboard.putData(initialChooser);
 
     // NamedCommands.registerCommand("AutoAim", rotateShooterSubsystem.setAutoAim());
-    NamedCommands.registerCommand("AutoShootRate", shooterSubsystem.shootPIDRateCmd());
+    NamedCommands.registerCommand("AutoShootRate", shooterSubsystem.setSpeakerRateControlCmd());
     NamedCommands.registerCommand("AutoTransportToShoot",
         new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
     NamedCommands.registerCommand("AutoIntakeWithTransport",
@@ -99,7 +99,7 @@ public class RobotContainer {
     // shooter
     shooterSubsystem.setDefaultCommand(shooterSubsystem.setShootModeCmd(3));
     mainController.b()
-        .toggleOnTrue(shooterSubsystem.shootPIDRateCmd().alongWith(shooterSubsystem.setAutoAimCmd())
+        .toggleOnTrue(shooterSubsystem.setSpeakerRateControlCmd().alongWith(shooterSubsystem.setAutoAimCmd())
             .alongWith(new TagDriveCmd(drivebase, mainController)));
     controlPanel.button(7).whileTrue(shooterSubsystem.setShootModeCmd(2));
     
