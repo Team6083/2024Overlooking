@@ -97,11 +97,11 @@ public class RobotContainer {
     mainController.x().whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
 
     // shooter
-    shooterSubsystem.setDefaultCommand(shooterSubsystem.setShootModeCmd(3));
+    shooterSubsystem.setDefaultCommand(shooterSubsystem.setInitRateControlCmd());
     mainController.b()
         .toggleOnTrue(shooterSubsystem.setSpeakerRateControlCmd().alongWith(shooterSubsystem.setAutoAimCmd())
             .alongWith(new TagDriveCmd(drivebase, mainController)));
-    controlPanel.button(7).whileTrue(shooterSubsystem.setShootModeCmd(2));
+    controlPanel.button(7).whileTrue(shooterSubsystem.setCarryRateControlCmd());
     
     // limelight
     controlPanel.button(3).whileTrue(drivebase.setTagVisionModeCmd());////

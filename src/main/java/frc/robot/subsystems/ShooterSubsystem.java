@@ -171,54 +171,54 @@ public class ShooterSubsystem extends SubsystemBase {
     downEncoder.reset();
   }
 
-  /**
-   * @param 1 aim degree
-   * @param 2 carry degree
-   * @param 3 init degree
-   */
-  public void setModeSetpoint() {
-    switch (shootMode) {
-      case 1:
-        setSetpoint(getSpeakerDegree(getSetpoint()));
-        break;
-      case 2:
-        setSetpoint(RotateShooterConstants.kCarryDegree);
-        break;
-      case 3:
-        setSetpoint(RotateShooterConstants.kInitDegree);
-      default:
-        break;
-    }
-  }
+  // /**
+  //  * @param 1 aim degree
+  //  * @param 2 carry degree
+  //  * @param 3 init degree
+  //  */
+  // public void setModeSetpoint() {
+  //   switch (shootMode) {
+  //     case 1:
+  //       setSetpoint(getSpeakerDegree(getSetpoint()));
+  //       break;
+  //     case 2:
+  //       setSetpoint(RotateShooterConstants.kCarryDegree);
+  //       break;
+  //     case 3:
+  //       setSetpoint(RotateShooterConstants.kInitDegree);
+  //     default:
+  //       break;
+  //   }
+  // }
 
-  /**
-   * Set up and down voltage by using both feedforward controller and
-   * pidcontroller to calculate the rate.
-   */
-  private void setRateControl() {
-    double upRate;
-    double downRate;
-    switch (shootMode) {
-      case 1:
-        upRate = ShooterConstants.kSpeakerShooterRate[0];
-        downRate = ShooterConstants.kSpeakerShooterRate[1];
-        break;
-      case 2:
-        upRate = ShooterConstants.kCarryShooterRate[0];
-        downRate = ShooterConstants.kCarryShooterRate[1];
-        break;
-      default:
-        upRate = ShooterConstants.kInitShooterRate[0];
-        downRate = ShooterConstants.kInitShooterRate[1];
-        break;
-    }
-    final double upMotorVoltage = upMotorFeedForwardController.calculate(upRate)
-        + ratePID.calculate(getUpEncoderRate(), upRate);
-    final double downMotorVoltage = downMotorFeedForwardController.calculate(downRate)
-        + ratePID.calculate(getDownEncoderRate(), downRate);
-    setUpMotorVoltage(upMotorVoltage);
-    setDownMotorVoltage(downMotorVoltage);
-  }
+  // /**
+  //  * Set up and down voltage by using both feedforward controller and
+  //  * pidcontroller to calculate the rate.
+  //  */
+  // private void setRateControl() {
+  //   double upRate;
+  //   double downRate;
+  //   switch (shootMode) {
+  //     case 1:
+  //       upRate = ShooterConstants.kSpeakerShooterRate[0];
+  //       downRate = ShooterConstants.kSpeakerShooterRate[1];
+  //       break;
+  //     case 2:
+  //       upRate = ShooterConstants.kCarryShooterRate[0];
+  //       downRate = ShooterConstants.kCarryShooterRate[1];
+  //       break;
+  //     default:
+  //       upRate = ShooterConstants.kInitShooterRate[0];
+  //       downRate = ShooterConstants.kInitShooterRate[1];
+  //       break;
+  //   }
+  //   final double upMotorVoltage = upMotorFeedForwardController.calculate(upRate)
+  //       + ratePID.calculate(getUpEncoderRate(), upRate);
+  //   final double downMotorVoltage = downMotorFeedForwardController.calculate(downRate)
+  //       + ratePID.calculate(getDownEncoderRate(), downRate);
+  //   setUpMotorVoltage(upMotorVoltage);
+  //   setDownMotorVoltage(downMotorVoltage);
+  // }
 
   private void setSpeakerRateControl() {
     setSetpoint(getSpeakerDegree(getSetpoint()));
@@ -415,17 +415,17 @@ public class ShooterSubsystem extends SubsystemBase {
     this.isMaunal = isManual;
   }
 
-  /**
-   * Command of setting rate mode.
-   * 
-   * @param mode 1, 2, 3
-   * @return setRateModeCmd
-   */
-  public Command setShootModeCmd(int mode) {
-    Command cmd = runOnce(() -> setShootMode(mode));
-    cmd.setName("SetShootModeCmd");
-    return cmd;
-  }
+  // /**
+  //  * Command of setting rate mode.
+  //  * 
+  //  * @param mode 1, 2, 3
+  //  * @return setRateModeCmd
+  //  */
+  // public Command setShootModeCmd(int mode) {
+  //   Command cmd = runOnce(() -> setShootMode(mode));
+  //   cmd.setName("SetShootModeCmd");
+  //   return cmd;
+  // }
 
   /**
    * Command of setting shooter voltage by PID and feedforward.
