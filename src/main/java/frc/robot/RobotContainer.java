@@ -43,7 +43,7 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsystem;
   private final ShooterSubsystem shooterSubsystem;
   private final TransportSubsystem transportSubsystem;
-  // private final RotateShooterSubsystem rotateShooterSubsystem;
+  private final RotateShooterSubsystem rotateShooterSubsystem;
   private final HookSubsystem hookSubsystem;
   private final TagTracking tagTracking;
   private final NoteTracking noteTracking;
@@ -59,7 +59,7 @@ public class RobotContainer {
     controlPanel = new CommandGenericHID(DriveControllerConstants.kControlPanel);
     powerDistributionSubsystem = new PowerDistributionSubsystem();
     drivebase = new Drivebase(tagTracking, noteTracking);
-    // rotateShooterSubsystem = new RotateShooterSubsystem(powerDistributionSubsystem, tagTracking);
+    rotateShooterSubsystem = new RotateShooterSubsystem(powerDistributionSubsystem, tagTracking);
     intakeSubsystem = new IntakeSubsystem(powerDistributionSubsystem);
     shooterSubsystem = new ShooterSubsystem(powerDistributionSubsystem, tagTracking);
     transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
@@ -70,11 +70,11 @@ public class RobotContainer {
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
     initialChooser = new SendableChooser<String>();
-    initialChooser.setDefaultOption("none", "0");
+    initialChooser.setDefaultOption("none", "null");
     initialChooser.addOption("left", "left");
     initialChooser.addOption("middle", "middle");
     initialChooser.addOption("right", "right");
-    SmartDashboard.putString("auto", "0");
+    SmartDashboard.putString("auto", "null");
     SmartDashboard.putData(initialChooser);
 
     // NamedCommands.registerCommand("AutoAim", rotateShooterSubsystem.setAutoAim());
@@ -129,15 +129,15 @@ public class RobotContainer {
     if (autoChooser.getSelected().isScheduled()) {
       return autoChooser.getSelected();
     }
-    String autoNumber = SmartDashboard.getString("auto", null);
+    String autoNumber = SmartDashboard.getString("auto", "null");
     String initial = initialChooser.getSelected();
     var alliance = DriverStation.getAlliance();
-    if (initial == null && alliance.isPresent())
+    if (initial == "null" && alliance.isPresent())
       return Commands.none();
     boolean isRed = alliance.get() == DriverStation.Alliance.Red;
     if (isRed) {
       initial = (initial == "left" ? "right" : (initial == "right" ? "left" : "middle"));
     }
-    return null;
+    return Autos.autoOptimize(drivebase, rotateShooterSubsystem, shooterSubsystem, transportSubsystem, intakeSubsystem, autoNumber, initial);
   }
 }
