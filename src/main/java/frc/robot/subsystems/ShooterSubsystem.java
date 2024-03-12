@@ -23,39 +23,41 @@ import frc.robot.subsystems.visionProcessing.TagTracking;
 
 public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new Shooter. */
-  private final VictorSPX upMotor;
-  private final VictorSPX downMotor;
-  private final Encoder upEncoder;
-  private final Encoder downEncoder;
-  private final PIDController ratePID;
-  private final CANSparkMax rotateMotor;
-  private final DutyCycleEncoder rotateEncoder;
-  private final PIDController rotatePID;
+  //shooter
+  private final VictorSPX upShooterMotor;
+  private final VictorSPX downShooterMotor;
+  private final Encoder upShooterEncoder;
+  private final Encoder downShooterEncoder;
+  private final PIDController rateShooterPID;
   private final SimpleMotorFeedforward upMotorFeedForwardController;
   private final SimpleMotorFeedforward downMotorFeedForwardController;
-  private final PowerDistributionSubsystem powerDistributionSubsystem;
-  private final TagTracking tagTracking;
   private int shootMode = 1;
+  // rotate shooter
+  private final TagTracking tagTracking;
   private boolean isMaunal = false;
   private boolean isAutoAim = false;
   private double manualVoltage = 0;
+  private final CANSparkMax rotateMotor;
+  private final DutyCycleEncoder rotateEncoder;
+  private final PIDController rotatePID;
   private double rotateDegreeError = 0.0;
 
+  private final PowerDistributionSubsystem powerDistributionSubsystem;
+
   public ShooterSubsystem(PowerDistributionSubsystem powerDistribution, TagTracking tagTracking) {
-    upMotor = new VictorSPX(ShooterConstants.kUpMotorChannel);
-    downMotor = new VictorSPX(ShooterConstants.kDownMotorChannel);
-    upEncoder = new Encoder(ShooterConstants.kUpEncoderChannelA, ShooterConstants.kUpEncoderChannelB);
-    downEncoder = new Encoder(ShooterConstants.kDownEncoderChannelA,
+    //shooter
+    upShooterMotor = new VictorSPX(ShooterConstants.kUpMotorChannel);
+    downShooterMotor = new VictorSPX(ShooterConstants.kDownMotorChannel);
+    upShooterEncoder = new Encoder(ShooterConstants.kUpEncoderChannelA, ShooterConstants.kUpEncoderChannelB);
+    downShooterEncoder = new Encoder(ShooterConstants.kDownEncoderChannelA,
         ShooterConstants.kDownEncoderChannelB);
 
-    upEncoder.setReverseDirection(ShooterConstants.kUpEncoderInverted);
-    downEncoder.setReverseDirection(ShooterConstants.kDownEncoderInverted);
-
-    ratePID = new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD);
-    rotatePID = new PIDController(RotateShooterConstants.kP, RotateShooterConstants.kI, RotateShooterConstants.kD);
-
-    upMotor.setInverted(ShooterConstants.kUpMotorInverted);
-    downMotor.setInverted(ShooterConstants.kDownMotorInverted);
+    upShooterEncoder.setReverseDirection(ShooterConstants.kUpEncoderInverted);
+    downShooterEncoder.setReverseDirection(ShooterConstants.kDownEncoderInverted);
+    rateShooterPID = new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD);
+    
+    upShooterMotor.setInverted(ShooterConstants.kUpMotorInverted);
+    downShooterMotor.setInverted(ShooterConstants.kDownMotorInverted);
 
     upMotorFeedForwardController = new SimpleMotorFeedforward(ShooterConstants.kUpMotorS, ShooterConstants.kUpMotorV,
         ShooterConstants.kUpMotorA);
@@ -64,9 +66,12 @@ public class ShooterSubsystem extends SubsystemBase {
         ShooterConstants.kDownMotorA);
 
     resetEncoder();
+
+    //rotate shooter
     rotateMotor = new CANSparkMax(RotateShooterConstants.kRotateShooterChannel, MotorType.kBrushless);
     rotateMotor.setInverted(RotateShooterConstants.kRotateShooterInverted);
     rotateEncoder = new DutyCycleEncoder(RotateShooterConstants.kEncoderChannel);
+    rotatePID = new PIDController(RotateShooterConstants.kP, RotateShooterConstants.kI, RotateShooterConstants.kD);
     this.powerDistributionSubsystem = powerDistribution;
     this.tagTracking = tagTracking;
     rotatePID.enableContinuousInput(-180.0, 180.0);
@@ -167,67 +172,18 @@ public class ShooterSubsystem extends SubsystemBase {
    * Reset both up and down encoders.
    */
   private void resetEncoder() {
-    upEncoder.reset();
-    downEncoder.reset();
+    upShooterEncoder.reset();
+    downShooterEncoder.reset();
   }
-
-  // /**
-  //  * @param 1 aim degree
-  //  * @param 2 carry degree
-  //  * @param 3 init degree
-  //  */
-  // public void setModeSetpoint() {
-  //   switch (shootMode) {
-  //     case 1:
-  //       setSetpoint(getSpeakerDegree(getSetpoint()));
-  //       break;
-  //     case 2:
-  //       setSetpoint(RotateShooterConstants.kCarryDegree);
-  //       break;
-  //     case 3:
-  //       setSetpoint(RotateShooterConstants.kInitDegree);
-  //     default:
-  //       break;
-  //   }
-  // }
-
-  // /**
-  //  * Set up and down voltage by using both feedforward controller and
-  //  * pidcontroller to calculate the rate.
-  //  */
-  // private void setRateControl() {
-  //   double upRate;
-  //   double downRate;
-  //   switch (shootMode) {
-  //     case 1:
-  //       upRate = ShooterConstants.kSpeakerShooterRate[0];
-  //       downRate = ShooterConstants.kSpeakerShooterRate[1];
-  //       break;
-  //     case 2:
-  //       upRate = ShooterConstants.kCarryShooterRate[0];
-  //       downRate = ShooterConstants.kCarryShooterRate[1];
-  //       break;
-  //     default:
-  //       upRate = ShooterConstants.kInitShooterRate[0];
-  //       downRate = ShooterConstants.kInitShooterRate[1];
-  //       break;
-  //   }
-  //   final double upMotorVoltage = upMotorFeedForwardController.calculate(upRate)
-  //       + ratePID.calculate(getUpEncoderRate(), upRate);
-  //   final double downMotorVoltage = downMotorFeedForwardController.calculate(downRate)
-  //       + ratePID.calculate(getDownEncoderRate(), downRate);
-  //   setUpMotorVoltage(upMotorVoltage);
-  //   setDownMotorVoltage(downMotorVoltage);
-  // }
 
   private void setSpeakerRateControl() {
     setSetpoint(getSpeakerDegree(getSetpoint()));
     double upRate = ShooterConstants.kSpeakerShooterRate[0];
     double downRate = ShooterConstants.kSpeakerShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upRate)
-        + ratePID.calculate(getUpEncoderRate(), upRate);
+        + rateShooterPID.calculate(getUpEncoderRate(), upRate);
     final double downMotorVoltage = downMotorFeedForwardController.calculate(downRate)
-        + ratePID.calculate(getDownEncoderRate(), downRate);
+        + rateShooterPID.calculate(getDownEncoderRate(), downRate);
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
   }
@@ -237,9 +193,9 @@ public class ShooterSubsystem extends SubsystemBase {
     double upRate = ShooterConstants.kCarryShooterRate[0];
     double downRate = ShooterConstants.kCarryShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upRate)
-        + ratePID.calculate(getUpEncoderRate(), upRate);
+        + rateShooterPID.calculate(getUpEncoderRate(), upRate);
     final double downMotorVoltage = downMotorFeedForwardController.calculate(downRate)
-        + ratePID.calculate(getDownEncoderRate(), downRate);
+        + rateShooterPID.calculate(getDownEncoderRate(), downRate);
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
   }
@@ -249,9 +205,9 @@ public class ShooterSubsystem extends SubsystemBase {
     double upRate = ShooterConstants.kInitShooterRate[0];
     double downRate = ShooterConstants.kInitShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upRate)
-        + ratePID.calculate(getUpEncoderRate(), upRate);
+        + rateShooterPID.calculate(getUpEncoderRate(), upRate);
     final double downMotorVoltage = downMotorFeedForwardController.calculate(downRate)
-        + ratePID.calculate(getDownEncoderRate(), downRate);
+        + rateShooterPID.calculate(getDownEncoderRate(), downRate);
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
   }
@@ -260,14 +216,14 @@ public class ShooterSubsystem extends SubsystemBase {
    * Stop up motor.
    */
   private void stopUpMotor() {
-    upMotor.set(VictorSPXControlMode.PercentOutput, 0.0);
+    upShooterMotor.set(VictorSPXControlMode.PercentOutput, 0.0);
   }
 
   /**
    * Stop down motor.
    */
   private void stopDownMotor() {
-    downMotor.set(VictorSPXControlMode.PercentOutput, 0.0);
+    downShooterMotor.set(VictorSPXControlMode.PercentOutput, 0.0);
   }
 
   /**
@@ -276,7 +232,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @return rate/2048 (double)
    */
   private double getUpEncoderRate() {
-    return upEncoder.getRate() / 2048.0;
+    return upShooterEncoder.getRate() / 2048.0;
   }
 
   /**
@@ -285,7 +241,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @return rate/2048 (double)
    */
   private double getDownEncoderRate() {
-    return downEncoder.getRate() / 2048.0;
+    return downShooterEncoder.getRate() / 2048.0;
   }
 
   /**
@@ -314,7 +270,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @return voltage
    */
   private double getUpMotorBusVoltage() {
-    return upMotor.getBusVoltage();
+    return upShooterMotor.getBusVoltage();
   }
 
   /**
@@ -323,7 +279,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @return voltage
    */
   private double getDownMotorBusVoltage() {
-    return downMotor.getBusVoltage();
+    return downShooterMotor.getBusVoltage();
   }
 
   /**
@@ -336,7 +292,7 @@ public class ShooterSubsystem extends SubsystemBase {
       stopUpMotor();
       return;
     }
-    upMotor.set(VictorSPXControlMode.PercentOutput, power);
+    upShooterMotor.set(VictorSPXControlMode.PercentOutput, power);
   }
 
   /**
@@ -349,7 +305,7 @@ public class ShooterSubsystem extends SubsystemBase {
       stopDownMotor();
       return;
     }
-    downMotor.set(VictorSPXControlMode.PercentOutput, power);
+    downShooterMotor.set(VictorSPXControlMode.PercentOutput, power);
   }
 
   /**
@@ -390,8 +346,8 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("downMotorRate", getDownEncoderRate());
     SmartDashboard.putBoolean("isEnoughRate", isEnoughRate());
     SmartDashboard.putNumber("shooterRateMode", shootMode);
-    SmartDashboard.putNumber("upMotorVoltage", upMotor.getMotorOutputVoltage());
-    SmartDashboard.putNumber("downMotorVoltage", downMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("upMotorVoltage", upShooterMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("downMotorVoltage", downShooterMotor.getMotorOutputVoltage());
   }
 
   public void stopMotor() {
@@ -414,31 +370,6 @@ public class ShooterSubsystem extends SubsystemBase {
   public void changeMaunalMode(boolean isManual) {
     this.isMaunal = isManual;
   }
-
-  // /**
-  //  * Command of setting rate mode.
-  //  * 
-  //  * @param mode 1, 2, 3
-  //  * @return setRateModeCmd
-  //  */
-  // public Command setShootModeCmd(int mode) {
-  //   Command cmd = runOnce(() -> setShootMode(mode));
-  //   cmd.setName("SetShootModeCmd");
-  //   return cmd;
-  // }
-
-  /**
-   * Command of setting shooter voltage by PID and feedforward.
-   * 
-   * @return shootRateControlCmd
-   */
-  // public Command shootPIDRateCmd() {
-  // Command cmd = runEnd(
-  // this::setRateControl,
-  // this::stopAllMotor);
-  // cmd.setName("shootPIDRateCmd");
-  // return cmd;
-  // }
 
   public Command setSpeakerRateControlCmd() {
     Command cmd = runEnd(this::setSpeakerRateControl, this::stopAllMotor);
