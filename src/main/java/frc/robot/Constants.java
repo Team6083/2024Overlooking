@@ -30,7 +30,7 @@ public final class Constants {
         public static final Boolean kDownEncoderInverted = true;
         public static final double kUpMotorManualVoltage = 10.0;
         public static final double kDownMotorManualVoltage = 10.0;
-        public static final double[] kSpeakerShootRate = { 60.0, 60.0 };
+        public static final double[] kSpeakerShooterRate = { 60.0, 60.0 };
         public static final double[] kCarryShooterRate = { 30.0, 30.0 };
         public static final double[] kInitShooterRate = { 60.0, 60.0 };
         public static final double kShooterRateOffset = 15;

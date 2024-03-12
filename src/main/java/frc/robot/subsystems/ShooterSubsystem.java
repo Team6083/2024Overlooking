@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
@@ -199,8 +200,8 @@ public class ShooterSubsystem extends SubsystemBase {
     double downRate;
     switch (shootMode) {
       case 1:
-        upRate = ShooterConstants.kSpeakerShootRate[0];
-        downRate = ShooterConstants.kSpeakerShootRate[1];
+        upRate = ShooterConstants.kSpeakerShooterRate[0];
+        downRate = ShooterConstants.kSpeakerShooterRate[1];
         break;
       case 2:
         upRate = ShooterConstants.kCarryShooterRate[0];
@@ -211,6 +212,42 @@ public class ShooterSubsystem extends SubsystemBase {
         downRate = ShooterConstants.kInitShooterRate[1];
         break;
     }
+    final double upMotorVoltage = upMotorFeedForwardController.calculate(upRate)
+        + ratePID.calculate(getUpEncoderRate(), upRate);
+    final double downMotorVoltage = downMotorFeedForwardController.calculate(downRate)
+        + ratePID.calculate(getDownEncoderRate(), downRate);
+    setUpMotorVoltage(upMotorVoltage);
+    setDownMotorVoltage(downMotorVoltage);
+  }
+
+  private void setSpeakerRateControl() {
+    setSetpoint(getSpeakerDegree(getSetpoint()));
+    double upRate = ShooterConstants.kSpeakerShooterRate[0];
+    double downRate = ShooterConstants.kSpeakerShooterRate[1];
+    final double upMotorVoltage = upMotorFeedForwardController.calculate(upRate)
+        + ratePID.calculate(getUpEncoderRate(), upRate);
+    final double downMotorVoltage = downMotorFeedForwardController.calculate(downRate)
+        + ratePID.calculate(getDownEncoderRate(), downRate);
+    setUpMotorVoltage(upMotorVoltage);
+    setDownMotorVoltage(downMotorVoltage);
+  }
+
+  private void setCarryRateControl() {
+    setSetpoint(RotateShooterConstants.kCarryDegree);
+    double upRate = ShooterConstants.kCarryShooterRate[0];
+    double downRate = ShooterConstants.kCarryShooterRate[1];
+    final double upMotorVoltage = upMotorFeedForwardController.calculate(upRate)
+        + ratePID.calculate(getUpEncoderRate(), upRate);
+    final double downMotorVoltage = downMotorFeedForwardController.calculate(downRate)
+        + ratePID.calculate(getDownEncoderRate(), downRate);
+    setUpMotorVoltage(upMotorVoltage);
+    setDownMotorVoltage(downMotorVoltage);
+  }
+
+  private void setInitRateControl() {
+          setSetpoint(RotateShooterConstants.kInitDegree);
+    double upRate = ShooterConstants.kInitShooterRate[0];
+    double downRate = ShooterConstants.kInitShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upRate)
         + ratePID.calculate(getUpEncoderRate(), upRate);
     final double downMotorVoltage = downMotorFeedForwardController.calculate(downRate)
@@ -324,8 +361,8 @@ public class ShooterSubsystem extends SubsystemBase {
   public boolean isEnoughRate() {
     switch (shootMode) {
       case 1:
-        return (getUpEncoderRate() >= ShooterConstants.kSpeakerShootRate[0] - ShooterConstants.kShooterRateOffset
-            && getDownEncoderRate() >= ShooterConstants.kSpeakerShootRate[1] - ShooterConstants.kShooterRateOffset);
+        return (getUpEncoderRate() >= ShooterConstants.kSpeakerShooterRate[0] - ShooterConstants.kShooterRateOffset
+            && getDownEncoderRate() >= ShooterConstants.kSpeakerShooterRate[1] - ShooterConstants.kShooterRateOffset);
       case 2:
         return (getUpEncoderRate() >= ShooterConstants.kCarryShooterRate[0] - ShooterConstants.kShooterRateOffset
             && getDownEncoderRate() >= ShooterConstants.kCarryShooterRate[1] - ShooterConstants.kShooterRateOffset);
@@ -395,11 +432,29 @@ public class ShooterSubsystem extends SubsystemBase {
    * 
    * @return shootRateControlCmd
    */
-  public Command shootPIDRateCmd() {
-    Command cmd = runEnd(
-        this::setRateControl,
-        this::stopAllMotor);
-    cmd.setName("shootPIDRateCmd");
+  // public Command shootPIDRateCmd() {
+  // Command cmd = runEnd(
+  // this::setRateControl,
+  // this::stopAllMotor);
+  // cmd.setName("shootPIDRateCmd");
+  // return cmd;
+  // }
+
+  public Command setSpeakerRateControlCmd() {
+    Command cmd = runEnd(this::setSpeakerRateControl, this::stopAllMotor);
+    cmd.setName("setSpeakerRateControlCmd");
+    return cmd;
+  }
+
+  public Command setCarryRateControlCmd() {
+    Command cmd = runEnd(this::setCarryRateControl, this::stopAllMotor);
+    cmd.setName("setCarryRateControlCmd");
+    return cmd;
+  }
+
+  public Command setInitRateControlCmd() {
+    Command cmd = runEnd(this::setInitRateControl, this::stopAllMotor);
+    cmd.setName("setInitRateControlCmd");
     return cmd;
   }
 
