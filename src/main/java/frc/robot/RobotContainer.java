@@ -26,7 +26,6 @@ import frc.robot.commands.driveControls.TagDriveCmd;
 import frc.robot.subsystems.HookSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionSubsystem;
-import frc.robot.subsystems.RotateShooterSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TransportSubsystem;
 import frc.robot.subsystems.drive.Drivebase;
@@ -42,7 +41,6 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsystem;
   private final ShooterSubsystem shooterSubsystem;
   private final TransportSubsystem transportSubsystem;
-  private final RotateShooterSubsystem rotateShooterSubsystem;
   private final HookSubsystem hookSubsystem;
   private final TagTracking tagTracking;
   private final NoteTracking noteTracking;
