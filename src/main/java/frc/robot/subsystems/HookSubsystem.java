@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.HookConstants;
 
@@ -231,64 +230,102 @@ public class HookSubsystem extends SubsystemBase {
   }
 
   // public Command upAllCmd() {
-  //   Command cmd = Commands.parallel(upLineCmd(), upRightCmd(), upLeftCmd());
-  //   cmd.setName("upAllCmd");
-  //   return cmd;
+  // Command cmd = Commands.parallel(upLineCmd(), upRightCmd(), upLeftCmd());
+  // cmd.setName("upAllCmd");
+  // return cmd;
   // }
 
   // public Command downAllCmd() {
-  //   Command cmd =Commands.parallel(downLineCmd(), downRightCmd(), downLeftCmd());
-  //   cmd.setName("downAllCmd");
-  //   return cmd;
+  // Command cmd =Commands.parallel(downLineCmd(), downRightCmd(), downLeftCmd());
+  // cmd.setName("downAllCmd");
+  // return cmd;
   // }
 
-  private Command upLineCmd() {
-    Command cmd = Commands.run(
-        () -> setLineSetpoint(getLineSetpoint() + HookConstants.kLineSetpointModify),
+  public Command upAllCmd() {
+    Command cmd = Commands.runEnd(
+        this::setAllHookUp,
+        this::stopAllHookMotor,
         this);
-    cmd.setName("upLineCmd");
+    cmd.setName("upAllCmd");
     return cmd;
   }
 
-  private Command upLeftCmd() {
-    Command cmd = Commands.run(
-        () -> setLeftSetpoint(getLeftSetpoint() + HookConstants.kLeftSetpointModify),
+  public Command downAllCmd() {
+    Command cmd = Commands.runEnd(
+        this::setAllHookDown,
+        this::stopAllHookMotor,
         this);
-    cmd.setName("upLeftCmd");
+    cmd.setName("downAllCmd");
     return cmd;
   }
 
-  private Command upRightCmd() {
-    Command cmd = Commands.run(
-        () -> setRightSetpoint(getRightSetpoint() + HookConstants.kRightSetpointModify),
-        this);
-    cmd.setName("upRightCmd");
-    return cmd;
+  private void setAllHookUp() {
+    setLineSetpoint(getLineSetpoint() + HookConstants.kLineSetpointModify);
+    setLeftSetpoint(getLeftSetpoint() + HookConstants.kLeftSetpointModify);
+    setRightSetpoint(getRightSetpoint() + HookConstants.kRightSetpointModify);
   }
 
-  private Command downLineCmd() {
-    Command cmd = Commands.run(
-        () -> setLineSetpoint(getLineSetpoint() - HookConstants.kLineSetpointModify),
-        this);
-    cmd.setName("downLineCmd");
-    return cmd;
+  private void setAllHookDown() {
+    setLineSetpoint(getLineSetpoint() - HookConstants.kLineSetpointModify);
+    setLeftSetpoint(getLeftSetpoint() - HookConstants.kLeftSetpointModify);
+    setRightSetpoint(getRightSetpoint() - HookConstants.kRightSetpointModify);
   }
 
-  private Command downLeftCmd() {
-    Command cmd = Commands.run(
-        () -> setLeftSetpoint(getLeftSetpoint() - HookConstants.kLeftSetpointModify),
-        this);
-    cmd.setName("downLeftCmd");
-    return cmd;
+  private void stopAllHookMotor() {
+    setLineMotorVoltage(0);
+    setLeftMotorVoltage(0);
+    setRightMotorVoltage(0);
   }
 
-  private Command downRightCmd() {
-    Command cmd = Commands.run(
-        () -> setRightSetpoint(getRightSetpoint() - HookConstants.kRightSetpointModify),
-        this);
-    cmd.setName("downRightCmd");
-    return cmd;
-  }
+  // private Command upLineCmd() {
+  // Command cmd = Commands.run(
+  // () -> setLineSetpoint(getLineSetpoint() + HookConstants.kLineSetpointModify),
+  // this);
+  // cmd.setName("upLineCmd");
+  // return cmd;
+  // }
+
+  // private Command upLeftCmd() {
+  // Command cmd = Commands.run(
+  // () -> setLeftSetpoint(getLeftSetpoint() + HookConstants.kLeftSetpointModify),
+  // this);
+  // cmd.setName("upLeftCmd");
+  // return cmd;
+  // }
+
+  // private Command upRightCmd() {
+  // Command cmd = Commands.run(
+  // () -> setRightSetpoint(getRightSetpoint() +
+  // HookConstants.kRightSetpointModify),
+  // this);
+  // cmd.setName("upRightCmd");
+  // return cmd;
+  // }
+
+  // private Command downLineCmd() {
+  // Command cmd = Commands.run(
+  // () -> setLineSetpoint(getLineSetpoint() - HookConstants.kLineSetpointModify),
+  // this);
+  // cmd.setName("downLineCmd");
+  // return cmd;
+  // }
+
+  // private Command downLeftCmd() {
+  // Command cmd = Commands.run(
+  // () -> setLeftSetpoint(getLeftSetpoint() - HookConstants.kLeftSetpointModify),
+  // this);
+  // cmd.setName("downLeftCmd");
+  // return cmd;
+  // }
+
+  // private Command downRightCmd() {
+  // Command cmd = Commands.run(
+  // () -> setRightSetpoint(getRightSetpoint() -
+  // HookConstants.kRightSetpointModify),
+  // this);
+  // cmd.setName("downRightCmd");
+  // return cmd;
+  // }
 
   public Command leftUpIndivisualCmd() {
     Command cmd = Commands.run(
