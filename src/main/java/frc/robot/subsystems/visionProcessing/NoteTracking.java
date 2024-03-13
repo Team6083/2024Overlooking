@@ -54,7 +54,7 @@ public class NoteTracking {
             poses.add(new Pose2d(x, y, new Rotation2d(0)));
             SmartDashboard.putNumber("noteYaw", trackedTarget.getYaw());
             SmartDashboard.putNumber("notePitch", trackedTarget.getPitch());
-            SmartDashboard.putNumber("noteSkew", trackedTarget.getSkew());
+            // SmartDashboard.putNumber("noteSkew", trackedTarget.getSkew());
         }
         SmartDashboard.putNumber("noteFound", poses.size());
         if (poses.size() > 0) {
@@ -88,7 +88,7 @@ public class NoteTracking {
             notesYaw.add(yaw);
             SmartDashboard.putNumber("noteYaw", trackedTarget.getYaw());
             SmartDashboard.putNumber("notePitch", trackedTarget.getPitch());
-            SmartDashboard.putNumber("noteSkew", trackedTarget.getSkew());
+            // SmartDashboard.putNumber("noteSkew", trackedTarget.getSkew());
         }
         return notesYaw;
     }
