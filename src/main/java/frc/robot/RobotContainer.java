@@ -81,7 +81,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("AutoTransportToShoot", new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
     NamedCommands.registerCommand("AutoShootRate", shooterSubsystem.setSpeakerRateControlCmd());
     NamedCommands.registerCommand("AutoIntakeWithTransport", new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-    NamedCommands.registerCommand("AutoRotateShooter", Commands.none());
+    NamedCommands.registerCommand("AutoRotateShooter", drivebase.tagTracking2Cmd());
     NamedCommands.registerCommand("AutoIntakeDown", new TimeStopIntakeCmd(intakeSubsystem));
     NamedCommands.registerCommand("AutoNote", new NoteDriveCmd(drivebase, mainController));
     NamedCommands.registerCommand("AutoTag", new TagDriveCmd(drivebase, mainController));
