@@ -12,11 +12,9 @@ import frc.robot.subsystems.IntakeSubsystem;
 
 public class TimeStopIntakeCmd extends Command {
   private final IntakeSubsystem intakeSubsystem;
-  private Timer timer;
   /** Creates a new TimeStopIntake. */
-  public TimeStopIntakeCmd(IntakeSubsystem intakeSubsystem,Timer timer) {
+  public TimeStopIntakeCmd(IntakeSubsystem intakeSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
-    this.timer = timer;
     addRequirements(this.intakeSubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -24,7 +22,7 @@ public class TimeStopIntakeCmd extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.start();
+    intakeSubsystem.stopRotateIntakeMotor();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
