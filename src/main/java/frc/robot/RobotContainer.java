@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
+import frc.robot.commands.AdjustShooterAngleManual;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.TimeStopIntakeCmd;
@@ -98,14 +99,15 @@ public class RobotContainer {
     mainController.x().whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
 
     // shooter
-    shooterSubsystem.setDefaultCommand(shooterSubsystem.setInitRateControlCmd());
-    mainController.b()
-        .toggleOnTrue(shooterSubsystem.setSpeakerRateControlCmd().alongWith(shooterSubsystem.setAutoAimCmd())
-            .alongWith(new TagDriveCmd(drivebase, mainController)));
-    controlPanel.button(7).whileTrue(shooterSubsystem.setCarryRateControlCmd());
+    shooterSubsystem.setDefaultCommand(new AdjustShooterAngleManual(mainController, shooterSubsystem));//(shooterSubsystem.setInitRateControlCmd());
+    mainController.b().toggleOnFalse(shooterSubsystem.stopAllMotorCmd());
+
+    // toggleOnTrue(shooterSubsystem.shootRateControlCmd().alongWith(shooterSubsystem.setAutoAimCmd()).alongWith(new TagDriveCmd(drivebase, mainController)));
+    controlPanel.button(8).whileTrue(shooterSubsystem.setCarryRateControlCmd()).whileFalse(shooterSubsystem.shootRateControlModeCmd());
+    controlPanel.button(9).whileTrue(shooterSubsystem.setAdjustAngleByTagCommand()).whileFalse(shooterSubsystem.setFixAngleCommand());
     
     // limelight
-    controlPanel.button(3).whileTrue(drivebase.setTagVisionModeCmd());////
+    controlPanel.button(3).whileTrue(drivebase.setTagVisionModeCmd());
     // transport
     mainController.a().toggleOnTrue(
         transportSubsystem.transportIntakeCmd().onlyWhile(() -> shooterSubsystem.isEnoughRate()).withTimeout(0.5));
