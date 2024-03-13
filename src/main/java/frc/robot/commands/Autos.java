@@ -16,7 +16,7 @@ import frc.robot.subsystems.TransportSubsystem;
 import frc.robot.subsystems.drive.Drivebase;
 
 public final class Autos {
-
+/* 
     public static Command autoOptimize(Drivebase drivebase,
             ShooterSubsystem shooterSubsystem, TransportSubsystem transportSubsystem, IntakeSubsystem intakeSubsystem,
             String autoNumber, String initial) {
@@ -421,7 +421,7 @@ public final class Autos {
 
         return new ParallelCommandGroup(runPeriodicCommand, runAutoCommand);
     }
-
+*/
     private Autos() {
         throw new UnsupportedOperationException("This is a utility class!");
     }

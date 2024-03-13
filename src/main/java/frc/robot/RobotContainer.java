@@ -94,11 +94,12 @@ public class RobotContainer {
     mainController.b().toggleOnTrue(shooterSubsystem.speakerRateControlCmd());
 
     // toggleOnTrue(shooterSubsystem.shootRateControlCmd().alongWith(shooterSubsystem.setAutoAimCmd()).alongWith(new TagDriveCmd(drivebase, mainController)));
-    controlPanel.button(8).whileTrue(shooterSubsystem.setCarryRateControlCmd()).whileFalse(shooterSubsystem.shootRateControlModeCmd());
-    controlPanel.button(9).whileTrue(shooterSubsystem.setAdjustAngleByTagCommand()).whileFalse(shooterSubsystem.setFixAngleCommand());
+    controlPanel.button(10).whileTrue(shooterSubsystem.setCarryRateControlCmd()).whileFalse(shooterSubsystem.shootRateControlModeCmd());
+    controlPanel.button(11).whileTrue(shooterSubsystem.setAdjustAngleByTagCommand()).whileFalse(shooterSubsystem.setFixAngleCommand());
     
-    // limelight
-    controlPanel.button(3).whileTrue(drivebase.setTagVisionModeCmd());////
+    // tracking
+    controlPanel.button(6).whileTrue(new NoteDriveCmd(drivebase, mainController));
+    mainController.b().toggleOnTrue(new TagDriveCmd(drivebase, mainController));
 
     // transport
     mainController.a().toggleOnTrue(
