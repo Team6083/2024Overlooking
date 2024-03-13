@@ -16,8 +16,8 @@ public class TransportToShootCmd extends ParallelDeadlineGroup {
 
   /** Creates a new TransCmd. */
   public TransportToShootCmd(TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem) {
-    super(new WaitCommand(1).onlyWhile(shooterSubsystem::isEnoughRate));
+    super(new WaitCommand(1).onlyWhile(shooterSubsystem::checkIfEnoughRate));
     addCommands(
-        transportSubsystem.transportIntakeCmd().onlyWhile(shooterSubsystem::isEnoughRate));
+        transportSubsystem.transportIntakeCmd().onlyWhile(shooterSubsystem::checkIfEnoughRate));
   }
 }

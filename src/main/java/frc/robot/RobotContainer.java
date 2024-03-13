@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
+import frc.robot.commands.AdjustShooterAngleManual;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.TimeStopIntakeCmd;
@@ -70,7 +71,7 @@ public class RobotContainer {
     // SmartDashboard.putData(initialChooser);
 
     NamedCommands.registerCommand("AutoTransportToShoot", new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
-    NamedCommands.registerCommand("AutoShootRate", shooterSubsystem.setSpeakerRateControlCmd());
+    NamedCommands.registerCommand("AutoShootRate", shooterSubsystem.speakerRateControlCmd());
     NamedCommands.registerCommand("AutoIntakeWithTransport", new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
     NamedCommands.registerCommand("AutoRotateShooter", drivebase.tagTracking2Cmd());
     NamedCommands.registerCommand("AutoIntakeDown", new TimeStopIntakeCmd(intakeSubsystem));
@@ -89,11 +90,12 @@ public class RobotContainer {
     mainController.x().whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
 
     // shooter
-    shooterSubsystem.setDefaultCommand(shooterSubsystem.setInitRateControlCmd());
-    mainController.b()
-        .toggleOnTrue(shooterSubsystem.setSpeakerRateControlCmd().alongWith(shooterSubsystem.setAutoAimCmd())
-            .alongWith(new TagDriveCmd(drivebase, mainController)));
-    controlPanel.button(7).whileTrue(shooterSubsystem.setCarryRateControlCmd());
+    shooterSubsystem.setDefaultCommand(new AdjustShooterAngleManual(mainController, shooterSubsystem));//(shooterSubsystem.setInitRateControlCmd());
+    mainController.b().toggleOnTrue(shooterSubsystem.speakerRateControlCmd());
+
+    // toggleOnTrue(shooterSubsystem.shootRateControlCmd().alongWith(shooterSubsystem.setAutoAimCmd()).alongWith(new TagDriveCmd(drivebase, mainController)));
+    controlPanel.button(8).whileTrue(shooterSubsystem.setCarryRateControlCmd()).whileFalse(shooterSubsystem.shootRateControlModeCmd());
+    controlPanel.button(9).whileTrue(shooterSubsystem.setAdjustAngleByTagCommand()).whileFalse(shooterSubsystem.setFixAngleCommand());
     
     // limelight
     controlPanel.button(3).whileTrue(drivebase.setTagVisionModeCmd());////
