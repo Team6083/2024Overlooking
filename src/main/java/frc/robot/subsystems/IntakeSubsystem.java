@@ -66,7 +66,7 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeMotor.set(VictorSPXControlMode.PercentOutput, voltage / getIntakeMotorBusVoltage());
   }
 
-  private void setRotateMotorVoltage(double voltage) {
+  public void setRotateMotorVoltage(double voltage) {
     if (powerDistributionSubsystem.isRotateIntakeOverCurrent()) {
       stopIntakeMotor();
       return;
