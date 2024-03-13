@@ -71,7 +71,6 @@ public class RobotContainer {
     // SmartDashboard.putData(initialChooser);
 
     NamedCommands.registerCommand("AutoTransportToShoot", new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
-    NamedCommands.registerCommand("AutoShootRate", shooterSubsystem.speakerRateControlCmd());
     NamedCommands.registerCommand("AutoIntakeWithTransport", new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
     NamedCommands.registerCommand("AutoRotateShooter", drivebase.tagTracking2Cmd());
     NamedCommands.registerCommand("AutoIntakeDown", new TimeStopIntakeCmd(intakeSubsystem));
