@@ -8,10 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.NoteTrackingConstants;
@@ -32,6 +36,49 @@ public class NoteTracking {
         return noteCamera.getLatestResult().hasTargets();
     }
 
+    public PhotonPipelineResult getPipelineResult() {
+        return noteCamera.getLatestResult();
+    }
+
+    public PhotonTrackedTarget getBestTarget() {
+        return getPipelineResult().getBestTarget();
+    }
+
+    public double getYaw() {
+        return getBestTarget().getYaw();
+    }
+
+    public double getPitch() {
+        return getBestTarget().getPitch();
+    }
+
+    public Transform2d getCamToTarget() {
+        double yaw = getYaw();
+        double pitch = getPitch();
+        double camPitch = -20; // need to fix, positvie up
+        // double camYaw = 30; // need to fix, positive right
+        double cam_Y_Offset = 0.2; // need to fix, sideway
+        double realPitch = pitch + camPitch;
+
+        double camHeight = 0.2; // need to fix
+        double x = camHeight / Math.tan(Math.toRadians(realPitch));
+        double y = x*Math.tan(Math.toRadians(yaw));
+        double realY = y-cam_Y_Offset;
+        double angle = Math.atan(Math.atan(realY/x));
+        Rotation2d rot = new Rotation2d(angle);
+        Translation2d translation = new Translation2d(x, y);
+        Transform2d transform = new Transform2d(translation, rot);
+        return transform;
+    }
+
+    public double getToNoteDistance(){
+        double x = getCamToTarget().getX();
+        double y = getCamToTarget().getY();
+        // double radian = getCamToTarget().getRotation().getRadians();
+        double distance = Math.sqrt(x*x+y*y);
+        return distance;
+    }
+
     /**
      * Return a list of 2 dimensional note pose. X axis by bot's front, Y axis by
      * bot's sideways. Pitch is up and down angle. Yaw is right and left.
@@ -42,7 +89,6 @@ public class NoteTracking {
         List<Pose2d> poses = new ArrayList<Pose2d>();
 
         List<PhotonTrackedTarget> targets = getTargetList();
-
 
         for (PhotonTrackedTarget trackedTarget : targets) {
             double pitch = trackedTarget.getPitch();
@@ -79,7 +125,7 @@ public class NoteTracking {
         return results.getTargets();
     }
 
-    public List<Double> getTx(){
+    public List<Double> getTx() {
         List<PhotonTrackedTarget> targets = getTargetList();
         List<Double> notesYaw = new ArrayList<Double>();
         double yaw;
