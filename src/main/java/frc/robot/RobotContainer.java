@@ -7,7 +7,6 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,12 +14,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
-import frc.robot.Constants.RotateShooterConstants;
-import frc.robot.commands.Autos;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
-import frc.robot.commands.TransportToShootCmd;
+import frc.robot.commands.TimeStopIntakeCmd;
 import frc.robot.commands.autoCmds.AutoTransportToShootCmd;
+import frc.robot.commands.driveControls.NoteDriveCmd;
 import frc.robot.commands.driveControls.SwerveJoystickCmd;
 import frc.robot.commands.driveControls.TagDriveCmd;
 import frc.robot.subsystems.HookSubsystem;
@@ -45,7 +43,7 @@ public class RobotContainer {
   private final TagTracking tagTracking;
   private final NoteTracking noteTracking;
   private SendableChooser<Command> autoChooser;
-  private SendableChooser<String> initialChooser;
+  // private SendableChooser<String> initialChooser;
 
   public RobotContainer() {
     tagTracking = new TagTracking();
@@ -65,21 +63,28 @@ public class RobotContainer {
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
 
-    initialChooser = new SendableChooser<String>();
-    initialChooser.setDefaultOption("none", "null");
-    initialChooser.addOption("left", "left");
-    initialChooser.addOption("middle", "middle");
-    initialChooser.addOption("right", "right");
-    SmartDashboard.putString("auto", "null");
-    SmartDashboard.putData(initialChooser);
+    // initialChooser = new SendableChooser<String>();
+    // initialChooser.setDefaultOption("none", "null");
+    // initialChooser.addOption("left", "left");
+    // initialChooser.addOption("middle", "middle");
+    // initialChooser.addOption("right", "right");
+    // SmartDashboard.putString("auto", "null");
+    // SmartDashboard.putData(initialChooser);
 
     // NamedCommands.registerCommand("AutoAim", rotateShooterSubsystem.setAutoAim());
+    // NamedCommands.registerCommand("AutoShootRate", shooterSubsystem.setSpeakerRateControlCmd());
+    // NamedCommands.registerCommand("AutoTransportToShoot",
+    //     new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
+    // NamedCommands.registerCommand("AutoIntakeWithTransport",
+    //     new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+    // NamedCommands.registerCommand("AutoFace", drivebase.tagTrackingCmd(0, 0, 0));
+    NamedCommands.registerCommand("AutoTransportToShoot", new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
     NamedCommands.registerCommand("AutoShootRate", shooterSubsystem.setSpeakerRateControlCmd());
-    NamedCommands.registerCommand("AutoTransportToShoot",
-        new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
-    NamedCommands.registerCommand("AutoIntakeWithTransport",
-        new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-    NamedCommands.registerCommand("AutoFace", drivebase.tagTrackingCmd(0, 0, 0));
+    NamedCommands.registerCommand("AutoIntakeWithTransport", new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+    NamedCommands.registerCommand("AutoRotateShooter", Commands.none());
+    NamedCommands.registerCommand("AutoIntakeDown", new TimeStopIntakeCmd(intakeSubsystem));
+    NamedCommands.registerCommand("AutoNote", new NoteDriveCmd(drivebase, mainController));
+    NamedCommands.registerCommand("AutoTag", new TagDriveCmd(drivebase, mainController));
   }
 
   private void configureBindings() {
@@ -122,18 +127,18 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    if (autoChooser.getSelected().isScheduled()) {
+    // if (autoChooser.getSelected().isScheduled()) {
       return autoChooser.getSelected();
-    }
-    String autoNumber = SmartDashboard.getString("auto", "null");
-    String initial = initialChooser.getSelected();
-    var alliance = DriverStation.getAlliance();
-    if (initial == "null" && alliance.isPresent())
-      return Commands.none();
-    boolean isRed = alliance.get() == DriverStation.Alliance.Red;
-    if (isRed) {
-      initial = (initial == "left" ? "right" : (initial == "right" ? "left" : "middle"));
-    }
-    return Autos.autoOptimize(drivebase, shooterSubsystem, transportSubsystem, intakeSubsystem, autoNumber, initial);
+    // }
+    // String autoNumber = SmartDashboard.getString("auto", "null");
+    // String initial = initialChooser.getSelected();
+    // var alliance = DriverStation.getAlliance();
+    // if (initial == "null" && alliance.isPresent())
+    //   return Commands.none();
+    // boolean isRed = alliance.get() == DriverStation.Alliance.Red;
+    // if (isRed) {
+    //   initial = (initial == "left" ? "right" : (initial == "right" ? "left" : "middle"));
+    // }
+    // return Autos.autoOptimize(drivebase, shooterSubsystem, transportSubsystem, intakeSubsystem, autoNumber, initial);
   }
 }
