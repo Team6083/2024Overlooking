@@ -160,7 +160,7 @@ public class TagTracking {
     public double getHorizontalDistanceByCT() {
         double horDis = Math.sqrt(
                 (Math.pow(getCT()[2] + TagTrackingConstants.camToShooterDistance, 2.0) + Math.pow(getCT()[0], 2.0)));
-                SmartDashboard.putNumber("Robottotagdistance", horDis);
+        SmartDashboard.putNumber("Robottotagdistance", horDis);
         return horDis;
     }
 
@@ -240,4 +240,11 @@ public class TagTracking {
         isCamOn = !isCamOn;
     }
 
+    public void setAutoCamOn() {
+        table.getEntry("camMode").setNumber(0);
+    }
+
+    public void setAutoCamOff() {
+        table.getEntry("camMode").setNumber(1);
+    }
 }

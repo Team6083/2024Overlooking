@@ -62,6 +62,8 @@ public class Drivebase extends SubsystemBase {
 
   private double magnification;
 
+  private boolean isTagTracking = false;
+
   private SwerveModuleState[] swerveModuleStates = new SwerveModuleState[4];
 
   public Drivebase(TagTracking tagTracking, NoteTracking noteTracking) {
@@ -264,6 +266,23 @@ public class Drivebase extends SubsystemBase {
     drive(xSpeed, ySpeed, Rot, true);
   }
 
+  public void tagTracking2() {
+    double Rot = 0;
+    double xSpeed = 0;
+    double ySpeed = 0;
+    double offset = tagTracking.getTx();
+    if (tagTracking.getTv() == 1) {
+
+      Rot = -trackingPID.calculate(offset, 0);
+    }
+    if (Math.abs(offset) >= 0.05) {
+      isTagTracking=true;
+      drive(xSpeed, ySpeed, Rot, true);
+    } else{
+      isTagTracking = false;
+    }
+  }
+
   public Command tagTrackingCmd(double xSpeed, double ySpeed, double rot) {
     Command cmd = runEnd(
         () -> tagTracking(xSpeed, ySpeed, rot),
@@ -321,10 +340,14 @@ public class Drivebase extends SubsystemBase {
   }
 
   public void putDashboard() {
-    // SmartDashboard.putNumber("frontLeft_speed", swerveModuleStates[0].speedMetersPerSecond);
-    // SmartDashboard.putNumber("frontRight_speed", swerveModuleStates[1].speedMetersPerSecond);
-    // SmartDashboard.putNumber("backLeft_speed", swerveModuleStates[2].speedMetersPerSecond);
-    // SmartDashboard.putNumber("backRight_speed", swerveModuleStates[3].speedMetersPerSecond);
+    // SmartDashboard.putNumber("frontLeft_speed",
+    // swerveModuleStates[0].speedMetersPerSecond);
+    // SmartDashboard.putNumber("frontRight_speed",
+    // swerveModuleStates[1].speedMetersPerSecond);
+    // SmartDashboard.putNumber("backLeft_speed",
+    // swerveModuleStates[2].speedMetersPerSecond);
+    // SmartDashboard.putNumber("backRight_speed",
+    // swerveModuleStates[3].speedMetersPerSecond);
     SmartDashboard.putNumber("gyro_heading", gyro.getRotation2d().getDegrees());
   }
 
@@ -418,4 +441,11 @@ public class Drivebase extends SubsystemBase {
     cmd.setName("noteTracking2Cmd");
     return cmd;
   }
+
+  public Command tagTracking2Cmd() {
+    Command cmd = Commands.runEnd(() -> tagTracking.setAutoCamOn(), () -> tagTracking.setAutoCamOff()).onlyWhile(()->isTagTracking);
+    cmd.setName("tagTrackin2Cmd");
+    return cmd;
+  }
+
 }
