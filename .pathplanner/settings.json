@@ -4,14 +4,17 @@
   "holonomicMode": true,
   "pathFolders": [
     "AmpAndAmp",
+    "AmpAndAmpB",
     "LBSToNote",
     "LTSToNote",
     "LeftAndLeft(failed)",
     "MiddleAndMiddle",
+    "MiddleAndMiddleB",
     "RBSToNote",
     "RTSToNote",
     "Relay To Shoot Point",
     "SourceAndSource",
+    "SourceAndSourceB",
     "Test"
   ],
   "autoFolders": [

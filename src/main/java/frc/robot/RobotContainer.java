@@ -122,18 +122,18 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    if (autoChooser.getSelected().isScheduled()) {
+    // if (autoChooser.getSelected().isScheduled()) {
       return autoChooser.getSelected();
-    }
-    String autoNumber = SmartDashboard.getString("auto", "null");
-    String initial = initialChooser.getSelected();
-    var alliance = DriverStation.getAlliance();
-    if (initial == "null" && alliance.isPresent())
-      return Commands.none();
-    boolean isRed = alliance.get() == DriverStation.Alliance.Red;
-    if (isRed) {
-      initial = (initial == "left" ? "right" : (initial == "right" ? "left" : "middle"));
-    }
-    return Autos.autoOptimize(drivebase, shooterSubsystem, transportSubsystem, intakeSubsystem, autoNumber, initial);
+    // }
+    // String autoNumber = SmartDashboard.getString("auto", "null");
+    // String initial = initialChooser.getSelected();
+    // var alliance = DriverStation.getAlliance();
+    // if (initial == "null" && alliance.isPresent())
+    //   return Commands.none();
+    // boolean isRed = alliance.get() == DriverStation.Alliance.Red;
+    // if (isRed) {
+    //   initial = (initial == "left" ? "right" : (initial == "right" ? "left" : "middle"));
+    // }
+    // return Autos.autoOptimize(drivebase, shooterSubsystem, transportSubsystem, intakeSubsystem, autoNumber, initial);
   }
 }
