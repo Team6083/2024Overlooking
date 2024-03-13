@@ -63,7 +63,6 @@ public class SwerveModule extends SubsystemBase {
   public void init() {
     configDriveMotor();
     configTurningMotor();
-    configDriveEncoder();
     resetAllEncoder();
     clearSticklyFault();
     stopModule();
@@ -85,11 +84,6 @@ public class SwerveModule extends SubsystemBase {
     turningMotor.setClosedLoopRampRate(ModuleConstants.kDriveClosedLoopRampRate);
     turningMotor.setIdleMode(IdleMode.kBrake);
     turningMotor.burnFlash();
-  }
-
-  public void configDriveEncoder() {
-    driveEncoder.setPositionConversionFactor(1.0 / 6.75 * 2.0 * Math.PI * ModuleConstants.kWheelRadius);
-    driveEncoder.setVelocityConversionFactor(1.0 / 60.0 / 6.75 * 2 * Math.PI * ModuleConstants.kWheelRadius);
   }
 
   public void resetAllEncoder() {
@@ -115,12 +109,12 @@ public class SwerveModule extends SubsystemBase {
 
   // to get the drive distance
   public double getDriveDistance() {
-    return driveEncoder.getPosition();
+    return driveEncoder.getPosition() * 1.0 / 6.75 * 2.0 * Math.PI * ModuleConstants.kWheelRadius;
   }
 
   // calculate the rate of the drive
   public double getDriveRate() {
-    return driveEncoder.getVelocity();
+    return driveEncoder.getVelocity() * 1.0 / 60.0 / 6.75 * 2 * Math.PI * ModuleConstants.kWheelRadius;
   }
 
   // to get rotation of turning motor
