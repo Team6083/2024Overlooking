@@ -80,7 +80,7 @@ public class RobotContainer {
     //     new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
     // NamedCommands.registerCommand("AutoFace", drivebase.tagTrackingCmd(0, 0, 0));
     NamedCommands.registerCommand("AutoTransportToShoot", new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
-    NamedCommands.registerCommand("AutoShootRate", shooterSubsystem.setSpeakerRateControlCmd());
+    NamedCommands.registerCommand("AutoShootRate", shooterSubsystem.speakerRateControlCmd());
     NamedCommands.registerCommand("AutoIntakeWithTransport", new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
     NamedCommands.registerCommand("AutoRotateShooter", drivebase.tagTracking2Cmd());
     NamedCommands.registerCommand("AutoIntakeDown", new TimeStopIntakeCmd(intakeSubsystem));
@@ -100,7 +100,7 @@ public class RobotContainer {
 
     // shooter
     shooterSubsystem.setDefaultCommand(new AdjustShooterAngleManual(mainController, shooterSubsystem));//(shooterSubsystem.setInitRateControlCmd());
-    mainController.b().toggleOnFalse(shooterSubsystem.stopAllMotorCmd());
+    mainController.b().toggleOnTrue(shooterSubsystem.speakerRateControlCmd());
 
     // toggleOnTrue(shooterSubsystem.shootRateControlCmd().alongWith(shooterSubsystem.setAutoAimCmd()).alongWith(new TagDriveCmd(drivebase, mainController)));
     controlPanel.button(8).whileTrue(shooterSubsystem.setCarryRateControlCmd()).whileFalse(shooterSubsystem.shootRateControlModeCmd());

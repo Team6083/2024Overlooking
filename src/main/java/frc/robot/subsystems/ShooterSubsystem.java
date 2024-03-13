@@ -180,18 +180,18 @@ public class ShooterSubsystem extends SubsystemBase {
     downShooterEncoder.reset();
   }
 
-  // private void setSpeakerRateControl() {
-  // setSetpoint(getSpeakerDegree(getSetpoint()));
-  // double upRate = ShooterConstants.kSpeakerShooterRate[0];
-  // double downRate = ShooterConstants.kSpeakerShooterRate[1];
-  // final double upMotorVoltage = upMotorFeedForwardController.calculate(upRate)
-  // + rateShooterPID.calculate(getUpEncoderRate(), upRate);
-  // final double downMotorVoltage =
-  // downMotorFeedForwardController.calculate(downRate)
-  // + rateShooterPID.calculate(getDownEncoderRate(), downRate);
-  // setUpMotorVoltage(upMotorVoltage);
-  // setDownMotorVoltage(downMotorVoltage);
-  // }
+  private void setSpeakerRateControl() {
+  setSetpoint(getSpeakerDegree(getSetpoint()));
+  double upRate = ShooterConstants.kSpeakerShooterRate[0];
+  double downRate = ShooterConstants.kSpeakerShooterRate[1];
+  final double upMotorVoltage = upMotorFeedForwardController.calculate(upRate)
+  + rateShooterPID.calculate(getUpEncoderRate(), upRate);
+  final double downMotorVoltage =
+  downMotorFeedForwardController.calculate(downRate)
+  + rateShooterPID.calculate(getDownEncoderRate(), downRate);
+  setUpMotorVoltage(upMotorVoltage);
+  setDownMotorVoltage(downMotorVoltage);
+  }
 
   // private void setCarryRateControl() {
   // setSetpoint(RotateShooterConstants.kCarryDegree);
@@ -507,11 +507,11 @@ public class ShooterSubsystem extends SubsystemBase {
     this.isMaunal = isManual;
   }
 
-  // public Command setSpeakerRateControlCmd() {
-  // Command cmd = runEnd(this::setSpeakerRateControl, this::stopAllMotor);
-  // cmd.setName("setSpeakerRateControlCmd");
-  // return cmd;
-  // }
+  public Command speakerRateControlCmd() {
+  Command cmd = runEnd(this::setSpeakerRateControl, this::stopAllMotor);
+  cmd.setName("setSpeakerRateControlCmd");
+  return cmd;
+  }
 
   // public Command setCarryRateControlCmd() {
   // Command cmd = runEnd(this::setCarryRateControl, this::stopAllMotor);
