@@ -249,6 +249,21 @@ public class Drivebase extends SubsystemBase {
     drive(xSpeed, ySpeed, robotRot, true);
   }
 
+  public void noteTracking2() {
+    double Rot = 0;
+    double xSpeed = 0;
+    double ySpeed = 0;
+    if (noteTracking.getTx().size() != 0) {
+      double yaw = noteTracking.getTx().indexOf(0.0);
+      double x = noteTracking.getLastPose().getX();
+      double y = noteTracking.getLastPose().getY();
+      Rot = -trackingPID.calculate(yaw, 0);
+      xSpeed = -trackingPID.calculate(x);
+      ySpeed = -trackingPID.calculate(y);
+    }
+    drive(xSpeed, ySpeed, Rot, true);
+  }
+
   public Command tagTrackingCmd(double xSpeed, double ySpeed, double rot) {
     Command cmd = runEnd(
         () -> tagTracking(xSpeed, ySpeed, rot),
@@ -306,10 +321,10 @@ public class Drivebase extends SubsystemBase {
   }
 
   public void putDashboard() {
-    SmartDashboard.putNumber("frontLeft_speed", swerveModuleStates[0].speedMetersPerSecond);
-    SmartDashboard.putNumber("frontRight_speed", swerveModuleStates[1].speedMetersPerSecond);
-    SmartDashboard.putNumber("backLeft_speed", swerveModuleStates[2].speedMetersPerSecond);
-    SmartDashboard.putNumber("backRight_speed", swerveModuleStates[3].speedMetersPerSecond);
+    // SmartDashboard.putNumber("frontLeft_speed", swerveModuleStates[0].speedMetersPerSecond);
+    // SmartDashboard.putNumber("frontRight_speed", swerveModuleStates[1].speedMetersPerSecond);
+    // SmartDashboard.putNumber("backLeft_speed", swerveModuleStates[2].speedMetersPerSecond);
+    // SmartDashboard.putNumber("backRight_speed", swerveModuleStates[3].speedMetersPerSecond);
     SmartDashboard.putNumber("gyro_heading", gyro.getRotation2d().getDegrees());
   }
 
@@ -395,6 +410,12 @@ public class Drivebase extends SubsystemBase {
 
   public Command setTagVisionModeCmd() {
     Command cmd = Commands.runEnd(() -> tagTracking.isVisionOn(), () -> tagTracking.setCamMode());
+    return cmd;
+  }
+
+  public Command noteTracking2Cmd() {
+    Command cmd = this.runOnce(this::noteTracking2);
+    cmd.setName("noteTracking2Cmd");
     return cmd;
   }
 }
