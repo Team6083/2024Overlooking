@@ -128,6 +128,11 @@ public class RobotContainer {
               return shooterSubsystem.fixRateControlCmd().alongWith(new TagDriveCmd(drivebase, mainController));
             }));
 
+    mainController.pov(0).whileTrue(shooterSubsystem.manualUpCmd().onlyWhile(
+        () -> shooterSubsystem.getIsManual()));
+    mainController.pov(180).whileTrue(shooterSubsystem.manualDownCmd().onlyWhile(
+        () -> shooterSubsystem.getIsManual()));
+        controlPanel.button(10).onTrue(shooterSubsystem.isManualOnCmd()).onFalse(shooterSubsystem.isManualOffCmd());
     // tracking
     controlPanel.button(7)
         .whileTrue(new NoteDriveCmd(drivebase, mainController));

@@ -43,6 +43,8 @@ public final class Constants {
         public static final double kDownMotorS = 0.681;
         public static final double kDownMotorV = 0.142;
         public static final double kDownMotorA = 0.0;
+        public static final double kManualUpVoltage = 3;
+        public static final double kManualDownVoltage = -3;
     }
 
     public static class TransportConstants {
