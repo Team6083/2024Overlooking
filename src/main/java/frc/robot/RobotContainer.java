@@ -86,8 +86,8 @@ public class RobotContainer {
     mainController.leftBumper().onTrue(drivebase.defaultSpeedCmd());
 
     // intake and transport
-    mainController.y().toggleOnTrue(new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-    mainController.x().whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+    // mainController.y().toggleOnTrue(new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+    // mainController.x().whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
 
     // shooter
     shooterSubsystem.setDefaultCommand(new AdjustShooterAngleManual(mainController, shooterSubsystem));//(shooterSubsystem.setInitRateControlCmd());
@@ -97,23 +97,23 @@ public class RobotContainer {
     controlPanel.button(10).whileTrue(shooterSubsystem.setCarryRateControlCmd()).whileFalse(shooterSubsystem.shootRateControlModeCmd());
     controlPanel.button(11).whileTrue(shooterSubsystem.setAdjustAngleByTagCommand()).whileFalse(shooterSubsystem.setFixAngleCommand());
     
-    // tracking
-    controlPanel.button(6).whileTrue(new NoteDriveCmd(drivebase, mainController));
-    mainController.b().toggleOnTrue(new TagDriveCmd(drivebase, mainController));
+    // // tracking
+    // controlPanel.button(6).whileTrue(new NoteDriveCmd(drivebase, mainController));
+    // mainController.b().toggleOnTrue(new TagDriveCmd(drivebase, mainController));
 
-    // transport
-    mainController.a().toggleOnTrue(
-        transportSubsystem.transportIntakeCmd().onlyWhile(() -> shooterSubsystem.isEnoughRate()).withTimeout(0.5));
+    // // transport
+    // mainController.a().toggleOnTrue(
+    //     transportSubsystem.transportIntakeCmd().onlyWhile(() -> shooterSubsystem.isEnoughRate()).withTimeout(0.5));
 
-    // // hook
-    mainController.rightTrigger(0.5).whileTrue(hookSubsystem.upAllCmd());
-    mainController.leftTrigger(0.5).whileTrue(hookSubsystem.downAllCmd());
-    controlPanel.button(0).whileTrue(hookSubsystem.leftUpIndivisualCmd());
-    controlPanel.button(1).whileTrue(hookSubsystem.leftDownIndivisualCmd());
-    controlPanel.button(2).whileTrue(hookSubsystem.rightUpIndivisualCmd());
-    controlPanel.button(3).whileTrue(hookSubsystem.rightDownIndivisualCmd());
+    // // // hook
+    // mainController.rightTrigger(0.5).whileTrue(hookSubsystem.upAllCmd());
+    // mainController.leftTrigger(0.5).whileTrue(hookSubsystem.downAllCmd());
+    // controlPanel.button(0).whileTrue(hookSubsystem.leftUpIndivisualCmd());
+    // controlPanel.button(1).whileTrue(hookSubsystem.leftDownIndivisualCmd());
+    // controlPanel.button(2).whileTrue(hookSubsystem.rightUpIndivisualCmd());
+    // controlPanel.button(3).whileTrue(hookSubsystem.rightDownIndivisualCmd());
 
-    // reset
+    // // reset
     mainController.back().onTrue(drivebase.gyroResetCmd());
   }
 

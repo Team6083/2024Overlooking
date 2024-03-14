@@ -42,7 +42,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final DutyCycleEncoder rotateEncoder;
   private final PIDController rotatePID;
   private double rotateDegreeError = 0.0;
-  private double setPoint;
+  private double setPoint = RotateShooterConstants.kInitDegree;
   private double upGoalRate = 0;
   private double downGoalRate = 0;
 
@@ -484,6 +484,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("shooterRateMode", shootMode);
     SmartDashboard.putNumber("upMotorVoltage", upShooterMotor.getMotorOutputVoltage());
     SmartDashboard.putNumber("downMotorVoltage", downShooterMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("rotateEncoder", getAngle());
   }
 
   public void stopMotor() {
