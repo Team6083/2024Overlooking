@@ -88,17 +88,13 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setSetpoint(double setpoint) {
-    final double currentSetpoint = getSetpoint() + rotateDegreeError;
-    if (hasExceedPhysicalLimit(currentSetpoint) != 0) {
-
-      return;
+    double rotateDegree = setpoint+rotateDegreeError;
+    if (hasExceedPhysicalLimit(rotateDegree) == -1) {
+      rotateDegree = RotateShooterConstants.kRotateAngleMin;
+    } else if (hasExceedPhysicalLimit(rotateDegree) == 1) {
+      rotateDegree = RotateShooterConstants.kRotateAngleMax;
     }
-    if (hasExceedPhysicalLimit(setpoint) == -1) {
-      setpoint = RotateShooterConstants.kRotateAngleMin;
-    } else if (hasExceedPhysicalLimit(setpoint) == 1) {
-      setpoint = RotateShooterConstants.kRotateAngleMax;
-    }
-    rotatePID.setSetpoint(setpoint);
+    rotatePID.setSetpoint(rotateDegree);
   }
 
   private void setPIDControl() {
@@ -488,7 +484,11 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("encoderDegree", getAngle());
     SmartDashboard.putNumber("upMotorVoltage", upShooterMotor.getMotorOutputVoltage());
     SmartDashboard.putNumber("downMotorVoltage", downShooterMotor.getMotorOutputVoltage());
+<<<<<<< HEAD
     SmartDashboard.putNumber("rotateSetpoint", setPoint);
+=======
+    SmartDashboard.putNumber("rotateEncoder", getAngle());
+>>>>>>> 2ca63587d30415585794d76fe23a63dc9554996c
   }
 
   public void stopMotor() {
