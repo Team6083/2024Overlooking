@@ -272,7 +272,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public Command aimControlCmd() {
-    Command cmd = run(this::aimControl);
+    Command cmd = runEnd(this::aimControl, this::stopAllMotor);
     return cmd;
   }
 

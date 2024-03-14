@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.Map;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -11,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
@@ -77,6 +80,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("AutoIntakeDown", new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
     NamedCommands.registerCommand("AutoNote", new NoteDriveCmd(drivebase, mainController).withTimeout(0.5));
     NamedCommands.registerCommand("AutoTag", new TagDriveCmd(drivebase, mainController));
+    NamedCommands.registerCommand("AutoTransport", transportSubsystem.transportIntakeCmd());
   }
 
   private void configureBindings() {
@@ -95,6 +99,14 @@ public class RobotContainer {
     shooterSubsystem.setDefaultCommand(new AdjustShooterAngleManual(mainController, shooterSubsystem));//(shooterSubsystem.setInitRateControlCmd());
     mainController.b().toggleOnTrue(new AimControlAllCmd(drivebase, shooterSubsystem).onlyWhile(()->controlPanel.button(1).getAsBoolean()));
 
+    enum ShooterModes{
+      Carry,
+      AutoMode,
+      ManualShoot
+    }
+
+    // mainController.b().toggleOnTrue(Commands.select(MapofEntries(Map<>.entry(null, null))
+    //   ));
     // toggleOnTrue(shooterSubsystem.shootRateControlCmd().alongWith(shooterSubsystem.setAutoAimCmd()).alongWith(new TagDriveCmd(drivebase, mainController)));
     controlPanel.button(8).whileTrue(shooterSubsystem.setCarryRateControlCmd()).whileFalse(shooterSubsystem.shootRateControlModeCmd());
     controlPanel.button(9).whileTrue(shooterSubsystem.setAdjustAngleByTagCommand()).whileFalse(shooterSubsystem.setDefaultAngleCommand());
