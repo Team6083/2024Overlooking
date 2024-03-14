@@ -20,7 +20,6 @@ public class IntakeSubsystem extends SubsystemBase {
   private final VictorSPX rotateIntake;
   private final DutyCycleEncoder rotateEncoder;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
-  private boolean isDownIntake = false;
 
   public IntakeSubsystem(PowerDistributionSubsystem powerDistributionSubsystem) {
     this.powerDistributionSubsystem = powerDistributionSubsystem;
