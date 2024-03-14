@@ -80,29 +80,34 @@ public class RobotContainer {
 
   private void configureBindings() {
     // drivetrain
-    drivebase.setDefaultCommand(new SwerveJoystickCmd(drivebase, mainController));
-    mainController.rightBumper().onTrue(drivebase.accelerateCmd());
-    mainController.leftBumper().onTrue(drivebase.defaultSpeedCmd());
+    // drivebase.setDefaultCommand(new SwerveJoystickCmd(drivebase, mainController));
+    // mainController.rightBumper().onTrue(drivebase.accelerateCmd());
+    // mainController.leftBumper().onTrue(drivebase.defaultSpeedCmd());
 
-    // intake and transport
-    mainController.y().toggleOnTrue(new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-    mainController.x().whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+    // // intake and transport
+    // mainController.y().toggleOnTrue(new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+    // mainController.x().whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+    controlPanel.button(5).onTrue(intakeSubsystem.reIntakeCmd());
+    // controlPanel.button(6).onTrue(new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.5));
 
     // shooter
     shooterSubsystem.setDefaultCommand(new AdjustShooterAngleManual(mainController, shooterSubsystem));//(shooterSubsystem.setInitRateControlCmd());
-    mainController.b().toggleOnTrue(shooterSubsystem.speakerRateControlCmd());
+    mainController.b().toggleOnTrue(shooterSubsystem.shootRateControlCmd().onlyWhile(()->controlPanel.button(1).getAsBoolean()));
 
     // toggleOnTrue(shooterSubsystem.shootRateControlCmd().alongWith(shooterSubsystem.setAutoAimCmd()).alongWith(new TagDriveCmd(drivebase, mainController)));
-    controlPanel.button(10).whileTrue(shooterSubsystem.setCarryRateControlCmd()).whileFalse(shooterSubsystem.shootRateControlModeCmd());
-    controlPanel.button(11).whileTrue(shooterSubsystem.setAdjustAngleByTagCommand()).whileFalse(shooterSubsystem.setFixAngleCommand());
+    controlPanel.button(8).whileTrue(shooterSubsystem.setCarryRateControlCmd()).whileFalse(shooterSubsystem.shootRateControlModeCmd());
+    controlPanel.button(9).whileTrue(shooterSubsystem.setAdjustAngleByTagCommand()).whileFalse(shooterSubsystem.setFixAngleCommand());
     
-    // tracking
-    controlPanel.button(6).whileTrue(new NoteDriveCmd(drivebase, mainController));
-    mainController.b().toggleOnTrue(new TagDriveCmd(drivebase, mainController));
+    // // tracking
+    // controlPanel.button(7).whileTrue(new NoteDriveCmd(drivebase, mainController));
+    // mainController.b().toggleOnTrue(new TagDriveCmd(drivebase, mainController));
 
-    // transport
-    mainController.a().toggleOnTrue(
-        transportSubsystem.transportIntakeCmd().onlyWhile(() -> shooterSubsystem.isEnoughRate()).withTimeout(0.5));
+    // // transport
+    // mainController.a().toggleOnTrue(
+    //     transportSubsystem.transportIntakeCmd().onlyWhile(() -> shooterSubsystem.isEnoughRate()).withTimeout(0.5));
+    // // transport
+    // mainController.a().toggleOnTrue(
+    //     transportSubsystem.transportIntakeCmd().onlyWhile(() -> shooterSubsystem.isEnoughRate()).withTimeout(0.5));
 
     // // hook
     mainController.rightTrigger(0.5).whileTrue(hookSubsystem.upAllCmd());
@@ -112,7 +117,7 @@ public class RobotContainer {
     controlPanel.button(2).whileTrue(hookSubsystem.rightUpIndivisualCmd());
     controlPanel.button(3).whileTrue(hookSubsystem.rightDownIndivisualCmd());
 
-    // reset
+    // // reset
     mainController.back().onTrue(drivebase.gyroResetCmd());
   }
 

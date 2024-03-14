@@ -55,9 +55,9 @@ public class NoteTracking {
     public Transform2d getCamToTarget() {
         double yaw = getYaw();
         double pitch = getPitch();
-        double camPitch = -20; // need to fix, positvie up
+        double camPitch = NoteTrackingConstants.pitchDegree; // need to fix, positvie up
         // double camYaw = 30; // need to fix, positive right
-        double cam_Y_Offset = 0.2; // need to fix, sideway
+        double cam_Y_Offset = NoteTrackingConstants.kCamYOffset; // need to fix, sideway
         double realPitch = pitch + camPitch;
 
         double camHeight = 0.2; // need to fix
