@@ -292,22 +292,6 @@ public class Drivebase extends SubsystemBase {
     return cmd;
   }
 
-  public Command accelerateCmd() {
-    Command cmd = Commands.runOnce(
-        () -> setMagnification(DrivebaseConstants.kHighMagnification),
-        this);
-    cmd.setName("accelerateCmd");
-    return cmd;
-  }
-
-  public Command defaultSpeedCmd() {
-    Command cmd = Commands.runOnce(
-        () -> setMagnification(DrivebaseConstants.kDefaultMagnification),
-        this);
-    cmd.setName("defaultSpeedCmd");
-    return cmd;
-  }
-
   public void setMagnification(double magnification) {
     this.magnification = magnification;
   }
@@ -350,6 +334,9 @@ public class Drivebase extends SubsystemBase {
     // SmartDashboard.putNumber("backRight_speed",
     // swerveModuleStates[3].speedMetersPerSecond);
     SmartDashboard.putNumber("gyro_heading", gyro.getRotation2d().getDegrees());
+    SmartDashboard.putNumber("poseX", getPose2d().getX());
+    SmartDashboard.putNumber("poseY", getPose2d().getY());
+    SmartDashboard.putNumber("poseRotationDegree", getPose2d().getRotation().getDegrees());
   }
 
   public double calShooterAngleByPose2d() {
