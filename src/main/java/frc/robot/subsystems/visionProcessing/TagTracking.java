@@ -23,7 +23,6 @@ public class TagTracking {
 
     private double[] bt; // botpose_targetspace
     private double[] ct; // camerapose_targetspace
-    private double[] ids;
 
     private double distance;
     private boolean isCamOn = true;
@@ -38,7 +37,6 @@ public class TagTracking {
         } catch (IOException err) {
             throw new RuntimeException();
         }
-        ids = new double[3];
     }
 
     /**
