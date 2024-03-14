@@ -139,6 +139,7 @@ public class RobotContainer {
         .toggleOnTrue(
             transportSubsystem.transportIntakeCmd().onlyWhile(
                 () -> shooterSubsystem.isEnoughRate()).withTimeout(0.5));
+    mainController.start().toggleOnTrue(transportSubsystem.transportIntakeCmd().withTimeout(0.5));
 
     // hook
     mainController.rightTrigger(0.5)
