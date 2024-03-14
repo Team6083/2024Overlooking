@@ -219,23 +219,7 @@ public class TagTracking {
             return new Pose2d();
         }
     }
-
-    // private double[] getIDs() {
-    //     int i = 0;
-    //     while (i < 3) {
-    //         if (i == 2 && ids[i - 1] == -1) {
-    //             break;
-    //         }
-    //         ids[i] = getTID();
-    //         i++;
-    //     }
-    //     return ids;
-    // }
-
-    // public double getLastID() {
-    //     return getIDs()[2];
-    // }
-
+    
     public void isVisionOn() {
         isCamOn = !isCamOn;
     }

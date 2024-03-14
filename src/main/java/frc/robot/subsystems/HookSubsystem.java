@@ -277,56 +277,6 @@ public class HookSubsystem extends SubsystemBase {
     setRightMotorVoltage(0);
   }
 
-  // private Command upLineCmd() {
-  // Command cmd = Commands.run(
-  // () -> setLineSetpoint(getLineSetpoint() + HookConstants.kLineSetpointModify),
-  // this);
-  // cmd.setName("upLineCmd");
-  // return cmd;
-  // }
-
-  // private Command upLeftCmd() {
-  // Command cmd = Commands.run(
-  // () -> setLeftSetpoint(getLeftSetpoint() + HookConstants.kLeftSetpointModify),
-  // this);
-  // cmd.setName("upLeftCmd");
-  // return cmd;
-  // }
-
-  // private Command upRightCmd() {
-  // Command cmd = Commands.run(
-  // () -> setRightSetpoint(getRightSetpoint() +
-  // HookConstants.kRightSetpointModify),
-  // this);
-  // cmd.setName("upRightCmd");
-  // return cmd;
-  // }
-
-  // private Command downLineCmd() {
-  // Command cmd = Commands.run(
-  // () -> setLineSetpoint(getLineSetpoint() - HookConstants.kLineSetpointModify),
-  // this);
-  // cmd.setName("downLineCmd");
-  // return cmd;
-  // }
-
-  // private Command downLeftCmd() {
-  // Command cmd = Commands.run(
-  // () -> setLeftSetpoint(getLeftSetpoint() - HookConstants.kLeftSetpointModify),
-  // this);
-  // cmd.setName("downLeftCmd");
-  // return cmd;
-  // }
-
-  // private Command downRightCmd() {
-  // Command cmd = Commands.run(
-  // () -> setRightSetpoint(getRightSetpoint() -
-  // HookConstants.kRightSetpointModify),
-  // this);
-  // cmd.setName("downRightCmd");
-  // return cmd;
-  // }
-
   public Command leftUpIndivisualCmd() {
     Command cmd = Commands.run(
         () -> setLeftSetpointOffset(leftSetpointOffset + HookConstants.kLeftSetpointModify),

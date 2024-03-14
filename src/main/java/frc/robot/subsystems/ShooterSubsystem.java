@@ -8,7 +8,6 @@ import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -34,8 +33,6 @@ public class ShooterSubsystem extends SubsystemBase {
   // rotate shooter
   private final TagTracking tagTracking;
   private boolean isManual;
-  private boolean isAutoAim = false;
-  private double manualVoltage = 0;
   private final CANSparkMax rotateMotor;
   private final DutyCycleEncoder rotateEncoder;
   private final PIDController rotatePID;
@@ -43,8 +40,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private double setPoint = RotateShooterConstants.kInitDegree;
   private double upGoalRate = 0;
   private double downGoalRate = 0;
-  private double offset = 0;
-
+  
   public ShooterSubsystem(TagTracking tagTracking) {
     // shooter
     upShooterMotor = new VictorSPX(ShooterConstants.kUpMotorChannel);
