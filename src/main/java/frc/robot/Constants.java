@@ -46,6 +46,28 @@ public final class Constants {
         public static final double kManualDownVoltage = -3;
     }
 
+        public static class RotateShooterConstants {
+        public static final int kRotateShooterChannel = 21;
+        public static final Boolean kRotateShooterInverted = true;
+        public static final Boolean kEncoderInverted = true;
+        public static final int kEncoderChannel = 2;
+        public static final double kInitDegree = 57.0;
+        public static final double kCarryDegree = 20.0;
+        public static final double kManualVoltage = 4.0;
+        public static final double kRotateVoltLimit = 5.0;
+        public static final double kRotateAngleMin = 20.0;
+        public static final double kRotateAngleMax = 67.0;
+        public static final double kRotateDegreeErrorPoint = 3;
+        public static final double kRotateOffset = 302.0;
+        public static final double kShooterOffset = 4.32;    
+        public static final double kSpeakerHeight = 2.18;
+        public static final double kAMPHeight = 0.89;
+        public static final double kShooterHeight = 0.3;
+        public static final double kP = 0.085;
+        public static final double kI = 0.0002;
+        public static final double kD = 0.0008;
+    }
+
     public static class TransportConstants {
         public static final int kTransportChannel = 22;
         public static final boolean kTransportInverted = true;
@@ -66,29 +88,6 @@ public final class Constants {
         public static final double kThrowVoltage = -4.0;
         public static final double kRotateVoltage = 12.0;
         public static final double kStopTime = 2.52;
-    }
-
-    public static class RotateShooterConstants {
-        public static final int kRotateShooterChannel = 21;
-        public static final Boolean kRotateShooterInverted = true;
-        public static final Boolean kEncoderInverted = true;
-        public static final int kEncoderChannel = 2;
-        public static final double kInitDegree = 57.0;
-        public static final double kCarryDegree = 2.0;
-        public static final double kManualVoltage = 4.0;
-        public static final double kRotateVoltLimit = 5.0;
-        public static final double kRotateAngleMin = 0.0;
-        public static final double kRotateAngleMax = 74.0;
-        public static final double kRotateDegreeErrorPoint = 3;
-        public static final double kRotateTriggerValue = 0.15;
-        public static final double kRotateOffset = 302.0;
-        public static final double kShooterOffset = 4.32;    
-        public static final double kSpeakerHeight = 2.18;
-        public static final double kAMPHeight = 0.89;
-        public static final double kShooterHeight = 0.3;
-        public static final double kP = 0.085;
-        public static final double kI = 0.0002;
-        public static final double kD = 0.0008;
     }
 
     public static class HookConstants {
