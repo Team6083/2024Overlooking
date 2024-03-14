@@ -40,7 +40,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private double setPoint = RotateShooterConstants.kInitDegree;
   private double upGoalRate = 0;
   private double downGoalRate = 0;
-  
+
   public ShooterSubsystem(TagTracking tagTracking) {
     // shooter
     upShooterMotor = new VictorSPX(ShooterConstants.kUpMotorChannel);
@@ -106,7 +106,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private void setPIDControl() {
-    double rotateVoltage = rotatePID.calculate(rotateEncoder.getAbsolutePosition());
+    double rotateVoltage = rotatePID.calculate(getAngle());
     double modifiedRotateVoltage = rotateVoltage;
     if (Math.abs(modifiedRotateVoltage) > RotateShooterConstants.kRotateVoltLimit) {
       modifiedRotateVoltage = RotateShooterConstants.kRotateVoltLimit * (rotateVoltage > 0 ? 1 : -1);
@@ -126,8 +126,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public double getSpeakerDegree(double currentDegree) {
-    if (tagTracking.getTv() == 1 && tagTracking.getTID() != 3.0
-        && tagTracking.getTID() != 8.0 && tagTracking.getHorDistanceByCal() > 1.1) {
+    if (tagTracking.getTv() == 1 && tagTracking.getHorDistanceByCal() > 1.1) {
       double horizonDistance = tagTracking.getHorizontalDistanceByCT();
       double speakerToShooterHeight = RotateShooterConstants.kSpeakerHeight - RotateShooterConstants.kShooterHeight;
       double degree = Math.toDegrees(Math.atan(speakerToShooterHeight / horizonDistance));
