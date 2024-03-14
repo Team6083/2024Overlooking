@@ -60,6 +60,17 @@ public class RobotContainer {
     shooterSubsystem = new ShooterSubsystem(tagTracking);
     transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
     hookSubsystem = new HookSubsystem(powerDistributionSubsystem);
+
+    NamedCommands.registerCommand("AutoTransportToShoot",
+        new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
+    NamedCommands.registerCommand("AutoIntakeWithTransport",
+        new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+    NamedCommands.registerCommand("AutoRotateShooter", drivebase.tagTracking2Cmd());
+    NamedCommands.registerCommand("AutoIntakeDown", new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
+    NamedCommands.registerCommand("AutoNote", new NoteDriveCmd(drivebase, mainController).withTimeout(0.5));
+    NamedCommands.registerCommand("AutoTag", new TagDriveCmd(drivebase, mainController));
+    NamedCommands.registerCommand("AutoTransport", transportSubsystem.transportIntakeCmd());
+    
     configureBindings();
     autoChooser = AutoBuilder.buildAutoChooser();
 
@@ -73,15 +84,7 @@ public class RobotContainer {
     // SmartDashboard.putString("auto", "null");
     // SmartDashboard.putData(initialChooser);
 
-    NamedCommands.registerCommand("AutoTransportToShoot",
-        new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
-    NamedCommands.registerCommand("AutoIntakeWithTransport",
-        new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-    NamedCommands.registerCommand("AutoRotateShooter", drivebase.tagTracking2Cmd());
-    NamedCommands.registerCommand("AutoIntakeDown", new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
-    NamedCommands.registerCommand("AutoNote", new NoteDriveCmd(drivebase, mainController).withTimeout(0.5));
-    NamedCommands.registerCommand("AutoTag", new TagDriveCmd(drivebase, mainController));
-    NamedCommands.registerCommand("AutoTransport", transportSubsystem.transportIntakeCmd());
+    
   }
 
   private void configureBindings() {
