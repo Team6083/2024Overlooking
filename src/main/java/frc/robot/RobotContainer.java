@@ -96,8 +96,8 @@ public class RobotContainer {
     mainController.b().toggleOnTrue(shooterSubsystem.shootRateControlCmd().onlyWhile(()->controlPanel.button(1).getAsBoolean()));
 
     // toggleOnTrue(shooterSubsystem.shootRateControlCmd().alongWith(shooterSubsystem.setAutoAimCmd()).alongWith(new TagDriveCmd(drivebase, mainController)));
-    controlPanel.button(11).whileTrue(shooterSubsystem.setCarryRateControlCmd()).whileFalse(shooterSubsystem.shootRateControlModeCmd());
-    controlPanel.button(12).whileTrue(shooterSubsystem.setAdjustAngleByTagCommand()).whileFalse(shooterSubsystem.setFixAngleCommand());
+    controlPanel.button(8).whileTrue(shooterSubsystem.setCarryRateControlCmd()).whileFalse(shooterSubsystem.shootRateControlModeCmd());
+    controlPanel.button(9).whileTrue(shooterSubsystem.setAdjustAngleByTagCommand()).whileFalse(shooterSubsystem.setFixAngleCommand());
     
     // // tracking
     // controlPanel.button(7).whileTrue(new NoteDriveCmd(drivebase, mainController));

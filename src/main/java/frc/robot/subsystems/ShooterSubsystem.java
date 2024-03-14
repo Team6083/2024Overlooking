@@ -45,6 +45,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private double setPoint = RotateShooterConstants.kInitDegree;
   private double upGoalRate = 0;
   private double downGoalRate = 0;
+  private double offset = 0;
 
   private final PowerDistributionSubsystem powerDistributionSubsystem;
 
@@ -219,8 +220,8 @@ public class ShooterSubsystem extends SubsystemBase {
     setPoint = getSpeakerDegree(getAngle());
   }
 
-  public void setFixAngle() {
-    setPoint = RotateShooterConstants.kInitDegree;
+  public void setDefaultAngle() {
+    setPoint = RotateShooterConstants.kInitDegree+offset;
   }
 
   // write these two methods into cmd
@@ -231,8 +232,8 @@ public class ShooterSubsystem extends SubsystemBase {
     return cmd;
   }
 
-  public Command setFixAngleCommand() {
-    Command cmd = runOnce(this::setFixAngle);
+  public Command setDefaultAngleCommand() {
+    Command cmd = runOnce(this::setDefaultAngle);
     cmd.setName("setFixAngle");
     return cmd;
   }
@@ -241,11 +242,22 @@ public class ShooterSubsystem extends SubsystemBase {
     setSetpoint(setPoint);
   }
 
-  public void shootRateControl() {
-    // shootRateControlMode();
+  public void aimControl() {
     setSetpoint(getSpeakerDegree(getSetpoint()));
     upGoalRate = ShooterConstants.kInitShooterRate[0];
     downGoalRate = ShooterConstants.kInitShooterRate[1];
+    final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
+        + rateShooterPID.calculate(getUpEncoderRate(), upGoalRate);
+    final double downMotorVoltage = downMotorFeedForwardController.calculate(downGoalRate)
+        + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
+    setUpMotorVoltage(upMotorVoltage);
+    setDownMotorVoltage(downMotorVoltage);
+  }
+
+  public void transportMode(){
+    setSetpoint(15);
+    upGoalRate = ShooterConstants.kCarryShooterRate[0];
+    downGoalRate = ShooterConstants.kCarryShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
         + rateShooterPID.calculate(getUpEncoderRate(), upGoalRate);
     final double downMotorVoltage = downMotorFeedForwardController.calculate(downGoalRate)
@@ -259,8 +271,8 @@ public class ShooterSubsystem extends SubsystemBase {
     return cmd;
   }
 
-  public Command shootRateControlCmd() {
-    Command cmd = runOnce(this::shootRateControl);
+  public Command aimControlCmd() {
+    Command cmd = run(this::aimControl);
     return cmd;
   }
 
