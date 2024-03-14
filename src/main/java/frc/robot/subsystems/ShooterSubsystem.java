@@ -228,20 +228,6 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   /**
-   * Stop up motor.
-   */
-  private void stopUpMotor() {
-    upShooterMotor.set(VictorSPXControlMode.PercentOutput, 0.0);
-  }
-
-  /**
-   * Stop down motor.
-   */
-  private void stopDownMotor() {
-    downShooterMotor.set(VictorSPXControlMode.PercentOutput, 0.0);
-  }
-
-  /**
    * Get up encoder rate.
    * 
    * @return rate/2048 (double)
@@ -313,6 +299,20 @@ public class ShooterSubsystem extends SubsystemBase {
    */
   private void setDownMotor(double power) {
     downShooterMotor.set(VictorSPXControlMode.PercentOutput, power);
+  }
+
+  /**
+   * Stop up motor.
+   */
+  private void stopUpMotor() {
+    upShooterMotor.set(VictorSPXControlMode.PercentOutput, 0.0);
+  }
+
+  /**
+   * Stop down motor.
+   */
+  private void stopDownMotor() {
+    downShooterMotor.set(VictorSPXControlMode.PercentOutput, 0.0);
   }
 
   /**
