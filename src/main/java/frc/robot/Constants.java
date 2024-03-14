@@ -48,8 +48,8 @@ public final class Constants {
     public static class TransportConstants {
         public static final int kTransportChannel = 22;
         public static final boolean kTransportInverted = true;
-        public static final double kTransVoltage = 5;
-        public static final double kReTransVoltage = -5;
+        public static final double kTransVoltage = 7;
+        public static final double kReTransVoltage = -7;
         public static final double kDistanceRange = 3.0;
     }
 
@@ -76,11 +76,11 @@ public final class Constants {
         public static final double kCarryDegree = 2.0;
         public static final double kManualVoltage = 4.0;
         public static final double kRotateVoltLimit = 5.0;
-        public static final double kRotateAngleMin = 15.0;
-        public static final double kRotateAngleMax = 60.0;
+        public static final double kRotateAngleMin = 0.0;
+        public static final double kRotateAngleMax = 74;
         public static final double kRotateDegreeErrorPoint = 3;
         public static final double kRotateTriggerValue = 0.15;
-        public static final double kRotateOffset = 302.0;
+        public static final double kRotateOffset = 304.0;
         public static final double kShooterOffset = 4.32;    
         public static final double kSpeakerHeight = 2.18;
         public static final double kAMPHeight = 0.89;
@@ -150,9 +150,9 @@ public final class Constants {
         public static final double kMinJoyStickValue = 0.35;
         public static final double kMaxAngularSpeed = 2.5 * Math.PI; // 1/2 rotation per second
 
-        public static final double kXLimiterRateLimit = 3.0;
-        public static final double kYLimiterRateLimit = 3.0;
-        public static final double kRotLimiterRateLimit = 3.0;
+        public static final double kXLimiterRateLimit = 4.0;
+        public static final double kYLimiterRateLimit = 4.0;
+        public static final double kRotLimiterRateLimit = 4.0;
 
         public static final boolean kFrontLeftDriveMotorInverted = true;
         public static final boolean kFrontRightDriveMotorInverted = false;
@@ -177,14 +177,14 @@ public final class Constants {
 
         public static final double kMaxModuleDriveVoltage = 12.0;
 
-        public static final double kDriveClosedLoopRampRate = 0.5;// 1 second 1 unit
-        public static final double kTurningClosedLoopRampRate = 0.25;
+        public static final double kDriveClosedLoopRampRate = 0.15;// 1 second 1 unit
+        public static final double kTurningClosedLoopRampRate = 0.15;
 
         public static final double kDesireSpeedtoMotorVoltage = kMaxModuleDriveVoltage / DrivebaseConstants.kMaxSpeed;
 
-        public static final double kMaxModuleTuringVoltage = 5.0;
+        public static final double kMaxModuleTuringVoltage = 9.0;
 
-        public static final double kMaxSpeedTurningDegree = 180.0;
+        public static final double kMaxSpeedTurningDegree = 160.0;
 
         public static final double kPRotationController = kMaxModuleTuringVoltage / kMaxSpeedTurningDegree;
         public static final double kIRotationController = 0.0;

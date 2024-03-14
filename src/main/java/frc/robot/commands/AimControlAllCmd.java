@@ -4,8 +4,11 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.driveControls.TagDriveCmd;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.drive.Drivebase;
 
@@ -14,9 +17,9 @@ import frc.robot.subsystems.drive.Drivebase;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AimControlAllCmd extends ParallelCommandGroup {
   /** Creates a new aimControlAll. */
-  public AimControlAllCmd(Drivebase drivebase, ShooterSubsystem shooterSubsystem) {
+  public AimControlAllCmd(Drivebase drivebase, ShooterSubsystem shooterSubsystem, CommandXboxController mainController) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(drivebase.tagTracking2Cmd(), shooterSubsystem.setAdjustAngleByTagCommand(), shooterSubsystem.shootRateControlModeCmd());
+    addCommands(new TagDriveCmd(drivebase, mainController), shooterSubsystem.setSpeakerRateControlCmd());
   }
 }

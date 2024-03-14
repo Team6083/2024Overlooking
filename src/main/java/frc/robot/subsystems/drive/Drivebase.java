@@ -252,21 +252,6 @@ public class Drivebase extends SubsystemBase {
     drive(xSpeed, ySpeed, robotRot, true);
   }
 
-  public void noteTracking2() {
-    double Rot = 0;
-    double xSpeed = 0;
-    double ySpeed = 0;
-    if (noteTracking.getTx().size() != 0) {
-      double yaw = noteTracking.getTx().indexOf(0.0);
-      double x = noteTracking.getLastPose().getX();
-      double y = noteTracking.getLastPose().getY();
-      Rot = -trackingPID.calculate(yaw, 0);
-      xSpeed = -trackingPID.calculate(x, NoteTrackingConstants.minNoteDistance);
-      // ySpeed = -trackingPID.calculate();
-    }
-    drive(xSpeed, ySpeed, Rot, true);
-  }
-
   public void tagTracking2() {
     double Rot = 0;
     double xSpeed = 0;
@@ -434,12 +419,6 @@ public class Drivebase extends SubsystemBase {
 
   public Command setTagVisionModeCmd() {
     Command cmd = Commands.runEnd(() -> tagTracking.isVisionOn(), () -> tagTracking.setCamMode());
-    return cmd;
-  }
-
-  public Command noteTracking2Cmd() {
-    Command cmd = this.runOnce(this::noteTracking2);
-    cmd.setName("noteTracking2Cmd");
     return cmd;
   }
 
