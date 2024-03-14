@@ -60,21 +60,24 @@ public class RobotContainer {
         transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
         hookSubsystem = new HookSubsystem(powerDistributionSubsystem);
 
-        NamedCommands.registerCommand("AutoTransportToShoot",
-                new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
-        NamedCommands.registerCommand("AutoIntakeWithTransport",
-                new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-        NamedCommands.registerCommand("AutoRotateShooter", drivebase.tagTracking2Cmd());
+        // NamedCommands.registerCommand("AutoTransportToShoot",
+        // new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
+        // NamedCommands.registerCommand("AutoRotateShooter",
+        // drivebase.tagTracking2Cmd());
+        // NamedCommands.registerCommand("AutoTag",
+        // new TagDriveCmd(drivebase, mainController));
         NamedCommands.registerCommand("AutoIntakeDown",
                 new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
+        NamedCommands.registerCommand("AutoIntakeWithTransport",
+                new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+        NamedCommands.registerCommand("AutoAimControl",
+                shooterSubsystem.aimControlCmd()); // rate and rotate
+        NamedCommands.registerCommand("AutoTransport",
+                transportSubsystem.transportIntakeCmd().withTimeout(0.5));
         NamedCommands.registerCommand("AutoNote",
                 new NoteDriveCmd(drivebase, mainController).withTimeout(0.5));
         NamedCommands.registerCommand("AutoTag",
                 new TagDriveCmd(drivebase, mainController));
-        NamedCommands.registerCommand("AutoTransport",
-                transportSubsystem.transportIntakeCmd());
-        NamedCommands.registerCommand("AutoAimControl",
-                shooterSubsystem.aimControlCmd());
 
         autoChooser = AutoBuilder.buildAutoChooser();
 
