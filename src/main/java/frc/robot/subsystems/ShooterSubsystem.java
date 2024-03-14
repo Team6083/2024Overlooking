@@ -360,15 +360,15 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     setPIDControl();
-    SmartDashboard.putNumber("upMotorRate", getUpEncoderRate());
-    SmartDashboard.putNumber("downMotorRate", getDownEncoderRate());
-    SmartDashboard.putBoolean("isEnoughRate", isEnoughRate());
+    SmartDashboard.putNumber("shooterUpEncoderRate", getUpEncoderRate());
+    SmartDashboard.putNumber("shooterDownEncoderRate", getDownEncoderRate());
+    SmartDashboard.putBoolean("shooterIsEnoughRate", isEnoughRate());
     SmartDashboard.putNumber("shooterRateMode", shootMode);
 
     SmartDashboard.putData(rotatePID);
-    SmartDashboard.putNumber("encoderDegree", getAngle());
-    SmartDashboard.putNumber("upMotorVoltage", upShooterMotor.getMotorOutputVoltage());
-    SmartDashboard.putNumber("downMotorVoltage", downShooterMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("rotateEncoderDegree", getAngle());
+    SmartDashboard.putNumber("rotateUpMotorVoltage", upShooterMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("rotateDownMotorVoltage", downShooterMotor.getMotorOutputVoltage());
     SmartDashboard.putNumber("rotateSetpoint", setPoint);
   }
 
