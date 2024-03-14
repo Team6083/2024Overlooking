@@ -49,9 +49,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private double downGoalRate = 0;
   private double offset = 0;
 
-  private final PowerDistributionSubsystem powerDistributionSubsystem;
-
-  public ShooterSubsystem(PowerDistributionSubsystem powerDistribution, TagTracking tagTracking) {
+  public ShooterSubsystem(TagTracking tagTracking) {
     // shooter
     upShooterMotor = new VictorSPX(ShooterConstants.kUpMotorChannel);
     downShooterMotor = new VictorSPX(ShooterConstants.kDownMotorChannel);
@@ -81,7 +79,6 @@ public class ShooterSubsystem extends SubsystemBase {
     rotateMotor.setInverted(RotateShooterConstants.kRotateShooterInverted);
     rotateEncoder = new DutyCycleEncoder(RotateShooterConstants.kEncoderChannel);
     rotatePID = new PIDController(RotateShooterConstants.kP, RotateShooterConstants.kI, RotateShooterConstants.kD);
-    this.powerDistributionSubsystem = powerDistribution;
     this.tagTracking = tagTracking;
     relaRotateEncoder = rotateMotor.getEncoder();
     relaRotateEncoder.setPositionConversionFactor(360.0);
@@ -89,6 +86,19 @@ public class ShooterSubsystem extends SubsystemBase {
     rotatePID.enableContinuousInput(-180.0, 180.0);
     rotatePID.setSetpoint(57);
     ;
+  }
+
+  public void stopMotor() {
+    rotateMotor.setVoltage(0.0);
+  }
+
+  public void setMotor(double voltage) {
+    rotateMotor.setVoltage(voltage);
+  }
+
+  private int hasExceedPhysicalLimit(double angle) {
+    return (angle < RotateShooterConstants.kRotateAngleMin ? -1
+        : (angle > RotateShooterConstants.kRotateAngleMax ? 1 : 0));
   }
 
   public double getSetpoint() {
@@ -140,12 +150,6 @@ public class ShooterSubsystem extends SubsystemBase {
     manualVoltage = voltage;
   }
 
-  public Command setManualVoltageCmd(double voltage) {
-    Command cmd = runOnce(() -> setManualVoltage(voltage));
-    cmd.setName("SetManualVoltageCmd");
-    return cmd;
-  }
-
   /**
    * Stop both up and down shooter motor.
    */
@@ -174,20 +178,8 @@ public class ShooterSubsystem extends SubsystemBase {
     setDownMotorVoltage(downMotorVoltage);
   }
 
-
-
-  public void setDefaultAngle() {
-    setPoint = RotateShooterConstants.kInitDegree + offset;
-  }
-
   public double adjustManualOffset() {
     return offset += 3;
-  }
-
-  public Command setDefaultAngleCommand() {
-    Command cmd = runOnce(this::setDefaultAngle);
-    cmd.setName("setFixAngle");
-    return cmd;
   }
 
   public void shootRateControlMode() {
@@ -216,25 +208,6 @@ public class ShooterSubsystem extends SubsystemBase {
         + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
-  }
-
-  public Command transportModeCmd(){
-    Command cmd = run(this::transportMode);
-    return cmd;
-  }
-
-  public Command shootRateControlModeCmd() {
-    Command cmd = runOnce(this::shootRateControlMode);
-    return cmd;
-  }
-
-  public Command aimControlCmd() {
-    Command cmd = runEnd(this::aimControl, this::stopAllMotor);
-    return cmd;
-  }
-  public Command shootRateControlCmd() {
-    Command cmd = runEnd(this::shootRateControlMode, this::stopAllMotor);
-    return cmd;
   }
 
   private void setInitRateControl() {
@@ -330,10 +303,6 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param power
    */
   private void setUpMotor(double power) {
-    if (powerDistributionSubsystem.isShooterUpOverCurrent()) {
-      stopUpMotor();
-      return;
-    }
     upShooterMotor.set(VictorSPXControlMode.PercentOutput, power);
   }
 
@@ -343,10 +312,6 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param power
    */
   private void setDownMotor(double power) {
-    if (powerDistributionSubsystem.isShooterDownOverCurrent()) {
-      stopDownMotor();
-      return;
-    }
     downShooterMotor.set(VictorSPXControlMode.PercentOutput, power);
   }
 
@@ -401,21 +366,10 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("rotateSetpoint", setPoint);
   }
 
-  public void stopMotor() {
-    rotateMotor.setVoltage(0.0);
-  }
-
-  public void setMotor(double voltage) {
-    if (powerDistributionSubsystem.isRotateShooterOverCurrent()) {
-      stopMotor();
-      return;
-    }
-    rotateMotor.setVoltage(voltage);
-  }
-
-  private int hasExceedPhysicalLimit(double angle) {
-    return (angle < RotateShooterConstants.kRotateAngleMin ? -1
-        : (angle > RotateShooterConstants.kRotateAngleMax ? 1 : 0));
+    public Command setManualVoltageCmd(double voltage) {
+    Command cmd = runOnce(() -> setManualVoltage(voltage));
+    cmd.setName("SetManualVoltageCmd");
+    return cmd;
   }
 
   public Command speakerRateControlCmd() {
@@ -423,7 +377,24 @@ public class ShooterSubsystem extends SubsystemBase {
     cmd.setName("setSpeakerRateControlCmd");
     return cmd;
   }
+  public Command transportModeCmd(){
+    Command cmd = run(this::transportMode);
+    return cmd;
+  }
 
+  public Command shootRateControlModeCmd() {
+    Command cmd = runOnce(this::shootRateControlMode);
+    return cmd;
+  }
+
+  public Command aimControlCmd() {
+    Command cmd = runEnd(this::aimControl, this::stopAllMotor);
+    return cmd;
+  }
+  public Command shootRateControlCmd() {
+    Command cmd = runEnd(this::shootRateControlMode, this::stopAllMotor);
+    return cmd;
+  }
   /**
    * Command of resetting encoder.
    * 

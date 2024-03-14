@@ -95,21 +95,18 @@ public class RobotContainer {
     mainController.x().whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
     controlPanel.button(5).onTrue(intakeSubsystem.intakeCmd());
     controlPanel.button(6).onTrue(intakeSubsystem.reIntakeCmd());
-    // controlPanel.button(6).onTrue(new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.5));
 
     // shooter
-
     enum ShooterModeSelector {
       Carry,
       AutoShoot,
     }
 
-    shooterSubsystem.setDefaultCommand(shooterSubsystem.setInitRateControlCmd());// AdjustShooterAngleManual(mainController,
-                                                                                  // shooterSubsystem));//(shooterSubsystem.setInitRateControlCmd());
+    shooterSubsystem.setDefaultCommand(shooterSubsystem.setInitRateControlCmd());
     mainController.b().toggleOnTrue(Commands.select(
         Map.ofEntries(
             Map.entry(ShooterModeSelector.Carry, shooterSubsystem.transportModeCmd()),
-            Map.entry(ShooterModeSelector.AutoShoot, shooterSubsystem.speakerRateControlCmd())),
+            Map.entry(ShooterModeSelector.AutoShoot, shooterSubsystem.aimControlCmd())),
         () -> {
           if(controlPanel.button(8).getAsBoolean()){
             return ShooterModeSelector.Carry;
