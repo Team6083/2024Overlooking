@@ -186,7 +186,7 @@ public class ShooterSubsystem extends SubsystemBase {
         + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
-    shootMode = 1;
+    setShootMode(1);
   }
 
   public void transportMode() {
@@ -199,7 +199,7 @@ public class ShooterSubsystem extends SubsystemBase {
         + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
-    shootMode = 2;
+    setShootMode(2);
   }
 
   private void setInitRateControl() {
@@ -212,7 +212,7 @@ public class ShooterSubsystem extends SubsystemBase {
         + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
-    shootMode = 3;
+        setShootMode(3);
   }
 
     private void setFixRateControl() {
@@ -225,7 +225,7 @@ public class ShooterSubsystem extends SubsystemBase {
         + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
-    shootMode = 1;
+    setShootMode(1);
   }
 
   public Command setInitRateControlCmd() {

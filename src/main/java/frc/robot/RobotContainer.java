@@ -143,12 +143,18 @@ public class RobotContainer {
                 () -> shooterSubsystem.isEnoughRate()).withTimeout(0.5));
 
     // hook
-    mainController.rightTrigger(0.5).whileTrue(hookSubsystem.upAllCmd());
-    mainController.leftTrigger(0.5).whileTrue(hookSubsystem.downAllCmd());
-    controlPanel.button(1).whileTrue(hookSubsystem.leftUpIndivisualCmd());
-    controlPanel.button(2).whileTrue(hookSubsystem.leftDownIndivisualCmd());
-    controlPanel.button(3).whileTrue(hookSubsystem.rightUpIndivisualCmd());
-    controlPanel.button(4).whileTrue(hookSubsystem.rightDownIndivisualCmd());
+    mainController.rightTrigger(0.5)
+        .whileTrue(hookSubsystem.upAllCmd());
+    mainController.leftTrigger(0.5)
+        .whileTrue(hookSubsystem.downAllCmd());
+    controlPanel.button(1)
+        .whileTrue(hookSubsystem.leftUpIndivisualCmd());
+    controlPanel.button(2)
+        .whileTrue(hookSubsystem.leftDownIndivisualCmd());
+    controlPanel.button(3)
+        .whileTrue(hookSubsystem.rightUpIndivisualCmd());
+    controlPanel.button(4)
+        .whileTrue(hookSubsystem.rightDownIndivisualCmd());
 
     // reset
     mainController.back().onTrue(drivebase.gyroResetCmd());
