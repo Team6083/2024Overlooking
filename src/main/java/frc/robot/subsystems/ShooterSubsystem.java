@@ -31,10 +31,9 @@ public class ShooterSubsystem extends SubsystemBase {
   private final SimpleMotorFeedforward upMotorFeedForwardController;
   private final SimpleMotorFeedforward downMotorFeedForwardController;
   private int shootMode = 1;
-  private int shooterMode = 1;
   // rotate shooter
   private final TagTracking tagTracking;
-  private boolean isMaunal = false;
+  private boolean isMaunal;
   private boolean isAutoAim = false;
   private double manualVoltage = 0;
   private final CANSparkMax rotateMotor;
@@ -376,11 +375,6 @@ public class ShooterSubsystem extends SubsystemBase {
     Command cmd = run(this::transportMode);
     return cmd;
   }
-
-  // public Command shootRateControlModeCmd() {
-  // Command cmd = runOnce(this::shootRateControlMode);
-  // return cmd;
-  // }
 
   public Command aimControlCmd() {
     Command cmd = runEnd(this::aimControl, this::stopAllMotor);
