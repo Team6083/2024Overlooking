@@ -70,8 +70,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("AutoNote", new NoteDriveCmd(drivebase, mainController).withTimeout(0.5));
     NamedCommands.registerCommand("AutoTag", new TagDriveCmd(drivebase, mainController));
     NamedCommands.registerCommand("AutoTransport", transportSubsystem.transportIntakeCmd());
-    
-    configureBindings();
+
     autoChooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -84,7 +83,7 @@ public class RobotContainer {
     // SmartDashboard.putString("auto", "null");
     // SmartDashboard.putData(initialChooser);
 
-    
+    configureBindings();
   }
 
   private void configureBindings() {
@@ -111,10 +110,10 @@ public class RobotContainer {
             Map.entry(ShooterModeSelector.Carry, shooterSubsystem.transportModeCmd()),
             Map.entry(ShooterModeSelector.AutoShoot, shooterSubsystem.aimControlCmd())),
         () -> {
-          if(controlPanel.button(8).getAsBoolean()){
+          if (controlPanel.button(8).getAsBoolean()) {
             return ShooterModeSelector.Carry;
           }
-          if(controlPanel.button(9).getAsBoolean()){
+          if (controlPanel.button(9).getAsBoolean()) {
             return ShooterModeSelector.AutoShoot;
           }
           return shooterSubsystem.setInitRateControlCmd();
