@@ -38,7 +38,6 @@ public class ShooterSubsystem extends SubsystemBase {
   private double manualVoltage = 0;
   private final CANSparkMax rotateMotor;
   private final DutyCycleEncoder rotateEncoder;
-  private final RelativeEncoder relaRotateEncoder;
   private final PIDController rotatePID;
   private double rotateDegreeError = 0.0;
   private double setPoint = RotateShooterConstants.kInitDegree;
@@ -75,9 +74,6 @@ public class ShooterSubsystem extends SubsystemBase {
     rotateEncoder = new DutyCycleEncoder(RotateShooterConstants.kEncoderChannel);
     rotatePID = new PIDController(RotateShooterConstants.kP, RotateShooterConstants.kI, RotateShooterConstants.kD);
     this.tagTracking = tagTracking;
-    relaRotateEncoder = rotateMotor.getEncoder();
-    relaRotateEncoder.setPositionConversionFactor(360.0);
-    relaRotateEncoder.setPosition(getAngle());
     rotatePID.enableContinuousInput(-180.0, 180.0);
     rotatePID.setSetpoint(57);
   }
@@ -114,7 +110,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private void setPIDControl() {
-    double rotateVoltage = rotatePID.calculate(relaRotateEncoder.getPosition());
+    double rotateVoltage = rotatePID.calculate(rotateEncoder.getAbsolutePosition());
     double modifiedRotateVoltage = rotateVoltage;
     if (Math.abs(modifiedRotateVoltage) > RotateShooterConstants.kRotateVoltLimit) {
       modifiedRotateVoltage = RotateShooterConstants.kRotateVoltLimit * (rotateVoltage > 0 ? 1 : -1);
@@ -124,7 +120,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public double getAngle() {
     double degree = (RotateShooterConstants.kEncoderInverted ? -1.0 : 1.0)
-        * ((relaRotateEncoder.getPosition() * 360.0) - RotateShooterConstants.kRotateOffset
+        * ((rotateEncoder.getAbsolutePosition() * 360.0) - RotateShooterConstants.kRotateOffset
             - RotateShooterConstants.kShooterOffset)
         % 360.0;
     if (Math.abs(degree) > 180) {
@@ -188,15 +184,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private void setInitRateControl() {
     setSetpoint(RotateShooterConstants.kInitDegree);
-    upGoalRate = ShooterConstants.kInitShooterRate[0];
-    downGoalRate = ShooterConstants.kInitShooterRate[1];
-    final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
-        + rateShooterPID.calculate(getUpEncoderRate(), upGoalRate);
-    final double downMotorVoltage = downMotorFeedForwardController.calculate(downGoalRate)
-        + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
-    setUpMotorVoltage(upMotorVoltage);
-    setDownMotorVoltage(downMotorVoltage);
-    setShootMode(3);
   }
 
   private void fixRateControl() {
@@ -319,9 +306,6 @@ public class ShooterSubsystem extends SubsystemBase {
       case 2:
         return (getUpEncoderRate() >= ShooterConstants.kCarryShooterRate[0] - ShooterConstants.kShooterRateOffset
             && getDownEncoderRate() >= ShooterConstants.kCarryShooterRate[1] - ShooterConstants.kShooterRateOffset);
-      case 3:
-        return (getUpEncoderRate() >= ShooterConstants.kInitShooterRate[0] - ShooterConstants.kShooterRateOffset
-            && getDownEncoderRate() >= ShooterConstants.kInitShooterRate[1] - ShooterConstants.kShooterRateOffset);
       default:
         return false;
     }
