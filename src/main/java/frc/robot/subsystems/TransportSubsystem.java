@@ -86,8 +86,8 @@ public class TransportSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("rangeDistance", distanceSensor.getTargetDistance());
-    SmartDashboard.putBoolean("isGetNote", isGetNote());
+    SmartDashboard.putNumber("distanceSensorDistance", distanceSensor.getTargetDistance());
+    SmartDashboard.putBoolean("transportIsGetNote", isGetNote());
   }
 
   /**

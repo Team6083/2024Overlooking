@@ -6,11 +6,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -33,10 +31,9 @@ public class ShooterSubsystem extends SubsystemBase {
   private final SimpleMotorFeedforward upMotorFeedForwardController;
   private final SimpleMotorFeedforward downMotorFeedForwardController;
   private int shootMode = 1;
-  private int shooterMode = 1;
   // rotate shooter
   private final TagTracking tagTracking;
-  private boolean isMaunal = false;
+  private boolean isManual;
   private boolean isAutoAim = false;
   private double manualVoltage = 0;
   private final CANSparkMax rotateMotor;
@@ -64,8 +61,6 @@ public class ShooterSubsystem extends SubsystemBase {
     upShooterMotor.setInverted(ShooterConstants.kUpMotorInverted);
     downShooterMotor.setInverted(ShooterConstants.kDownMotorInverted);
 
-    
-
     upMotorFeedForwardController = new SimpleMotorFeedforward(ShooterConstants.kUpMotorS, ShooterConstants.kUpMotorV,
         ShooterConstants.kUpMotorA);
     downMotorFeedForwardController = new SimpleMotorFeedforward(ShooterConstants.kDownMotorS,
@@ -85,7 +80,6 @@ public class ShooterSubsystem extends SubsystemBase {
     relaRotateEncoder.setPosition(getAngle());
     rotatePID.enableContinuousInput(-180.0, 180.0);
     rotatePID.setSetpoint(57);
-    ;
   }
 
   public void stopMotor() {
@@ -106,6 +100,10 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setSetpoint(double setpoint) {
+    double currentSetpoint = getSetpoint();
+    if (hasExceedPhysicalLimit(currentSetpoint) != 0) {
+      return;
+    }
     double rotateDegree = setpoint + rotateDegreeError;
     if (hasExceedPhysicalLimit(rotateDegree) == -1) {
       rotateDegree = RotateShooterConstants.kRotateAngleMin;
@@ -126,7 +124,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public double getAngle() {
     double degree = (RotateShooterConstants.kEncoderInverted ? -1.0 : 1.0)
-        * ((rotateEncoder.getAbsolutePosition() * 360.0) - RotateShooterConstants.kRotateOffset
+        * ((relaRotateEncoder.getPosition() * 360.0) - RotateShooterConstants.kRotateOffset
             - RotateShooterConstants.kShooterOffset)
         % 360.0;
     if (Math.abs(degree) > 180) {
@@ -146,10 +144,6 @@ public class ShooterSubsystem extends SubsystemBase {
     return currentDegree;
   }
 
-  private void setManualVoltage(double voltage) {
-    manualVoltage = voltage;
-  }
-
   /**
    * Stop both up and down shooter motor.
    */
@@ -166,39 +160,20 @@ public class ShooterSubsystem extends SubsystemBase {
     downShooterEncoder.reset();
   }
 
-  private void setSpeakerRateControl() {
-    setSetpoint(getSpeakerDegree(getSetpoint()));
-    double upRate = ShooterConstants.kSpeakerShooterRate[0];
-    double downRate = ShooterConstants.kSpeakerShooterRate[1];
-    final double upMotorVoltage = upMotorFeedForwardController.calculate(upRate)
-        + rateShooterPID.calculate(getUpEncoderRate(), upRate);
-    final double downMotorVoltage = downMotorFeedForwardController.calculate(downRate)
-        + rateShooterPID.calculate(getDownEncoderRate(), downRate);
-    setUpMotorVoltage(upMotorVoltage);
-    setDownMotorVoltage(downMotorVoltage);
-  }
-
-  public double adjustManualOffset() {
-    return offset += 3;
-  }
-
-  public void shootRateControlMode() {
-    setSetpoint(setPoint);
-  }
-
   public void aimControl() {
     setSetpoint(getSpeakerDegree(getSetpoint()));
-    upGoalRate = ShooterConstants.kInitShooterRate[0];
-    downGoalRate = ShooterConstants.kInitShooterRate[1];
+    upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
+    downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
         + rateShooterPID.calculate(getUpEncoderRate(), upGoalRate);
     final double downMotorVoltage = downMotorFeedForwardController.calculate(downGoalRate)
         + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
+    setShootMode(1);
   }
 
-  public void transportMode() {
+  public void carryControl() {
     setSetpoint(15);
     upGoalRate = ShooterConstants.kCarryShooterRate[0];
     downGoalRate = ShooterConstants.kCarryShooterRate[1];
@@ -208,6 +183,7 @@ public class ShooterSubsystem extends SubsystemBase {
         + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
+    setShootMode(2);
   }
 
   private void setInitRateControl() {
@@ -220,6 +196,20 @@ public class ShooterSubsystem extends SubsystemBase {
         + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
+    setShootMode(3);
+  }
+
+  private void fixRateControl() {
+    setSetpoint(RotateShooterConstants.kInitDegree);
+    upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
+    downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
+    final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
+        + rateShooterPID.calculate(getUpEncoderRate(), upGoalRate);
+    final double downMotorVoltage = downMotorFeedForwardController.calculate(downGoalRate)
+        + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
+    setUpMotorVoltage(upMotorVoltage);
+    setDownMotorVoltage(downMotorVoltage);
+    setShootMode(1);
   }
 
   public Command setInitRateControlCmd() {
@@ -337,9 +327,50 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
 
-  public boolean checkIfEnoughRate() {
-    return getUpEncoderRate() >= upGoalRate - ShooterConstants.kShooterRateOffset
-        && getDownEncoderRate() >= downGoalRate - ShooterConstants.kShooterRateOffset;
+  private void isManualOn() {
+    isManual = true;
+  }
+
+  private void isManualOff() {
+    isManual = false;
+  }
+
+  public Command isManualOnCmd() {
+    Command cmd = runOnce(this::isManualOn);
+    setName("isManualOnCmd");
+    return cmd;
+  }
+
+  public Command isManualOffCmd() {
+    Command cmd = runOnce(this::isManualOff);
+    setName("isManualOffCmd");
+    return cmd;
+  }
+
+  public boolean getIsManual() {
+    return isManual;
+  }
+
+  private void manualUp() {
+    setMotor(ShooterConstants.kManualUpVoltage);
+    rotatePID.setSetpoint(getAngle());
+  }
+
+  private void manualDown() {
+    setMotor(ShooterConstants.kManualDownVoltage);
+    rotatePID.setSetpoint(getAngle());
+  }
+
+  public Command manualUpCmd() {
+    Command cmd = runEnd(this::manualUp, this::stopMotor);
+    setName("manualUpCmd");
+    return cmd;
+  }
+
+  public Command manualDownCmd() {
+    Command cmd = runEnd(this::manualDown, this::stopMotor);
+    setName("manualDownCmd");
+    return cmd;
   }
 
   /**
@@ -351,39 +382,29 @@ public class ShooterSubsystem extends SubsystemBase {
     shootMode = mode;
   }
 
+  public void isManual() {
+    isManual = true;
+  }
+
   @Override
   public void periodic() {
-    setPIDControl();
-    SmartDashboard.putNumber("upMotorRate", getUpEncoderRate());
-    SmartDashboard.putNumber("downMotorRate", getDownEncoderRate());
-    SmartDashboard.putBoolean("isEnoughRate", isEnoughRate());
+    if (!isManual) {
+      setPIDControl();
+    }
+    SmartDashboard.putNumber("shooterUpEncoderRate", getUpEncoderRate());
+    SmartDashboard.putNumber("shooterDownEncoderRate", getDownEncoderRate());
+    SmartDashboard.putBoolean("shooterIsEnoughRate", isEnoughRate());
     SmartDashboard.putNumber("shooterRateMode", shootMode);
 
     SmartDashboard.putData(rotatePID);
-    SmartDashboard.putNumber("encoderDegree", getAngle());
-    SmartDashboard.putNumber("upMotorVoltage", upShooterMotor.getMotorOutputVoltage());
-    SmartDashboard.putNumber("downMotorVoltage", downShooterMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("rotateEncoderDegree", getAngle());
+    SmartDashboard.putNumber("rotateUpMotorVoltage", upShooterMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("rotateDownMotorVoltage", downShooterMotor.getMotorOutputVoltage());
     SmartDashboard.putNumber("rotateSetpoint", setPoint);
   }
 
-    public Command setManualVoltageCmd(double voltage) {
-    Command cmd = runOnce(() -> setManualVoltage(voltage));
-    cmd.setName("SetManualVoltageCmd");
-    return cmd;
-  }
-
-  public Command speakerRateControlCmd() {
-    Command cmd = runEnd(this::setSpeakerRateControl, this::stopAllMotor);
-    cmd.setName("setSpeakerRateControlCmd");
-    return cmd;
-  }
-  public Command transportModeCmd(){
-    Command cmd = run(this::transportMode);
-    return cmd;
-  }
-
-  public Command shootRateControlModeCmd() {
-    Command cmd = runOnce(this::shootRateControlMode);
+  public Command carryControlCmd() {
+    Command cmd = runEnd(this::carryControl, this::stopAllMotor);
     return cmd;
   }
 
@@ -391,25 +412,11 @@ public class ShooterSubsystem extends SubsystemBase {
     Command cmd = runEnd(this::aimControl, this::stopAllMotor);
     return cmd;
   }
-  public Command shootRateControlCmd() {
-    Command cmd = runEnd(this::shootRateControlMode, this::stopAllMotor);
-    return cmd;
-  }
-  /**
-   * Command of resetting encoder.
-   * 
-   * @return resetEncoderCmd
-   */
-  public Command resetEncoderCmd() {
-    Command cmd = runOnce(
-        this::resetEncoderCmd);
-    cmd.setName("resetEncoderCmd");
-    return cmd;
-  }
 
-  public Command stopAllMotorCmd() {
-    Command cmd = runOnce(this::stopAllMotor);
-    cmd.setName("stopAllMotor");
+  public Command fixRateControlCmd() {
+    Command cmd = runEnd(
+        this::fixRateControl, this::stopAllMotor);
+    cmd.setName("fixRateControlCmd");
     return cmd;
   }
 }

@@ -220,21 +220,21 @@ public class TagTracking {
         }
     }
 
-    private double[] getIDs() {
-        int i = 0;
-        while (i < 3) {
-            if (i == 2 && ids[i - 1] == -1) {
-                break;
-            }
-            ids[i] = getTID();
-            i++;
-        }
-        return ids;
-    }
+    // private double[] getIDs() {
+    //     int i = 0;
+    //     while (i < 3) {
+    //         if (i == 2 && ids[i - 1] == -1) {
+    //             break;
+    //         }
+    //         ids[i] = getTID();
+    //         i++;
+    //     }
+    //     return ids;
+    // }
 
-    public double getLastID() {
-        return getIDs()[2];
-    }
+    // public double getLastID() {
+    //     return getIDs()[2];
+    // }
 
     public void isVisionOn() {
         isCamOn = !isCamOn;

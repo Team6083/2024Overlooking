@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
 import frc.robot.Constants.DrivebaseConstants;
-import frc.robot.commands.AimControlAllCmd;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.TimeStopIntakeCmd;
@@ -101,9 +100,9 @@ public class RobotContainer {
     mainController.x()
         .whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
     controlPanel.button(5)
-        .onTrue(intakeSubsystem.intakeCmd());
+        .onTrue(intakeSubsystem.setUpIntakeCmd());
     controlPanel.button(6)
-        .onTrue(intakeSubsystem.reIntakeCmd());
+        .onTrue(intakeSubsystem.setDownIntakeCmd());
 
     // shooter
     enum ShooterModeSelector {
@@ -111,12 +110,14 @@ public class RobotContainer {
       AutoShoot,
     }
 
-    shooterSubsystem.setDefaultCommand(shooterSubsystem.setInitRateControlCmd());
+    shooterSubsystem
+        .setDefaultCommand(shooterSubsystem.setInitRateControlCmd());
     mainController.b()
         .toggleOnTrue(Commands.select(
             Map.ofEntries(
-                Map.entry(ShooterModeSelector.Carry, shooterSubsystem.transportModeCmd()),
-                Map.entry(ShooterModeSelector.AutoShoot, shooterSubsystem.aimControlCmd())),
+                Map.entry(ShooterModeSelector.Carry, shooterSubsystem.carryControlCmd()),
+                Map.entry(ShooterModeSelector.AutoShoot,
+                    shooterSubsystem.aimControlCmd().alongWith(new TagDriveCmd(drivebase, mainController)))),
             () -> {
               if (controlPanel.button(8).getAsBoolean()) {
                 return ShooterModeSelector.Carry;
@@ -124,9 +125,14 @@ public class RobotContainer {
               if (controlPanel.button(9).getAsBoolean()) {
                 return ShooterModeSelector.AutoShoot;
               }
-              return shooterSubsystem.setInitRateControlCmd();
+              return shooterSubsystem.fixRateControlCmd().alongWith(new TagDriveCmd(drivebase, mainController));
             }));
 
+    mainController.pov(0).whileTrue(shooterSubsystem.manualUpCmd().onlyWhile(
+        () -> shooterSubsystem.getIsManual()));
+    mainController.pov(180).whileTrue(shooterSubsystem.manualDownCmd().onlyWhile(
+        () -> shooterSubsystem.getIsManual()));
+        controlPanel.button(10).onTrue(shooterSubsystem.isManualOnCmd()).onFalse(shooterSubsystem.isManualOffCmd());
     // tracking
     controlPanel.button(7)
         .whileTrue(new NoteDriveCmd(drivebase, mainController));
@@ -135,15 +141,24 @@ public class RobotContainer {
 
     // transport
     mainController.a()
-        .toggleOnTrue(transportSubsystem.transportIntakeCmd().onlyWhile(() -> shooterSubsystem.isEnoughRate()).withTimeout(0.5));
+        .toggleOnTrue(
+            transportSubsystem.transportIntakeCmd().onlyWhile(
+                () -> shooterSubsystem.isEnoughRate()).withTimeout(0.5));
+    mainController.start().toggleOnTrue(transportSubsystem.transportIntakeCmd().withTimeout(0.5));
 
     // hook
-    mainController.rightTrigger(0.5).whileTrue(hookSubsystem.upAllCmd());
-    mainController.leftTrigger(0.5).whileTrue(hookSubsystem.downAllCmd());
-    controlPanel.button(1).whileTrue(hookSubsystem.leftUpIndivisualCmd());
-    controlPanel.button(2).whileTrue(hookSubsystem.leftDownIndivisualCmd());
-    controlPanel.button(3).whileTrue(hookSubsystem.rightUpIndivisualCmd());
-    controlPanel.button(4).whileTrue(hookSubsystem.rightDownIndivisualCmd());
+    mainController.rightTrigger(0.5)
+        .whileTrue(hookSubsystem.upAllCmd());
+    mainController.leftTrigger(0.5)
+        .whileTrue(hookSubsystem.downAllCmd());
+    controlPanel.button(1)
+        .whileTrue(hookSubsystem.leftUpIndivisualCmd());
+    controlPanel.button(2)
+        .whileTrue(hookSubsystem.leftDownIndivisualCmd());
+    controlPanel.button(3)
+        .whileTrue(hookSubsystem.rightUpIndivisualCmd());
+    controlPanel.button(4)
+        .whileTrue(hookSubsystem.rightDownIndivisualCmd());
 
     // reset
     mainController.back().onTrue(drivebase.gyroResetCmd());
