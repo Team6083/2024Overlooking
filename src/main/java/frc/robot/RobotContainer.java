@@ -111,13 +111,13 @@ public class RobotContainer {
     }
 
     shooterSubsystem
-        .setDefaultCommand(shooterSubsystem.setInitRateControlCmd().onlyWhile(
-            () -> shooterSubsystem.isEnoughRate()));
+        .setDefaultCommand(shooterSubsystem.setInitRateControlCmd());
     mainController.b()
         .toggleOnTrue(Commands.select(
             Map.ofEntries(
                 Map.entry(ShooterModeSelector.Carry, shooterSubsystem.transportModeCmd()),
-                Map.entry(ShooterModeSelector.AutoShoot, shooterSubsystem.aimControlCmd())),
+                Map.entry(ShooterModeSelector.AutoShoot,
+                    shooterSubsystem.aimControlCmd().alongWith(new TagDriveCmd(drivebase, mainController)))),
             () -> {
               if (controlPanel.button(8).getAsBoolean()) {
                 return ShooterModeSelector.Carry;
@@ -125,10 +125,8 @@ public class RobotContainer {
               if (controlPanel.button(9).getAsBoolean()) {
                 return ShooterModeSelector.AutoShoot;
               }
-              return shooterSubsystem.setFixRateControlCmd();
-            }).onlyWhile(
-                () -> shooterSubsystem.isEnoughRate())
-            .alongWith(new TagDriveCmd(drivebase, mainController)));
+              return shooterSubsystem.setFixRateControlCmd().alongWith(new TagDriveCmd(drivebase, mainController));
+            }));
 
     // tracking
     controlPanel.button(7)
