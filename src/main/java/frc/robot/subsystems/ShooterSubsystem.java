@@ -87,17 +87,13 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setSetpoint(double setpoint) {
-    final double currentSetpoint = getSetpoint() + rotateDegreeError;
-    if (hasExceedPhysicalLimit(currentSetpoint) != 0) {
-
-      return;
+    double rotateDegree = setpoint+rotateDegreeError;
+    if (hasExceedPhysicalLimit(rotateDegree) == -1) {
+      rotateDegree = RotateShooterConstants.kRotateAngleMin;
+    } else if (hasExceedPhysicalLimit(rotateDegree) == 1) {
+      rotateDegree = RotateShooterConstants.kRotateAngleMax;
     }
-    if (hasExceedPhysicalLimit(setpoint) == -1) {
-      setpoint = RotateShooterConstants.kRotateAngleMin;
-    } else if (hasExceedPhysicalLimit(setpoint) == 1) {
-      setpoint = RotateShooterConstants.kRotateAngleMax;
-    }
-    rotatePID.setSetpoint(setpoint);
+    rotatePID.setSetpoint(rotateDegree);
   }
 
   private void setPIDControl() {
