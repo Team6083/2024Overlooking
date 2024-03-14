@@ -484,11 +484,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("encoderDegree", getAngle());
     SmartDashboard.putNumber("upMotorVoltage", upShooterMotor.getMotorOutputVoltage());
     SmartDashboard.putNumber("downMotorVoltage", downShooterMotor.getMotorOutputVoltage());
-<<<<<<< HEAD
     SmartDashboard.putNumber("rotateSetpoint", setPoint);
-=======
-    SmartDashboard.putNumber("rotateEncoder", getAngle());
->>>>>>> 2ca63587d30415585794d76fe23a63dc9554996c
   }
 
   public void stopMotor() {
