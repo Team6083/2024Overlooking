@@ -108,7 +108,7 @@ public class RobotContainer {
                                                                                   // shooterSubsystem));//(shooterSubsystem.setInitRateControlCmd());
     mainController.b().toggleOnTrue(Commands.select(
         Map.ofEntries(
-            Map.entry(ShooterModeSelector.Carry, shooterSubsystem.setCarryRateControlCmd()),
+            Map.entry(ShooterModeSelector.Carry, shooterSubsystem.transportModeCmd()),
             Map.entry(ShooterModeSelector.AutoShoot, shooterSubsystem.setAutoAimCmd()),
             Map.entry(ShooterModeSelector.FixShoot, shooterSubsystem.setInitRateControlCmd())),
         () -> {
@@ -120,21 +120,7 @@ public class RobotContainer {
           }
           return ShooterModeSelector.FixShoot;
         }));
-    // new AimControlAllCmd(drivebase,
-    // shooterSubsystem).onlyWhile(()->controlPanel.button(1).getAsBoolean()));
 
-    enum ShooterModes{
-      Carry,
-      AutoMode,
-      ManualShoot
-    }
-
-    // mainController.b().toggleOnTrue(Commands.select(MapofEntries(Map<>.entry(null, null))
-    //   ));
-    // toggleOnTrue(shooterSubsystem.shootRateControlCmd().alongWith(shooterSubsystem.setAutoAimCmd()).alongWith(new TagDriveCmd(drivebase, mainController)));
-    controlPanel.button(8).whileTrue(shooterSubsystem.setCarryRateControlCmd()).whileFalse(shooterSubsystem.shootRateControlModeCmd());
-    controlPanel.button(9).whileTrue(shooterSubsystem.setAdjustAngleByTagCommand()).whileFalse(shooterSubsystem.setDefaultAngleCommand());
-    
     // tracking
     controlPanel.button(7).whileTrue(new NoteDriveCmd(drivebase, mainController));
     mainController.b().toggleOnTrue(new TagDriveCmd(drivebase, mainController));
