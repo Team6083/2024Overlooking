@@ -357,6 +357,16 @@ public class ShooterSubsystem extends SubsystemBase {
     return cmd;
   }
 
+  private void manualOffsetAdjust(double adjustValue) {
+    setSetpoint(getSetpoint() + adjustValue);
+  }
+
+  public Command manualOffsetAdjustCmd(double adjustValue) {
+    Command cmd = runOnce(() -> manualOffsetAdjust(adjustValue));
+    setName("manualOffsetAdjustCmd");
+    return cmd;
+  }
+
   /**
    * Set shooter rate mode.
    * 

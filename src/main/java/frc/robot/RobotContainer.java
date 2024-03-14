@@ -111,7 +111,7 @@ public class RobotContainer {
     }
 
     shooterSubsystem
-        .setDefaultCommand(shooterSubsystem.setInitRateControlCmd());
+        .setDefaultCommand(shooterSubsystem.setInitRateControlCmd().alongWith(shooterSubsystem.manualOffsetAdjustCmd(controlPanel.getRawAxis(1))));
     mainController.b()
         .toggleOnTrue(Commands.select(
             Map.ofEntries(
