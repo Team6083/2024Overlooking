@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
+import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.commands.AimControlAllCmd;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
@@ -89,14 +90,20 @@ public class RobotContainer {
   private void configureBindings() {
     // drivetrain
     drivebase.setDefaultCommand(new SwerveJoystickCmd(drivebase, mainController));
-    mainController.rightBumper().onTrue(drivebase.accelerateCmd());
-    mainController.leftBumper().onTrue(drivebase.defaultSpeedCmd());
+    mainController.rightBumper()
+        .onTrue(Commands.runOnce(() -> drivebase.setMagnification(DrivebaseConstants.kHighMagnification)));
+    mainController.leftBumper()
+        .onTrue(Commands.runOnce(() -> drivebase.setMagnification(DrivebaseConstants.kDefaultMagnification)));
 
     // intake and transport
-    mainController.y().toggleOnTrue(new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-    mainController.x().whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-    controlPanel.button(5).onTrue(intakeSubsystem.intakeCmd());
-    controlPanel.button(6).onTrue(intakeSubsystem.reIntakeCmd());
+    mainController.y()
+        .toggleOnTrue(new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+    mainController.x()
+        .whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+    controlPanel.button(5)
+        .onTrue(intakeSubsystem.intakeCmd());
+    controlPanel.button(6)
+        .onTrue(intakeSubsystem.reIntakeCmd());
 
     // shooter
     enum ShooterModeSelector {
@@ -105,27 +112,30 @@ public class RobotContainer {
     }
 
     shooterSubsystem.setDefaultCommand(shooterSubsystem.setInitRateControlCmd());
-    mainController.b().toggleOnTrue(Commands.select(
-        Map.ofEntries(
-            Map.entry(ShooterModeSelector.Carry, shooterSubsystem.transportModeCmd()),
-            Map.entry(ShooterModeSelector.AutoShoot, shooterSubsystem.aimControlCmd())),
-        () -> {
-          if (controlPanel.button(8).getAsBoolean()) {
-            return ShooterModeSelector.Carry;
-          }
-          if (controlPanel.button(9).getAsBoolean()) {
-            return ShooterModeSelector.AutoShoot;
-          }
-          return shooterSubsystem.setInitRateControlCmd();
-        }));
+    mainController.b()
+        .toggleOnTrue(Commands.select(
+            Map.ofEntries(
+                Map.entry(ShooterModeSelector.Carry, shooterSubsystem.transportModeCmd()),
+                Map.entry(ShooterModeSelector.AutoShoot, shooterSubsystem.aimControlCmd())),
+            () -> {
+              if (controlPanel.button(8).getAsBoolean()) {
+                return ShooterModeSelector.Carry;
+              }
+              if (controlPanel.button(9).getAsBoolean()) {
+                return ShooterModeSelector.AutoShoot;
+              }
+              return shooterSubsystem.setInitRateControlCmd();
+            }));
 
     // tracking
-    controlPanel.button(7).whileTrue(new NoteDriveCmd(drivebase, mainController));
-    mainController.b().toggleOnTrue(new TagDriveCmd(drivebase, mainController));
+    controlPanel.button(7)
+        .whileTrue(new NoteDriveCmd(drivebase, mainController));
+    mainController.b()
+        .toggleOnTrue(new TagDriveCmd(drivebase, mainController));
 
     // transport
-    mainController.a().toggleOnTrue(
-        transportSubsystem.transportIntakeCmd().onlyWhile(() -> shooterSubsystem.isEnoughRate()).withTimeout(0.5));
+    mainController.a()
+        .toggleOnTrue(transportSubsystem.transportIntakeCmd().onlyWhile(() -> shooterSubsystem.isEnoughRate()).withTimeout(0.5));
 
     // // hook
     mainController.rightTrigger(0.5).whileTrue(hookSubsystem.upAllCmd());
