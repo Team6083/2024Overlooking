@@ -115,7 +115,7 @@ public class RobotContainer {
     mainController.b()
         .toggleOnTrue(Commands.select(
             Map.ofEntries(
-                Map.entry(ShooterModeSelector.Carry, shooterSubsystem.transportModeCmd()),
+                Map.entry(ShooterModeSelector.Carry, shooterSubsystem.carryControlCmd()),
                 Map.entry(ShooterModeSelector.AutoShoot,
                     shooterSubsystem.aimControlCmd().alongWith(new TagDriveCmd(drivebase, mainController)))),
             () -> {
@@ -125,7 +125,7 @@ public class RobotContainer {
               if (controlPanel.button(9).getAsBoolean()) {
                 return ShooterModeSelector.AutoShoot;
               }
-              return shooterSubsystem.setFixRateControlCmd().alongWith(new TagDriveCmd(drivebase, mainController));
+              return shooterSubsystem.fixRateControlCmd().alongWith(new TagDriveCmd(drivebase, mainController));
             }));
 
     // tracking

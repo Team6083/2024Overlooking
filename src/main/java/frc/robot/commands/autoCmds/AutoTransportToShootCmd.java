@@ -18,6 +18,6 @@ public class AutoTransportToShootCmd extends ParallelDeadlineGroup {
     // Add the deadline command in the super() call. Add other commands using
     // addCommands().
     super(new WaitCommand(0.8));
-    addCommands(shooterSubsystem.speakerRateControlCmd(), new WaitCommand(0.3).andThen(transportSubsystem.transportIntakeCmd()));
+    addCommands(shooterSubsystem.aimControlCmd(), new WaitCommand(0.3).andThen(transportSubsystem.transportIntakeCmd()));
   }
 }

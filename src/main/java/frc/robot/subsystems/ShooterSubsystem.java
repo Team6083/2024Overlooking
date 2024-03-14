@@ -33,7 +33,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private int shootMode = 1;
   // rotate shooter
   private final TagTracking tagTracking;
-  private boolean isMaunal;
+  private boolean isManual;
   private boolean isAutoAim = false;
   private double manualVoltage = 0;
   private final CANSparkMax rotateMotor;
@@ -187,7 +187,7 @@ public class ShooterSubsystem extends SubsystemBase {
     setShootMode(1);
   }
 
-  public void transportMode() {
+  public void carryControl() {
     setSetpoint(15);
     upGoalRate = ShooterConstants.kCarryShooterRate[0];
     downGoalRate = ShooterConstants.kCarryShooterRate[1];
@@ -213,7 +213,7 @@ public class ShooterSubsystem extends SubsystemBase {
     setShootMode(3);
   }
 
-  private void setFixRateControl() {
+  private void fixRateControl() {
     setSetpoint(RotateShooterConstants.kInitDegree);
     upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
     downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
@@ -350,6 +350,14 @@ public class ShooterSubsystem extends SubsystemBase {
     shootMode = mode;
   }
 
+  public void isManual(){
+    isManual = true;
+  }
+
+  public void notManual(){
+    isManual = false;
+  }
+
   @Override
   public void periodic() {
     setPIDControl();
@@ -371,8 +379,8 @@ public class ShooterSubsystem extends SubsystemBase {
     return cmd;
   }
 
-  public Command transportModeCmd() {
-    Command cmd = run(this::transportMode);
+  public Command carryControlCmd() {
+    Command cmd = runEnd(this::carryControl, this::stopAllMotor);
     return cmd;
   }
 
@@ -381,32 +389,10 @@ public class ShooterSubsystem extends SubsystemBase {
     return cmd;
   }
 
-  // public Command shootRateControlCmd() {
-  // Command cmd = runEnd(this::shootRateControlMode, this::stopAllMotor);
-  // return cmd;
-  // }
-  /**
-   * Command of resetting encoder.
-   * 
-   * @return resetEncoderCmd
-   */
-  public Command resetEncoderCmd() {
-    Command cmd = runOnce(
-        this::resetEncoderCmd);
-    cmd.setName("resetEncoderCmd");
-    return cmd;
-  }
-
-  public Command setFixRateControlCmd() {
-    Command cmd = run(
-        this::setFixRateControl);
-    cmd.setName("setFixRateControlCmd");
-    return cmd;
-  }
-
-  public Command stopAllMotorCmd() {
-    Command cmd = runOnce(this::stopAllMotor);
-    cmd.setName("stopAllMotor");
+  public Command fixRateControlCmd() {
+    Command cmd = runEnd(
+        this::fixRateControl, this::stopAllMotor);
+    cmd.setName("fixRateControlCmd");
     return cmd;
   }
 }
