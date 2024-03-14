@@ -58,12 +58,12 @@ public final class Constants {
         public static final int kRotateIntakeChannel = 29;
         public static final int kRotateEncoderChannel = 7;
         public static final Boolean kIntakeInverted = true;
-        public static final Boolean kRotateIntakeInverted = false;
+        public static final Boolean kRotateIntakeInverted = true;
         public static final Boolean kRotateEncoderInverted = false;
         public static final double kRotateOffset = 105;
         public static final double kIntakeVoltage = 7.0;
         public static final double kThrowVoltage = -4.0;
-        public static final double kDownVoltage = -12.0;
+        public static final double kRotateVoltage = 12.0;
         public static final double kStopTime = 2.52;
     }
 

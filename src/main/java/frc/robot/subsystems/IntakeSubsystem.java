@@ -42,12 +42,21 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   private void setDownIntake() {
-    if (getAngle() <1.0 || isDownIntake) {
-      stopRotateIntakeMotor();
-      isDownIntake = true;
-      return;
-    }
-    setRotateMotorVoltage(IntakeConstants.kDownVoltage);
+    setRotateMotorVoltage(IntakeConstants.kRotateVoltage);
+  }
+
+  private void setUpIntake(){
+    setRotateMotorVoltage(IntakeConstants.kRotateVoltage);
+  }
+
+  public Command setDownIntakeCmd(){
+    Command cmd = runEnd(this::setDownIntake, this::stopRotateIntakeMotor);
+    return cmd;
+  }
+
+  public Command setUpIntakeCmd(){
+    Command cmd = runEnd(this::setUpIntakeCmd, this::stopRotateIntakeMotor);
+    return cmd;
   }
 
   private void stopIntakeMotor() {
