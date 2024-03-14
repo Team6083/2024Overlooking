@@ -129,15 +129,6 @@ public class ShooterSubsystem extends SubsystemBase {
     return currentDegree;
   }
 
-  public double getAmpDegree(double currentDegree) {
-    if (tagTracking.getTv() == 1) {
-      double ampToShooterHeight = RotateShooterConstants.kAMPHeight - RotateShooterConstants.kShooterHeight;
-      double degree = Math.toDegrees(Math.atan(ampToShooterHeight / tagTracking.getHorizontalDistanceByCT()));
-      return degree;
-    }
-    return currentDegree;
-  }
-
   public void autoAimOn() {
     this.isAutoAim = true;
   }
@@ -190,9 +181,7 @@ public class ShooterSubsystem extends SubsystemBase {
     setDownMotorVoltage(downMotorVoltage);
   }
 
-  public void setAdjustAngleByTag() {
-    setPoint = getSpeakerDegree(getAngle());
-  }
+
 
   public void setDefaultAngle() {
     setPoint = RotateShooterConstants.kInitDegree + offset;
@@ -200,14 +189,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public double adjustManualOffset() {
     return offset += 3;
-  }
-
-  // write these two methods into cmd
-
-  public Command setAdjustAngleByTagCommand() {
-    Command cmd = run(this::setAdjustAngleByTag);
-    cmd.setName("setAdjustAngleByTag");
-    return cmd;
   }
 
   public Command setDefaultAngleCommand() {
@@ -263,23 +244,6 @@ public class ShooterSubsystem extends SubsystemBase {
     return cmd;
   }
 
-  private void setCarryRateControl() {
-    setSetpoint(RotateShooterConstants.kCarryDegree);
-    upGoalRate = ShooterConstants.kCarryShooterRate[0];
-    downGoalRate = ShooterConstants.kCarryShooterRate[1];
-    final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
-        + rateShooterPID.calculate(getUpEncoderRate(), upGoalRate);
-    final double downMotorVoltage = downMotorFeedForwardController.calculate(downGoalRate)
-        + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
-    setUpMotorVoltage(upMotorVoltage);
-    setDownMotorVoltage(downMotorVoltage);
-  }
-
-  public Command setCarryRateControlCmd() {
-    Command cmd = runOnce(this::setCarryRateControl);
-    return cmd;
-  }
-
   private void setInitRateControl() {
     setSetpoint(RotateShooterConstants.kInitDegree);
     upGoalRate = ShooterConstants.kInitShooterRate[0];
@@ -295,45 +259,6 @@ public class ShooterSubsystem extends SubsystemBase {
   public Command setInitRateControlCmd() {
     Command cmd = run(this::setInitRateControl);
     return cmd;
-  }
-
-  // public Command setInitRateControlCmd() {
-  // Command cmd = runOnce(this::setInitRateControl);
-  // return cmd;
-  // }
-  //
-
-  // public void addManualAngleOffset() {
-  // double offset = 0;
-  // offset += 3;
-  // }
-
-  // public Command addManualAngleOffsetCmd() {
-  // Command cmd = runOnce(this::addManualAngleOffset);
-  // setName("setManualAngleOffsetCmd");
-  // return cmd;
-  // }
-
-  // public void minusManualAngleOffset() {
-  // double offset = 0;
-  // offset += 3;
-  // }
-
-  // public Command minusManualAngleOffsetCmd() {
-  // Command cmd = runOnce(this::addManualAngleOffset);
-  // setName("minusManualAngleOffsetCmd");
-  // return cmd;
-  // }
-
-  public void AdjustShooterAngleManual(double adjust) {
-    double offset = getAngle();
-    // setSetpoint(offset+adjust);
-    double rotateVoltage = rotatePID.calculate(offset + adjust);
-    double modifiedRotateVoltage = rotateVoltage;
-    if (Math.abs(modifiedRotateVoltage) > RotateShooterConstants.kRotateVoltLimit) {
-      modifiedRotateVoltage = RotateShooterConstants.kRotateVoltLimit * (rotateVoltage > 0 ? 1 : -1);
-    }
-    setMotor(modifiedRotateVoltage);
   }
 
   /**
@@ -500,37 +425,9 @@ public class ShooterSubsystem extends SubsystemBase {
         : (angle > RotateShooterConstants.kRotateAngleMax ? 1 : 0));
   }
 
-  public void changeMaunalMode(boolean isManual) {
-    this.isMaunal = isManual;
-  }
-
   public Command speakerRateControlCmd() {
     Command cmd = runEnd(this::setSpeakerRateControl, this::stopAllMotor);
     cmd.setName("setSpeakerRateControlCmd");
-    return cmd;
-  }
-
-  // public Command setCarryRateControlCmd() {
-  // Command cmd = runEnd(this::setCarryRateControl, this::stopAllMotor);
-  // cmd.setName("setCarryRateControlCmd");
-  // return cmd;
-  // }
-
-  // public Command setInitRateControlCmd() {
-  // Command cmd = runEnd(this::setInitRateControl, this::stopAllMotor);
-  // cmd.setName("setInitRateControlCmd");
-  // return cmd;
-  // }
-
-  /**
-   * Reverse current manual mode.
-   * 
-   * @param mode
-   * @return changeManualModeCmd
-   */
-  public Command changeMaunalModeCmd(boolean mode) {
-    Command cmd = runOnce(() -> changeMaunalMode(mode));
-    cmd.setName("changeMaunalModeCmd");
     return cmd;
   }
 

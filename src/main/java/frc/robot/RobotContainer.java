@@ -101,16 +101,14 @@ public class RobotContainer {
     enum ShooterModeSelector {
       Carry,
       AutoShoot,
-      FixShoot
     }
 
-    shooterSubsystem.setDefaultCommand(shooterSubsystem.setDefaultAngleCommand());// AdjustShooterAngleManual(mainController,
+    shooterSubsystem.setDefaultCommand(shooterSubsystem.setInitRateControlCmd());// AdjustShooterAngleManual(mainController,
                                                                                   // shooterSubsystem));//(shooterSubsystem.setInitRateControlCmd());
     mainController.b().toggleOnTrue(Commands.select(
         Map.ofEntries(
             Map.entry(ShooterModeSelector.Carry, shooterSubsystem.transportModeCmd()),
-            Map.entry(ShooterModeSelector.AutoShoot, shooterSubsystem.setAutoAimCmd()),
-            Map.entry(ShooterModeSelector.FixShoot, shooterSubsystem.setInitRateControlCmd())),
+            Map.entry(ShooterModeSelector.AutoShoot, shooterSubsystem.speakerRateControlCmd())),
         () -> {
           if(controlPanel.button(8).getAsBoolean()){
             return ShooterModeSelector.Carry;
@@ -118,7 +116,7 @@ public class RobotContainer {
           if(controlPanel.button(9).getAsBoolean()){
             return ShooterModeSelector.AutoShoot;
           }
-          return ShooterModeSelector.FixShoot;
+          return shooterSubsystem.setInitRateControlCmd();
         }));
 
     // tracking
