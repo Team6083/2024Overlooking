@@ -55,7 +55,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public Command setUpIntakeCmd(){
-    Command cmd = runEnd(this::setUpIntakeCmd, this::stopRotateIntakeMotor);
+    Command cmd = runEnd(this::setUpIntake, this::stopRotateIntakeMotor);
     return cmd;
   }
 
