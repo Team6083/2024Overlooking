@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.24,
-      "y": 5.5
+      "x": 0.76,
+      "y": 6.53
     },
-    "rotation": 0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -59,13 +59,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "middleAndMiddleB1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoNote"
+            "pathName": "ampAndAmpB1"
           }
         },
         {
@@ -75,7 +69,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "middleAndMiddleB2"
+                  "pathName": "ampAndAmpB2"
                 }
               },
               {
@@ -115,12 +109,6 @@
                 "data": {
                   "name": "AutoAimControl"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoTag"
-                }
               }
             ]
           }
@@ -128,13 +116,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "middleAndMiddleB3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoNote"
+            "pathName": "ampAndAmpB3"
           }
         },
         {
@@ -144,7 +126,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "middleAndMiddleB4"
+                  "pathName": "ampAndAmpB4"
                 }
               },
               {
@@ -159,7 +141,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "middleAndMiddleB5"
+            "pathName": "ampAndAmpB5"
           }
         },
         {
@@ -190,12 +172,6 @@
                 "data": {
                   "name": "AutoAimControl"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoTag"
-                }
               }
             ]
           }
@@ -203,7 +179,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "middleAndMiddleB6"
+            "pathName": "ampAndAmpB6"
           }
         },
         {
@@ -213,7 +189,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "middleAndMiddleB7"
+                  "pathName": "ampAndAmpB7"
                 }
               },
               {

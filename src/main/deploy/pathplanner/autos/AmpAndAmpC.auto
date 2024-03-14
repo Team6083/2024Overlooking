@@ -3,9 +3,9 @@
   "startingPose": {
     "position": {
       "x": 0.76,
-      "y": 4.56
+      "y": 6.53
     },
-    "rotation": -60.0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -129,6 +129,12 @@
           "type": "path",
           "data": {
             "pathName": "ampAndAmpB3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoNote"
           }
         },
         {

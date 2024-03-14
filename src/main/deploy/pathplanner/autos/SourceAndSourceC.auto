@@ -138,6 +138,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "AutoNote"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [

@@ -63,12 +63,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "AutoNote"
-          }
-        },
-        {
           "type": "deadline",
           "data": {
             "commands": [
@@ -115,12 +109,6 @@
                 "data": {
                   "name": "AutoAimControl"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoTag"
-                }
               }
             ]
           }
@@ -129,12 +117,6 @@
           "type": "path",
           "data": {
             "pathName": "middleAndMiddleB3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoNote"
           }
         },
         {
@@ -189,12 +171,6 @@
                 "type": "named",
                 "data": {
                   "name": "AutoAimControl"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoTag"
                 }
               }
             ]
