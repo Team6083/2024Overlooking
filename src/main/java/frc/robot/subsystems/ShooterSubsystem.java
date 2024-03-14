@@ -275,6 +275,10 @@ public class ShooterSubsystem extends SubsystemBase {
     Command cmd = runEnd(this::aimControl, this::stopAllMotor);
     return cmd;
   }
+  public Command shootRateControlCmd() {
+    Command cmd = runEnd(this::shootRateControlMode, this::stopAllMotor);
+    return cmd;
+  }
 
   private void setCarryRateControl() {
     setSetpoint(RotateShooterConstants.kCarryDegree);
