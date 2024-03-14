@@ -42,7 +42,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final DutyCycleEncoder rotateEncoder;
   private final PIDController rotatePID;
   private double rotateDegreeError = 0.0;
-  private double setPoint;
+  private double setPoint = RotateShooterConstants.kInitDegree;
   private double upGoalRate = 0;
   private double downGoalRate = 0;
 
@@ -79,7 +79,8 @@ public class ShooterSubsystem extends SubsystemBase {
     this.powerDistributionSubsystem = powerDistribution;
     this.tagTracking = tagTracking;
     rotatePID.enableContinuousInput(-180.0, 180.0);
-    setSetpoint(RotateShooterConstants.kInitDegree);
+    rotatePID.setSetpoint(57);
+    ;
   }
 
   public double getSetpoint() {
@@ -181,16 +182,15 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private void setSpeakerRateControl() {
-  setSetpoint(getSpeakerDegree(getSetpoint()));
-  double upRate = ShooterConstants.kSpeakerShooterRate[0];
-  double downRate = ShooterConstants.kSpeakerShooterRate[1];
-  final double upMotorVoltage = upMotorFeedForwardController.calculate(upRate)
-  + rateShooterPID.calculate(getUpEncoderRate(), upRate);
-  final double downMotorVoltage =
-  downMotorFeedForwardController.calculate(downRate)
-  + rateShooterPID.calculate(getDownEncoderRate(), downRate);
-  setUpMotorVoltage(upMotorVoltage);
-  setDownMotorVoltage(downMotorVoltage);
+    setSetpoint(getSpeakerDegree(getSetpoint()));
+    double upRate = ShooterConstants.kSpeakerShooterRate[0];
+    double downRate = ShooterConstants.kSpeakerShooterRate[1];
+    final double upMotorVoltage = upMotorFeedForwardController.calculate(upRate)
+        + rateShooterPID.calculate(getUpEncoderRate(), upRate);
+    final double downMotorVoltage = downMotorFeedForwardController.calculate(downRate)
+        + rateShooterPID.calculate(getDownEncoderRate(), downRate);
+    setUpMotorVoltage(upMotorVoltage);
+    setDownMotorVoltage(downMotorVoltage);
   }
 
   // private void setCarryRateControl() {
@@ -230,7 +230,7 @@ public class ShooterSubsystem extends SubsystemBase {
   // write these two methods into cmd
 
   public Command setAdjustAngleByTagCommand() {
-    Command cmd = runOnce(this::setAdjustAngleByTag);
+    Command cmd = run(this::setAdjustAngleByTag);
     cmd.setName("setAdjustAngleByTag");
     return cmd;
   }
@@ -247,6 +247,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void shootRateControl() {
     // shootRateControlMode();
+    setSetpoint(getSpeakerDegree(getSetpoint()));
     upGoalRate = ShooterConstants.kInitShooterRate[0];
     downGoalRate = ShooterConstants.kInitShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
@@ -311,31 +312,31 @@ public class ShooterSubsystem extends SubsystemBase {
   //
 
   // public void addManualAngleOffset() {
-  //   double offset = 0;
-  //   offset += 3;
+  // double offset = 0;
+  // offset += 3;
   // }
 
   // public Command addManualAngleOffsetCmd() {
-  //   Command cmd = runOnce(this::addManualAngleOffset);
-  //   setName("setManualAngleOffsetCmd");
-  //   return cmd;
+  // Command cmd = runOnce(this::addManualAngleOffset);
+  // setName("setManualAngleOffsetCmd");
+  // return cmd;
   // }
 
   // public void minusManualAngleOffset() {
-  //   double offset = 0;
-  //   offset += 3;
+  // double offset = 0;
+  // offset += 3;
   // }
 
   // public Command minusManualAngleOffsetCmd() {
-  //   Command cmd = runOnce(this::addManualAngleOffset);
-  //   setName("minusManualAngleOffsetCmd");
-  //   return cmd;
+  // Command cmd = runOnce(this::addManualAngleOffset);
+  // setName("minusManualAngleOffsetCmd");
+  // return cmd;
   // }
 
-  public void AdjustShooterAngleManual(double adjust){
+  public void AdjustShooterAngleManual(double adjust) {
     double offset = getAngle();
     // setSetpoint(offset+adjust);
-    double rotateVoltage = rotatePID.calculate(offset+adjust);
+    double rotateVoltage = rotatePID.calculate(offset + adjust);
     double modifiedRotateVoltage = rotateVoltage;
     if (Math.abs(modifiedRotateVoltage) > RotateShooterConstants.kRotateVoltLimit) {
       modifiedRotateVoltage = RotateShooterConstants.kRotateVoltLimit * (rotateVoltage > 0 ? 1 : -1);
@@ -482,8 +483,12 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("downMotorRate", getDownEncoderRate());
     SmartDashboard.putBoolean("isEnoughRate", isEnoughRate());
     SmartDashboard.putNumber("shooterRateMode", shootMode);
+
+    SmartDashboard.putData(rotatePID);
+    SmartDashboard.putNumber("encoderDegree", getAngle());
     SmartDashboard.putNumber("upMotorVoltage", upShooterMotor.getMotorOutputVoltage());
     SmartDashboard.putNumber("downMotorVoltage", downShooterMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("rotateSetpoint", setPoint);
   }
 
   public void stopMotor() {
@@ -508,9 +513,9 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public Command speakerRateControlCmd() {
-  Command cmd = runEnd(this::setSpeakerRateControl, this::stopAllMotor);
-  cmd.setName("setSpeakerRateControlCmd");
-  return cmd;
+    Command cmd = runEnd(this::setSpeakerRateControl, this::stopAllMotor);
+    cmd.setName("setSpeakerRateControlCmd");
+    return cmd;
   }
 
   // public Command setCarryRateControlCmd() {

@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.NoteTrackingConstants;
 import frc.robot.subsystems.visionProcessing.NoteTracking;
 import frc.robot.subsystems.visionProcessing.TagTracking;
 
@@ -260,8 +261,8 @@ public class Drivebase extends SubsystemBase {
       double x = noteTracking.getLastPose().getX();
       double y = noteTracking.getLastPose().getY();
       Rot = -trackingPID.calculate(yaw, 0);
-      xSpeed = -trackingPID.calculate(x);
-      ySpeed = -trackingPID.calculate(y);
+      xSpeed = -trackingPID.calculate(x, NoteTrackingConstants.minNoteDistance);
+      // ySpeed = -trackingPID.calculate();
     }
     drive(xSpeed, ySpeed, Rot, true);
   }
