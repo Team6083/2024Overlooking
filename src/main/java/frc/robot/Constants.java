@@ -76,8 +76,8 @@ public final class Constants {
         public static final double kCarryDegree = 2.0;
         public static final double kManualVoltage = 4.0;
         public static final double kRotateVoltLimit = 5.0;
-        public static final double kRotateAngleMin = 15.0;
-        public static final double kRotateAngleMax = 60.0;
+        public static final double kRotateAngleMin = 0.0;
+        public static final double kRotateAngleMax = 74.0;
         public static final double kRotateDegreeErrorPoint = 3;
         public static final double kRotateTriggerValue = 0.15;
         public static final double kRotateOffset = 302.0;
@@ -85,7 +85,7 @@ public final class Constants {
         public static final double kSpeakerHeight = 2.18;
         public static final double kAMPHeight = 0.89;
         public static final double kShooterHeight = 0.3;
-        public static final double kP = 0.09;
+        public static final double kP = 0.085;
         public static final double kI = 0.0002;
         public static final double kD = 0.0008;
     }
@@ -177,14 +177,14 @@ public final class Constants {
 
         public static final double kMaxModuleDriveVoltage = 12.0;
 
-        public static final double kDriveClosedLoopRampRate = 0.5;// 1 second 1 unit
-        public static final double kTurningClosedLoopRampRate = 0.25;
+        public static final double kDriveClosedLoopRampRate = 0.15;// 1 second 1 unit
+        public static final double kTurningClosedLoopRampRate = 0.15;
 
         public static final double kDesireSpeedtoMotorVoltage = kMaxModuleDriveVoltage / DrivebaseConstants.kMaxSpeed;
 
-        public static final double kMaxModuleTuringVoltage = 5.0;
+        public static final double kMaxModuleTuringVoltage = 9.0;
 
-        public static final double kMaxSpeedTurningDegree = 180.0;
+        public static final double kMaxSpeedTurningDegree = 160.0;
 
         public static final double kPRotationController = kMaxModuleTuringVoltage / kMaxSpeedTurningDegree;
         public static final double kIRotationController = 0.0;

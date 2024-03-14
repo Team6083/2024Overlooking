@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -40,6 +41,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private double manualVoltage = 0;
   private final CANSparkMax rotateMotor;
   private final DutyCycleEncoder rotateEncoder;
+  private final RelativeEncoder relaRotateEncoder;
   private final PIDController rotatePID;
   private double rotateDegreeError = 0.0;
   private double setPoint = RotateShooterConstants.kInitDegree;
@@ -64,6 +66,8 @@ public class ShooterSubsystem extends SubsystemBase {
     upShooterMotor.setInverted(ShooterConstants.kUpMotorInverted);
     downShooterMotor.setInverted(ShooterConstants.kDownMotorInverted);
 
+    
+
     upMotorFeedForwardController = new SimpleMotorFeedforward(ShooterConstants.kUpMotorS, ShooterConstants.kUpMotorV,
         ShooterConstants.kUpMotorA);
     downMotorFeedForwardController = new SimpleMotorFeedforward(ShooterConstants.kDownMotorS,
@@ -79,6 +83,9 @@ public class ShooterSubsystem extends SubsystemBase {
     rotatePID = new PIDController(RotateShooterConstants.kP, RotateShooterConstants.kI, RotateShooterConstants.kD);
     this.powerDistributionSubsystem = powerDistribution;
     this.tagTracking = tagTracking;
+    relaRotateEncoder = rotateMotor.getEncoder();
+    relaRotateEncoder.setPositionConversionFactor(360.0);
+    relaRotateEncoder.setPosition(getAngle());
     rotatePID.enableContinuousInput(-180.0, 180.0);
     rotatePID.setSetpoint(57);
     ;
@@ -99,7 +106,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private void setPIDControl() {
-    double rotateVoltage = rotatePID.calculate(getAngle());
+    double rotateVoltage = rotatePID.calculate(relaRotateEncoder.getPosition());
     double modifiedRotateVoltage = rotateVoltage;
     if (Math.abs(modifiedRotateVoltage) > RotateShooterConstants.kRotateVoltLimit) {
       modifiedRotateVoltage = RotateShooterConstants.kRotateVoltLimit * (rotateVoltage > 0 ? 1 : -1);
@@ -127,20 +134,6 @@ public class ShooterSubsystem extends SubsystemBase {
       return degree + 9.0 * horizonDistance / 2.9;
     }
     return currentDegree;
-  }
-
-  public void autoAimOn() {
-    this.isAutoAim = true;
-  }
-
-  public void autoAimOff() {
-    this.isAutoAim = false;
-  }
-
-  public Command setAutoAimCmd() {
-    Command cmd = runEnd(() -> autoAimOn(), () -> autoAimOff()).onlyWhile(() -> shootMode != 2);
-    cmd.setName("setAutoAimCmd");
-    return cmd;
   }
 
   private void setManualVoltage(double voltage) {

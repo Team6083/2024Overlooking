@@ -17,6 +17,6 @@ public class AimControlAllCmd extends ParallelCommandGroup {
   public AimControlAllCmd(Drivebase drivebase, ShooterSubsystem shooterSubsystem) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(drivebase.tagTracking2Cmd(), shooterSubsystem.setAdjustAngleByTagCommand(), shooterSubsystem.shootRateControlModeCmd());
+    addCommands(drivebase.tagTracking2Cmd(),shooterSubsystem.shootRateControlModeCmd());
   }
 }

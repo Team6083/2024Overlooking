@@ -57,7 +57,7 @@ public class RobotContainer {
     powerDistributionSubsystem = new PowerDistributionSubsystem();
     drivebase = new Drivebase(tagTracking, noteTracking);
     intakeSubsystem = new IntakeSubsystem(powerDistributionSubsystem);
-    shooterSubsystem = new ShooterSubsystem(powerDistributionSubsystem, tagTracking);
+    shooterSubsystem = new ShooterSubsystem(tagTracking);
     transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
     hookSubsystem = new HookSubsystem(powerDistributionSubsystem);
     configureBindings();
@@ -93,8 +93,9 @@ public class RobotContainer {
     // intake and transport
     mainController.y().toggleOnTrue(new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
     mainController.x().whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-    controlPanel.button(5).onTrue(intakeSubsystem.reIntakeCmd());
-    controlPanel.button(6).onTrue(new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.5));
+    controlPanel.button(5).onTrue(intakeSubsystem.intakeCmd());
+    controlPanel.button(6).onTrue(intakeSubsystem.reIntakeCmd());
+    // controlPanel.button(6).onTrue(new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.5));
 
     // shooter
 
