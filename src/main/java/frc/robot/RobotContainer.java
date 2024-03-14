@@ -13,12 +13,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
 import frc.robot.Constants.DrivebaseConstants;
-import frc.robot.commands.AimControlAllCmd;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.TimeStopIntakeCmd;
@@ -101,9 +99,9 @@ public class RobotContainer {
     mainController.x()
         .whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
     controlPanel.button(5)
-        .onTrue(intakeSubsystem.intakeCmd());
+        .onTrue(intakeSubsystem.setUpIntakeCmd());
     controlPanel.button(6)
-        .onTrue(intakeSubsystem.reIntakeCmd());
+        .onTrue(intakeSubsystem.setDownIntakeCmd());
 
     // shooter
     enum ShooterModeSelector {
