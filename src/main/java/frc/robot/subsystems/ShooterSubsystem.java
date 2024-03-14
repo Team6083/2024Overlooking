@@ -62,8 +62,6 @@ public class ShooterSubsystem extends SubsystemBase {
     upShooterMotor.setInverted(ShooterConstants.kUpMotorInverted);
     downShooterMotor.setInverted(ShooterConstants.kDownMotorInverted);
 
-    
-
     upMotorFeedForwardController = new SimpleMotorFeedforward(ShooterConstants.kUpMotorS, ShooterConstants.kUpMotorV,
         ShooterConstants.kUpMotorA);
     downMotorFeedForwardController = new SimpleMotorFeedforward(ShooterConstants.kDownMotorS,
@@ -165,15 +163,16 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   // private void setSpeakerRateControl() {
-  //   setSetpoint(getSpeakerDegree(getSetpoint()));
-  //   double upRate = ShooterConstants.kSpeakerShooterRate[0];
-  //   double downRate = ShooterConstants.kSpeakerShooterRate[1];
-  //   final double upMotorVoltage = upMotorFeedForwardController.calculate(upRate)
-  //       + rateShooterPID.calculate(getUpEncoderRate(), upRate);
-  //   final double downMotorVoltage = downMotorFeedForwardController.calculate(downRate)
-  //       + rateShooterPID.calculate(getDownEncoderRate(), downRate);
-  //   setUpMotorVoltage(upMotorVoltage);
-  //   setDownMotorVoltage(downMotorVoltage);
+  // setSetpoint(getSpeakerDegree(getSetpoint()));
+  // double upRate = ShooterConstants.kSpeakerShooterRate[0];
+  // double downRate = ShooterConstants.kSpeakerShooterRate[1];
+  // final double upMotorVoltage = upMotorFeedForwardController.calculate(upRate)
+  // + rateShooterPID.calculate(getUpEncoderRate(), upRate);
+  // final double downMotorVoltage =
+  // downMotorFeedForwardController.calculate(downRate)
+  // + rateShooterPID.calculate(getDownEncoderRate(), downRate);
+  // setUpMotorVoltage(upMotorVoltage);
+  // setDownMotorVoltage(downMotorVoltage);
   // }
 
   public void aimControl() {
@@ -212,10 +211,10 @@ public class ShooterSubsystem extends SubsystemBase {
         + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
-        setShootMode(3);
+    setShootMode(3);
   }
 
-    private void setFixRateControl() {
+  private void setFixRateControl() {
     setSetpoint(RotateShooterConstants.kInitDegree);
     upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
     downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
@@ -343,11 +342,6 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
 
-  public boolean checkIfEnoughRate() {
-    return getUpEncoderRate() >= upGoalRate - ShooterConstants.kShooterRateOffset
-        && getDownEncoderRate() >= downGoalRate - ShooterConstants.kShooterRateOffset;
-  }
-
   /**
    * Set shooter rate mode.
    * 
@@ -372,29 +366,30 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("rotateSetpoint", setPoint);
   }
 
-    public Command setManualVoltageCmd(double voltage) {
+  public Command setManualVoltageCmd(double voltage) {
     Command cmd = runOnce(() -> setManualVoltage(voltage));
     cmd.setName("SetManualVoltageCmd");
     return cmd;
   }
 
-  public Command transportModeCmd(){
+  public Command transportModeCmd() {
     Command cmd = run(this::transportMode);
     return cmd;
   }
 
   // public Command shootRateControlModeCmd() {
-  //   Command cmd = runOnce(this::shootRateControlMode);
-  //   return cmd;
+  // Command cmd = runOnce(this::shootRateControlMode);
+  // return cmd;
   // }
 
   public Command aimControlCmd() {
     Command cmd = runEnd(this::aimControl, this::stopAllMotor);
     return cmd;
   }
+
   // public Command shootRateControlCmd() {
-  //   Command cmd = runEnd(this::shootRateControlMode, this::stopAllMotor);
-  //   return cmd;
+  // Command cmd = runEnd(this::shootRateControlMode, this::stopAllMotor);
+  // return cmd;
   // }
   /**
    * Command of resetting encoder.
@@ -405,6 +400,13 @@ public class ShooterSubsystem extends SubsystemBase {
     Command cmd = runOnce(
         this::resetEncoderCmd);
     cmd.setName("resetEncoderCmd");
+    return cmd;
+  }
+
+  public Command setFixRateControlCmd() {
+    Command cmd = run(
+        this::setFixRateControl);
+    cmd.setName("setFixRateControlCmd");
     return cmd;
   }
 

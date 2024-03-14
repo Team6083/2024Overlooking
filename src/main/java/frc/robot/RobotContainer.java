@@ -125,7 +125,7 @@ public class RobotContainer {
               if (controlPanel.button(9).getAsBoolean()) {
                 return ShooterModeSelector.AutoShoot;
               }
-              return shooterSubsystem.setInitRateControlCmd();
+              return shooterSubsystem.setFixRateControlCmd();
             }).onlyWhile(
                 () -> shooterSubsystem.isEnoughRate())
             .alongWith(new TagDriveCmd(drivebase, mainController)));
