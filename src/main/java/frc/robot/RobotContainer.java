@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
-import frc.robot.commands.AdjustShooterAngleManual;
 import frc.robot.commands.AimControlAllCmd;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
@@ -74,8 +73,10 @@ public class RobotContainer {
     // SmartDashboard.putString("auto", "null");
     // SmartDashboard.putData(initialChooser);
 
-    NamedCommands.registerCommand("AutoTransportToShoot", new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
-    NamedCommands.registerCommand("AutoIntakeWithTransport", new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+    NamedCommands.registerCommand("AutoTransportToShoot",
+        new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
+    NamedCommands.registerCommand("AutoIntakeWithTransport",
+        new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
     NamedCommands.registerCommand("AutoRotateShooter", drivebase.tagTracking2Cmd());
     NamedCommands.registerCommand("AutoIntakeDown", new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
     NamedCommands.registerCommand("AutoNote", new NoteDriveCmd(drivebase, mainController).withTimeout(0.5));
@@ -96,8 +97,31 @@ public class RobotContainer {
     controlPanel.button(6).onTrue(new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.5));
 
     // shooter
-    shooterSubsystem.setDefaultCommand(new AdjustShooterAngleManual(mainController, shooterSubsystem));//(shooterSubsystem.setInitRateControlCmd());
-    mainController.b().toggleOnTrue(new AimControlAllCmd(drivebase, shooterSubsystem).onlyWhile(()->controlPanel.button(1).getAsBoolean()));
+
+    enum ShooterModeSelector {
+      Carry,
+      AutoShoot,
+      FixShoot
+    }
+
+    shooterSubsystem.setDefaultCommand(shooterSubsystem.setDefaultAngleCommand());// AdjustShooterAngleManual(mainController,
+                                                                                  // shooterSubsystem));//(shooterSubsystem.setInitRateControlCmd());
+    mainController.b().toggleOnTrue(Commands.select(
+        Map.ofEntries(
+            Map.entry(ShooterModeSelector.Carry, shooterSubsystem.setCarryRateControlCmd()),
+            Map.entry(ShooterModeSelector.AutoShoot, shooterSubsystem.setAutoAimCmd()),
+            Map.entry(ShooterModeSelector.FixShoot, shooterSubsystem.setInitRateControlCmd())),
+        () -> {
+          if(controlPanel.button(8).getAsBoolean()){
+            return ShooterModeSelector.Carry;
+          }
+          if(controlPanel.button(9).getAsBoolean()){
+            return ShooterModeSelector.AutoShoot;
+          }
+          return ShooterModeSelector.FixShoot;
+        }));
+    // new AimControlAllCmd(drivebase,
+    // shooterSubsystem).onlyWhile(()->controlPanel.button(1).getAsBoolean()));
 
     enum ShooterModes{
       Carry,
@@ -118,7 +142,7 @@ public class RobotContainer {
     // transport
     mainController.a().toggleOnTrue(
         transportSubsystem.transportIntakeCmd().onlyWhile(() -> shooterSubsystem.isEnoughRate()).withTimeout(0.5));
-  
+
     // // hook
     mainController.rightTrigger(0.5).whileTrue(hookSubsystem.upAllCmd());
     mainController.leftTrigger(0.5).whileTrue(hookSubsystem.downAllCmd());
@@ -133,17 +157,19 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     // if (autoChooser.getSelected().isScheduled()) {
-      return autoChooser.getSelected();
+    return autoChooser.getSelected();
     // }
     // String autoNumber = SmartDashboard.getString("auto", "null");
     // String initial = initialChooser.getSelected();
     // var alliance = DriverStation.getAlliance();
     // if (initial == "null" && alliance.isPresent())
-    //   return Commands.none();
+    // return Commands.none();
     // boolean isRed = alliance.get() == DriverStation.Alliance.Red;
     // if (isRed) {
-    //   initial = (initial == "left" ? "right" : (initial == "right" ? "left" : "middle"));
+    // initial = (initial == "left" ? "right" : (initial == "right" ? "left" :
+    // "middle"));
     // }
-    // return Autos.autoOptimize(drivebase, shooterSubsystem, transportSubsystem, intakeSubsystem, autoNumber, initial);
+    // return Autos.autoOptimize(drivebase, shooterSubsystem, transportSubsystem,
+    // intakeSubsystem, autoNumber, initial);
   }
 }

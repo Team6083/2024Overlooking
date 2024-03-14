@@ -89,7 +89,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setSetpoint(double setpoint) {
-    double rotateDegree = setpoint+rotateDegreeError;
+    double rotateDegree = setpoint + rotateDegreeError;
     if (hasExceedPhysicalLimit(rotateDegree) == -1) {
       rotateDegree = RotateShooterConstants.kRotateAngleMin;
     } else if (hasExceedPhysicalLimit(rotateDegree) == 1) {
@@ -221,7 +221,11 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setDefaultAngle() {
-    setPoint = RotateShooterConstants.kInitDegree+offset;
+    setPoint = RotateShooterConstants.kInitDegree + offset;
+  }
+
+  public double adjustManualOffset() {
+    return offset += 3;
   }
 
   // write these two methods into cmd
@@ -254,7 +258,7 @@ public class ShooterSubsystem extends SubsystemBase {
     setDownMotorVoltage(downMotorVoltage);
   }
 
-  public void transportMode(){
+  public void transportMode() {
     setSetpoint(15);
     upGoalRate = ShooterConstants.kCarryShooterRate[0];
     downGoalRate = ShooterConstants.kCarryShooterRate[1];
@@ -297,11 +301,8 @@ public class ShooterSubsystem extends SubsystemBase {
     return cmd;
   }
 
-  private void setInitRateControlMode() {
-    setSetpoint(RotateShooterConstants.kInitDegree);
-  }
-
   private void setInitRateControl() {
+    setSetpoint(RotateShooterConstants.kInitDegree);
     upGoalRate = ShooterConstants.kInitShooterRate[0];
     downGoalRate = ShooterConstants.kInitShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
@@ -313,7 +314,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public Command setInitRateControlCmd() {
-    Command cmd = runEnd(this::setInitRateControlMode, this::setInitRateControl);
+    Command cmd = run(this::setInitRateControl);
     return cmd;
   }
 
