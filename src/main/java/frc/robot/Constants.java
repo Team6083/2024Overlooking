@@ -175,7 +175,7 @@ public final class Constants {
 
         public static final double kWheelDiameterMeters = 0.15;
 
-        public static final double kMaxModuleDriveVoltage = 8.0;
+        public static final double kMaxModuleDriveVoltage = 12.0;
 
         public static final double kDriveClosedLoopRampRate = 0.5;// 1 second 1 unit
         public static final double kTurningClosedLoopRampRate = 0.25;

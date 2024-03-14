@@ -260,7 +260,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public Command shootRateControlCmd() {
-    Command cmd = runOnce(this::shootRateControl);
+    Command cmd = runEnd(this::shootRateControl, this::stopAllMotor);
     return cmd;
   }
 
