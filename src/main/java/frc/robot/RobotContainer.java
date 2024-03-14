@@ -100,9 +100,9 @@ public class RobotContainer {
     mainController.x()
         .whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
     controlPanel.button(5)
-        .onTrue(intakeSubsystem.intakeCmd());
+        .onTrue(intakeSubsystem.setUpIntakeCmd());
     controlPanel.button(6)
-        .onTrue(intakeSubsystem.reIntakeCmd());
+        .onTrue(intakeSubsystem.setDownIntakeCmd());
 
     // shooter
     enum ShooterModeSelector {
