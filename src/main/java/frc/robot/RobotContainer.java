@@ -137,7 +137,7 @@ public class RobotContainer {
     mainController.a()
         .toggleOnTrue(transportSubsystem.transportIntakeCmd().onlyWhile(() -> shooterSubsystem.isEnoughRate()).withTimeout(0.5));
 
-    // // hook
+    // hook
     mainController.rightTrigger(0.5).whileTrue(hookSubsystem.upAllCmd());
     mainController.leftTrigger(0.5).whileTrue(hookSubsystem.downAllCmd());
     controlPanel.button(1).whileTrue(hookSubsystem.leftUpIndivisualCmd());
@@ -145,7 +145,7 @@ public class RobotContainer {
     controlPanel.button(3).whileTrue(hookSubsystem.rightUpIndivisualCmd());
     controlPanel.button(4).whileTrue(hookSubsystem.rightDownIndivisualCmd());
 
-    // // reset
+    // reset
     mainController.back().onTrue(drivebase.gyroResetCmd());
   }
 

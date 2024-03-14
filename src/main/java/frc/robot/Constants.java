@@ -64,7 +64,7 @@ public final class Constants {
         public static final double kIntakeVoltage = 7.0;
         public static final double kThrowVoltage = -4.0;
         public static final double kDownVoltage = -12.0;
-        public static final double kStopTime = 2.5;
+        public static final double kStopTime = 2.52;
     }
 
     public static class RotateShooterConstants {
