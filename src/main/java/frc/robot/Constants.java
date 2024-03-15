@@ -22,8 +22,8 @@ public final class Constants {
         public static final int kDownMotorChannel = 25;
         public static final int kUpEncoderChannelA = 8;
         public static final int kUpEncoderChannelB = 9;
-        public static final int kDownEncoderChannelA = 1;
-        public static final int kDownEncoderChannelB = 2;
+        public static final int kDownEncoderChannelA = 0;
+        public static final int kDownEncoderChannelB = 1;
         public static final Boolean kUpMotorInverted = false;
         public static final Boolean kDownMotorInverted = false;
         public static final Boolean kUpEncoderInverted = true;

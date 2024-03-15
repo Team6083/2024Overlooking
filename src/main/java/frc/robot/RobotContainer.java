@@ -81,7 +81,7 @@ public class RobotContainer {
         // autoChooser.addOption("redAmp", Autos.redAmp(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
         // autoChooser.addOption("redMiddle",Autos.redMiddle(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
         // autoChooser.addOption("blueMiddle", Autos.blueMiddle(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
-        autoChooser.addOption("oneNote", Autos.oneNote(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
+        autoChooser.addOption("oneNote", Autos.oneNote(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem));
         SmartDashboard.putData("Auto Chooser", autoChooser);
         // SmartDashboard.putData("shootSubsystem", shooterSubsystem);
         // SmartDashboard.putData("IntakeSubsystem", intakeSubsystem);

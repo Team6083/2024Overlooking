@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -22,8 +23,7 @@ import frc.robot.subsystems.drive.Drivebase;
 public final class Autos {
 
         public static Command oneNote(Drivebase drivebase, IntakeSubsystem intakeSubsystem,
-                        TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem,
-                        CommandXboxController mainController) {
+                        TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem) {
 
                 Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
                 // Command AutoIntakeWithTransport = new
@@ -33,160 +33,159 @@ public final class Autos {
                 // Command AutoNote = new NoteDriveCmd(drivebase,
                 // mainController).withTimeout(0.5);
                 // Command AutoTag = new TagDriveCmd(drivebase, mainController);
+                Command front = drivebase.driveCmd(3, 0, 0).withTimeout(2);
 
-                Command cmd = new ParallelCommandGroup(AutoIntakeDown,
-                                new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl));
-
+                Command cmd = AutoIntakeDown.andThen(AutoAimControl.withTimeout(0.5).alongWith(AutoTransport)).andThen(front);
                 return cmd;
         }
 
-        public static Command blueAmp(Drivebase drivebase, IntakeSubsystem intakeSubsystem,
-                        TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem,
-                        CommandXboxController mainController) {
-                Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
-                Command AutoIntakeWithTransport = new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem);
-                Command AutoAimControl = shooterSubsystem.aimControlCmd();
-                Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
-                Command AutoNote = new NoteDriveCmd(drivebase, mainController).withTimeout(0.5);
-                Command AutoTag = new TagDriveCmd(drivebase, mainController);
+        // public static Command blueAmp(Drivebase drivebase, IntakeSubsystem intakeSubsystem,
+        //                 TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem,
+        //                 CommandXboxController mainController) {
+        //         Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
+        //         Command AutoIntakeWithTransport = new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem);
+        //         Command AutoAimControl = shooterSubsystem.aimControlCmd();
+        //         Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
+        //         Command AutoNote = new NoteDriveCmd(drivebase, mainController).withTimeout(0.5);
+        //         Command AutoTag = new TagDriveCmd(drivebase, mainController);
 
-                drivebase.resetPose(AutoConstants.leftPose2d);
+        //         drivebase.resetPose(AutoConstants.leftPose2d);
 
-                Command cmd = new ParallelCommandGroup(AutoIntakeDown,
-                                new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl));
-                cmd.andThen(drivebase.followPathCommand(AutoConstants.Amp1), AutoNote);
-                cmd.andThen(
-                                new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Amp2),
-                                                AutoIntakeWithTransport));
-                cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl,
-                                AutoTag));
-                cmd.andThen(drivebase.followPathCommand(AutoConstants.Amp3), AutoNote);
+        //         Command cmd = new ParallelCommandGroup(AutoIntakeDown,
+        //                         new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl));
+        //         cmd.andThen(drivebase.followPathCommand(AutoConstants.Amp1), AutoNote);
+        //         cmd.andThen(
+        //                         new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Amp2),
+        //                                         AutoIntakeWithTransport));
+        //         cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl,
+        //                         AutoTag));
+        //         cmd.andThen(drivebase.followPathCommand(AutoConstants.Amp3), AutoNote);
 
-                cmd.andThen(
-                                new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Amp4),
-                                                AutoIntakeWithTransport));
-                cmd.andThen(drivebase.followPathCommand(AutoConstants.Amp5));
-                cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl,
-                                AutoTag));
+        //         cmd.andThen(
+        //                         new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Amp4),
+        //                                         AutoIntakeWithTransport));
+        //         cmd.andThen(drivebase.followPathCommand(AutoConstants.Amp5));
+        //         cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl,
+        //                         AutoTag));
 
-                cmd.andThen(drivebase.followPathCommand(AutoConstants.Amp6));
-                cmd.andThen(
-                                new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Amp7),
-                                                AutoIntakeWithTransport));
+        //         cmd.andThen(drivebase.followPathCommand(AutoConstants.Amp6));
+        //         cmd.andThen(
+        //                         new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Amp7),
+        //                                         AutoIntakeWithTransport));
 
-                return cmd;
-        }
+        //         return cmd;
+        // }
 
-        public static Command redAmp(Drivebase drivebase, IntakeSubsystem intakeSubsystem,
-                        TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem,
-                        CommandXboxController mainController) {
-                Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
-                Command AutoIntakeWithTransport = new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem);
-                Command AutoAimControl = shooterSubsystem.aimControlCmd();
-                Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
-                Command AutoNote = new NoteDriveCmd(drivebase, mainController).withTimeout(0.5);
-                Command AutoTag = new TagDriveCmd(drivebase, mainController);
+        // public static Command redAmp(Drivebase drivebase, IntakeSubsystem intakeSubsystem,
+        //                 TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem,
+        //                 CommandXboxController mainController) {
+        //         Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
+        //         Command AutoIntakeWithTransport = new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem);
+        //         Command AutoAimControl = shooterSubsystem.aimControlCmd();
+        //         Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
+        //         Command AutoNote = new NoteDriveCmd(drivebase, mainController).withTimeout(0.5);
+        //         Command AutoTag = new TagDriveCmd(drivebase, mainController);
 
-                drivebase.resetPose(new Pose2d(15.78, 6.53, Rotation2d.fromDegrees(120)));
+        //         drivebase.resetPose(new Pose2d(15.78, 6.53, Rotation2d.fromDegrees(120)));
 
-                Command cmd = new ParallelCommandGroup(AutoIntakeDown,
-                                new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl));
-                cmd.andThen(drivebase.followPathCommand(AutoConstants.Amp1), AutoNote);
-                cmd.andThen(
-                                new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Amp2),
-                                                AutoIntakeWithTransport));
-                cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl,
-                                AutoTag));
-                cmd.andThen(drivebase.followPathCommand(AutoConstants.Amp3), AutoNote);
+        //         Command cmd = new ParallelCommandGroup(AutoIntakeDown,
+        //                         new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl));
+        //         cmd.andThen(drivebase.followPathCommand(AutoConstants.Amp1), AutoNote);
+        //         cmd.andThen(
+        //                         new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Amp2),
+        //                                         AutoIntakeWithTransport));
+        //         cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl,
+        //                         AutoTag));
+        //         cmd.andThen(drivebase.followPathCommand(AutoConstants.Amp3), AutoNote);
 
-                cmd.andThen(
-                                new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Amp4),
-                                                AutoIntakeWithTransport));
-                cmd.andThen(drivebase.followPathCommand(AutoConstants.Amp5));
-                cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl,
-                                AutoTag));
+        //         cmd.andThen(
+        //                         new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Amp4),
+        //                                         AutoIntakeWithTransport));
+        //         cmd.andThen(drivebase.followPathCommand(AutoConstants.Amp5));
+        //         cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl,
+        //                         AutoTag));
 
-                cmd.andThen(drivebase.followPathCommand(AutoConstants.Amp6));
-                cmd.andThen(
-                                new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Amp7),
-                                                AutoIntakeWithTransport));
+        //         cmd.andThen(drivebase.followPathCommand(AutoConstants.Amp6));
+        //         cmd.andThen(
+        //                         new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Amp7),
+        //                                         AutoIntakeWithTransport));
 
-                return cmd;
-        }
+        //         return cmd;
+        // }
 
-        public static Command blueMiddle(Drivebase drivebase, IntakeSubsystem intakeSubsystem,
-                        TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem,
-                        CommandXboxController mainController) {
-                Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
-                Command AutoIntakeWithTransport = new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem);
-                Command AutoAimControl = shooterSubsystem.aimControlCmd();
-                Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
-                Command AutoNote = new NoteDriveCmd(drivebase, mainController).withTimeout(0.5);
-                Command AutoTag = new TagDriveCmd(drivebase, mainController);
+        // public static Command blueMiddle(Drivebase drivebase, IntakeSubsystem intakeSubsystem,
+        //                 TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem,
+        //                 CommandXboxController mainController) {
+        //         Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
+        //         Command AutoIntakeWithTransport = new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem);
+        //         Command AutoAimControl = shooterSubsystem.aimControlCmd();
+        //         Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
+        //         Command AutoNote = new NoteDriveCmd(drivebase, mainController).withTimeout(0.5);
+        //         Command AutoTag = new TagDriveCmd(drivebase, mainController);
 
-                drivebase.resetPose(AutoConstants.middlePose2d);
+        //         drivebase.resetPose(AutoConstants.middlePose2d);
 
-                Command cmd = new ParallelCommandGroup(AutoIntakeDown,
-                                new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl));
-                cmd.andThen(drivebase.followPathCommand(AutoConstants.Middle1), AutoNote);
-                cmd.andThen(
-                                new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Middle2),
-                                                AutoIntakeWithTransport));
-                cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl,
-                                AutoTag));
-                cmd.andThen(drivebase.followPathCommand(AutoConstants.Middle3), AutoNote);
+        //         Command cmd = new ParallelCommandGroup(AutoIntakeDown,
+        //                         new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl));
+        //         cmd.andThen(drivebase.followPathCommand(AutoConstants.Middle1), AutoNote);
+        //         cmd.andThen(
+        //                         new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Middle2),
+        //                                         AutoIntakeWithTransport));
+        //         cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl,
+        //                         AutoTag));
+        //         cmd.andThen(drivebase.followPathCommand(AutoConstants.Middle3), AutoNote);
 
-                cmd.andThen(
-                                new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Middle4),
-                                                AutoIntakeWithTransport));
-                cmd.andThen(drivebase.followPathCommand(AutoConstants.Middle5));
-                cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl,
-                                AutoTag));
+        //         cmd.andThen(
+        //                         new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Middle4),
+        //                                         AutoIntakeWithTransport));
+        //         cmd.andThen(drivebase.followPathCommand(AutoConstants.Middle5));
+        //         cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl,
+        //                         AutoTag));
 
-                cmd.andThen(drivebase.followPathCommand(AutoConstants.Middle6));
-                cmd.andThen(
-                                new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Middle7),
-                                                AutoIntakeWithTransport));
+        //         cmd.andThen(drivebase.followPathCommand(AutoConstants.Middle6));
+        //         cmd.andThen(
+        //                         new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Middle7),
+        //                                         AutoIntakeWithTransport));
 
-                return cmd;
-        }
+        //         return cmd;
+        // }
 
-        public static Command redMiddle(Drivebase drivebase, IntakeSubsystem intakeSubsystem,
-                        TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem,
-                        CommandXboxController mainController) {
-                Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
-                Command AutoIntakeWithTransport = new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem);
-                Command AutoAimControl = shooterSubsystem.aimControlCmd();
-                Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
-                Command AutoNote = new NoteDriveCmd(drivebase, mainController).withTimeout(0.5);
-                Command AutoTag = new TagDriveCmd(drivebase, mainController);
+        // public static Command redMiddle(Drivebase drivebase, IntakeSubsystem intakeSubsystem,
+        //                 TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem,
+        //                 CommandXboxController mainController) {
+        //         Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
+        //         Command AutoIntakeWithTransport = new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem);
+        //         Command AutoAimControl = shooterSubsystem.aimControlCmd();
+        //         Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
+        //         Command AutoNote = new NoteDriveCmd(drivebase, mainController).withTimeout(0.5);
+        //         Command AutoTag = new TagDriveCmd(drivebase, mainController);
 
-                drivebase.resetPose(new Pose2d(16.54 - 1.24, 5.5, Rotation2d.fromDegrees(180)));
+        //         drivebase.resetPose(new Pose2d(16.54 - 1.24, 5.5, Rotation2d.fromDegrees(180)));
 
-                Command cmd = new ParallelCommandGroup(AutoIntakeDown,
-                                new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl));
-                cmd.andThen(drivebase.followPathCommand(AutoConstants.Middle1), AutoNote);
-                cmd.andThen(
-                                new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Middle2),
-                                                AutoIntakeWithTransport));
-                cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl,
-                                AutoTag));
-                cmd.andThen(drivebase.followPathCommand(AutoConstants.Middle3), AutoNote);
+        //         Command cmd = new ParallelCommandGroup(AutoIntakeDown,
+        //                         new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl));
+        //         cmd.andThen(drivebase.followPathCommand(AutoConstants.Middle1), AutoNote);
+        //         cmd.andThen(
+        //                         new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Middle2),
+        //                                         AutoIntakeWithTransport));
+        //         cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl,
+        //                         AutoTag));
+        //         cmd.andThen(drivebase.followPathCommand(AutoConstants.Middle3), AutoNote);
 
-                cmd.andThen(
-                                new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Middle4),
-                                                AutoIntakeWithTransport));
-                cmd.andThen(drivebase.followPathCommand(AutoConstants.Middle5));
-                cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl,
-                                AutoTag));
+        //         cmd.andThen(
+        //                         new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Middle4),
+        //                                         AutoIntakeWithTransport));
+        //         cmd.andThen(drivebase.followPathCommand(AutoConstants.Middle5));
+        //         cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl,
+        //                         AutoTag));
 
-                cmd.andThen(drivebase.followPathCommand(AutoConstants.Middle6));
-                cmd.andThen(
-                                new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Middle7),
-                                                AutoIntakeWithTransport));
+        //         cmd.andThen(drivebase.followPathCommand(AutoConstants.Middle6));
+        //         cmd.andThen(
+        //                         new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.Middle7),
+        //                                         AutoIntakeWithTransport));
 
-                return cmd;
-        }
+        //         return cmd;
+        // }
 
         // public static Command blueSource(Drivebase drivebase, IntakeSubsystem intakeSubsystem,
         //                 TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem,
