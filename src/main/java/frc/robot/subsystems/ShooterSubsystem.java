@@ -74,11 +74,11 @@ public class ShooterSubsystem extends SubsystemBase {
     rotatePID.setSetpoint(setPoint);
   }
 
-  public void stopMotor() {
+  public void stopRotateMotor() {
     rotateMotor.setVoltage(0.0);
   }
 
-  public void setMotor(double voltage) {
+  public void setRotateMotor(double voltage) {
     rotateMotor.setVoltage(voltage);
   }
 
@@ -111,7 +111,7 @@ public class ShooterSubsystem extends SubsystemBase {
     if (Math.abs(modifiedRotateVoltage) > RotateShooterConstants.kRotateVoltLimit) {
       modifiedRotateVoltage = RotateShooterConstants.kRotateVoltLimit * (rotateVoltage > 0 ? 1 : -1);
     }
-    setMotor(modifiedRotateVoltage);
+    setRotateMotor(modifiedRotateVoltage);
   }
 
   public double getAngle() {
@@ -151,20 +151,7 @@ public class ShooterSubsystem extends SubsystemBase {
     downShooterEncoder.reset();
   }
 
-  public void changeMode(boolean isCarry) {
-    if (isCarry) {
-      carryControl();
-    } else {
-      speakerControl();
-    }
-  }
-
-  public Command changeModeCmd(boolean isCarry) {
-    Command cmd = runEnd(() -> changeModeCmd(isCarry), () -> stopAllMotor());
-    return cmd;
-  }
-
-  public void speakerControl() {
+  public void aimControl() {
     setSetpoint(getSpeakerDegree(getSetpoint()));
     upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
     downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
@@ -347,34 +334,24 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private void manualUp() {
-    setMotor(ShooterConstants.kManualUpVoltage);
+    setRotateMotor(ShooterConstants.kManualUpVoltage);
     rotatePID.setSetpoint(getAngle());
   }
 
   private void manualDown() {
-    setMotor(ShooterConstants.kManualDownVoltage);
+    setRotateMotor(ShooterConstants.kManualDownVoltage);
     rotatePID.setSetpoint(getAngle());
   }
 
   public Command manualUpCmd() {
-    Command cmd = runEnd(this::manualUp, this::stopMotor);
+    Command cmd = runEnd(this::manualUp, this::stopRotateMotor);
     setName("manualUpCmd");
     return cmd;
   }
 
   public Command manualDownCmd() {
-    Command cmd = runEnd(this::manualDown, this::stopMotor);
+    Command cmd = runEnd(this::manualDown, this::stopRotateMotor);
     setName("manualDownCmd");
-    return cmd;
-  }
-
-  private void manualOffsetAdjust(double adjustValue) {
-    setSetpoint(getSetpoint() + adjustValue);
-  }
-
-  public Command manualOffsetAdjustCmd(double adjustValue) {
-    Command cmd = runOnce(() -> manualOffsetAdjust(adjustValue));
-    setName("manualOffsetAdjustCmd");
     return cmd;
   }
 
@@ -409,7 +386,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public Command aimControlCmd() {
-    Command cmd = runEnd(this::speakerControl, this::stopAllMotor);
+    Command cmd = runEnd(this::aimControl, this::stopAllMotor);
     return cmd;
   }
 
@@ -422,5 +399,4 @@ public class ShooterSubsystem extends SubsystemBase {
     Command cmd = runEnd(this::ampControl, this::stopAllMotor);
     return cmd;
   }
-
 }
