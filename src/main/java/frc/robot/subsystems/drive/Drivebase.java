@@ -201,12 +201,6 @@ public class Drivebase extends SubsystemBase {
     backRight.setDesiredState(swerveModuleStates[3]);
   }
 
-  public Command driveCmd(double xSpeed, double ySpeed, double rot){
-    Command cmd = runEnd(()->drive(xSpeed, ySpeed, rot, true), ()->drive(0, 0 , 0, true));
-    return cmd;
-
-  }
-
   public void driveRobotRelative(ChassisSpeeds speeds) {
     drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false);
   }

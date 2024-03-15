@@ -38,6 +38,12 @@
                 "data": {
                   "waitTime": 1.0
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoTransport"
+                }
               }
             ]
           }
@@ -63,6 +69,6 @@
       ]
     }
   },
-  "folder": "Test",
+  "folder": null,
   "choreoAuto": false
 }

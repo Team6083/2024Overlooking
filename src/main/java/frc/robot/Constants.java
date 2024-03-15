@@ -51,12 +51,12 @@ public final class Constants {
         public static final Boolean kRotateShooterInverted = true;
         public static final Boolean kEncoderInverted = true;
         public static final int kEncoderChannel = 2;
-        public static final double kInitDegree = 58.0;
+        public static final double kInitDegree = 57.0;
         public static final double kCarryDegree = 20.0;
         public static final double kManualVoltage = 4.0;
         public static final double kRotateVoltLimit = 5.0;
         public static final double kRotateAngleMin = 20.0;
-        public static final double kRotateAngleMax = 70.0;
+        public static final double kRotateAngleMax = 67.0;
         public static final double kRotateDegreeErrorPoint = 3;
         public static final double kRotateOffset = 302.0;
         public static final double kShooterOffset = 4.32;    
@@ -103,8 +103,8 @@ public final class Constants {
         public static final double kPLine = 2.0;
         public static final double kILine = 0.0001;
         public static final double kDLine = 0.001;
-        public static final int kLeftEncoderChannel[] = {5,6};
-        public static final int kRightEncoderChannel[] = {4,9};
+        public static final int kLeftEncoderChannel = 4;
+        public static final int kRightEncoderChannel = 3;
         public static final double kHookPositionConversionfactor = 1.0;
         public static final double kLinePositionMax = 60.0;
         public static final double kLinePositionMin = 0.0;
@@ -154,10 +154,10 @@ public final class Constants {
         public static final double kYLimiterRateLimit = 5.0;
         public static final double kRotLimiterRateLimit = 5.0;
 
-        public static final boolean kFrontLeftDriveMotorInverted = true;
-        public static final boolean kFrontRightDriveMotorInverted = false;
-        public static final boolean kBackLeftDriveMotorInverted = true;
-        public static final boolean kBackRightDriveMotorInverted = false;
+        public static final boolean kFrontLeftDriveMotorInverted = false;
+        public static final boolean kFrontRightDriveMotorInverted = true;
+        public static final boolean kBackLeftDriveMotorInverted = false;
+        public static final boolean kBackRightDriveMotorInverted = true;
 
         public static final boolean kGyroInverted = false; // wheather gyro is under the robot
         public static final double kGyroOffSet = 0;

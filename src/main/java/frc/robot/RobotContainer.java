@@ -42,7 +42,7 @@ public class RobotContainer {
     private final IntakeSubsystem intakeSubsystem;
     private final ShooterSubsystem shooterSubsystem;
     private final TransportSubsystem transportSubsystem;
-//     private final HookSubsystem hookSubsystem;
+    private final HookSubsystem hookSubsystem;
     private final TagTracking tagTracking;
     private final NoteTracking noteTracking;
     private SendableChooser<Command> autoChooser;
@@ -59,29 +59,26 @@ public class RobotContainer {
         intakeSubsystem = new IntakeSubsystem(powerDistributionSubsystem);
         shooterSubsystem = new ShooterSubsystem(tagTracking);
         transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
-        // hookSubsystem = new HookSubsystem(powerDistributionSubsystem);
+        hookSubsystem = new HookSubsystem(powerDistributionSubsystem);
 
-        // NamedCommands.registerCommand("AutoIntakeDown",
-        //         new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
-        // NamedCommands.registerCommand("AutoIntakeWithTransport",
-        //         new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-        // NamedCommands.registerCommand("AutoAimControl",
-        //         shooterSubsystem.aimControlCmd()); // rate and rotate
-        // NamedCommands.registerCommand("AutoTransport",
-        //         transportSubsystem.transportIntakeCmd().withTimeout(0.5));
-        // NamedCommands.registerCommand("AutoNote",
-        //         new NoteDriveCmd(drivebase, mainController).withTimeout(0.5));
-        // NamedCommands.registerCommand("AutoTag",
-        //         new TagDriveCmd(drivebase, mainController));
+        NamedCommands.registerCommand("AutoIntakeDown",
+                new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
+        NamedCommands.registerCommand("AutoIntakeWithTransport",
+                new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+        NamedCommands.registerCommand("AutoAimControl",
+                shooterSubsystem.aimControlCmd()); // rate and rotate
+        NamedCommands.registerCommand("AutoTransport",
+                transportSubsystem.transportIntakeCmd().withTimeout(0.5));
+        NamedCommands.registerCommand("AutoNote",
+                new NoteDriveCmd(drivebase, mainController).withTimeout(0.5));
+        NamedCommands.registerCommand("AutoTag",
+                new TagDriveCmd(drivebase, mainController));
 
-        // autoChooser = AutoBuilder.buildAutoChooser();
-        autoChooser = new SendableChooser<Command>();
-        autoChooser.setDefaultOption("Do Nothing", Commands.none());
+        autoChooser = AutoBuilder.buildAutoChooser();
+        // autoChooser = new SendableChooser<Command>();
+        // autoChooser.setDefaultOption("Do Nothing", Commands.none());
         // autoChooser.addOption("blueAmp", Autos.blueAmp(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
         // autoChooser.addOption("redAmp", Autos.redAmp(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
-        // autoChooser.addOption("redMiddle",Autos.redMiddle(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
-        // autoChooser.addOption("blueMiddle", Autos.blueMiddle(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
-        autoChooser.addOption("oneNote", Autos.oneNote(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem));
         SmartDashboard.putData("Auto Chooser", autoChooser);
         // SmartDashboard.putData("shootSubsystem", shooterSubsystem);
         // SmartDashboard.putData("IntakeSubsystem", intakeSubsystem);
@@ -117,10 +114,11 @@ public class RobotContainer {
                 .whileTrue(intakeSubsystem.setUpIntakeCmd());
         controlPanel.button(6)
                 .whileTrue(intakeSubsystem.setDownIntakeCmd());
-        // shooter
+
         shooterSubsystem
                 .setDefaultCommand(shooterSubsystem.setInitControlCmd());
-        mainController.b().toggleOnTrue(shooterSubsystem.aimControlCmd().alongWith(new TagDriveCmd(drivebase, mainController)));
+        mainController.b()
+                .toggleOnTrue(shooterSubsystem.aimControlCmd().alongWith(new TagDriveCmd(drivebase, mainController)));
 
         mainController.pov(0).whileTrue(shooterSubsystem.manualUpCmd().onlyWhile(
                 () -> shooterSubsystem.getIsManual()));
@@ -139,10 +137,10 @@ public class RobotContainer {
         mainController.start().toggleOnTrue(transportSubsystem.transportIntakeCmd().withTimeout(0.5));
 
         // hook
-        // mainController.rightTrigger(0.5)
-        //         .whileTrue(hookSubsystem.upAllCmd());
-        // mainController.leftTrigger(0.5)
-        //         .whileTrue(hookSubsystem.downAllCmd());
+        mainController.rightTrigger(0.5)
+                .whileTrue(hookSubsystem.upAllCmd());
+        mainController.leftTrigger(0.5)
+                .whileTrue(hookSubsystem.downAllCmd());
         // controlPanel.button(1)
         //         .whileTrue(hookSubsystem.leftUpIndivisualCmd());
         // controlPanel.button(2)
