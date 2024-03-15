@@ -40,8 +40,6 @@ public class ShooterSubsystem extends SubsystemBase {
   private final PIDController rotatePID;
   private double rotateDegreeError = 0.0;
   private double setPoint = RotateShooterConstants.kInitDegree;
-  private double upGoalRate = 0;
-  private double downGoalRate = 0;
 
   public ShooterSubsystem(TagTracking tagTracking) {
     // shooter
@@ -155,8 +153,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void aimControl() {
     setSetpoint(getSpeakerDegree(getSetpoint()));
-    upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
-    downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
+    double upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
+    double downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
         + rateShooterPID.calculate(getUpEncoderRate(), upGoalRate);
     final double downMotorVoltage = downMotorFeedForwardController.calculate(downGoalRate)
@@ -168,8 +166,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void carryControl() {
     setSetpoint(RotateShooterConstants.kCarryDegree);
-    upGoalRate = ShooterConstants.kCarryShooterRate[0];
-    downGoalRate = ShooterConstants.kCarryShooterRate[1];
+    double upGoalRate = ShooterConstants.kCarryShooterRate[0];
+    double downGoalRate = ShooterConstants.kCarryShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
         + rateShooterPID.calculate(getUpEncoderRate(), upGoalRate);
     final double downMotorVoltage = downMotorFeedForwardController.calculate(downGoalRate)
@@ -181,14 +179,16 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void ampControl() {
     setSetpoint(RotateShooterConstants.kInitDegree);
-    upGoalRate = ShooterConstants.kAmpShooterRate[0];
-    downGoalRate = ShooterConstants.kAmpShooterRate[1];
+    double upGoalRate = ShooterConstants.kAmpShooterRate[0];
+    double downGoalRate = ShooterConstants.kAmpShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
         + rateShooterPID.calculate(getUpEncoderRate(), upGoalRate);
     final double downMotorVoltage = downMotorFeedForwardController.calculate(downGoalRate)
         + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
-    setUpMotor(upMotorVoltage);
-    setDownMotor(downMotorVoltage);
+    SmartDashboard.putNumber("upgoalrate", upGoalRate);
+    SmartDashboard.putNumber("downgoalrate", downGoalRate);
+    setUpMotorVoltage(upMotorVoltage);
+    setDownMotorVoltage(downMotorVoltage);
     setShootMode(3);
   }
 
