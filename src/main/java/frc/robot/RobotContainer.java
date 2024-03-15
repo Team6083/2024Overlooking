@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.util.Map;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
