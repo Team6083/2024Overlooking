@@ -151,21 +151,39 @@ public class ShooterSubsystem extends SubsystemBase {
     downShooterEncoder.reset();
   }
 
-  public void changeMode(boolean isCarry){
-    if(isCarry){
+  public void changeMode(boolean isCarry) {
+    if (isCarry) {
       carryControl();
-    }else{
+    } else {
       aimControl();
     }
   }
 
-  public Command changeModeCmd(boolean isCarry){
-    Command cmd = runEnd(()->changeModeCmd(isCarry), ()->stopAllMotor());
+  public Command changeModeCmd(boolean isCarry) {
+    Command cmd = runEnd(() -> changeModeCmd(isCarry), () -> stopAllMotor());
     return cmd;
   }
 
   public void aimControl() {
     setSetpoint(getSpeakerDegree(getSetpoint()));
+    upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
+    downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
+    final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
+        + rateShooterPID.calculate(getUpEncoderRate(), upGoalRate);
+    final double downMotorVoltage = downMotorFeedForwardController.calculate(downGoalRate)
+        + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
+    setUpMotorVoltage(upMotorVoltage);
+    setDownMotorVoltage(downMotorVoltage);
+    setShootMode(1);
+  }
+
+  public void shootControl(boolean isAutoAim) {
+    if (isAutoAim) {
+      setSetpoint(getSpeakerDegree(getSetpoint()));
+    }
+    else{
+      setSetpoint(58);
+    }
     upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
     downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
