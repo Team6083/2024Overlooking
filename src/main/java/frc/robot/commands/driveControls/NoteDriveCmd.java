@@ -32,9 +32,9 @@ public class NoteDriveCmd extends Command {
   @Override
   public void execute() {
     magnification = drivebase.getMagnification();
-    xSpeed = xLimiter.calculate(main.getLeftY()) * drivebaseMaxSpeed * magnification; // forward
-    ySpeed = yLimiter.calculate(main.getLeftX()) * drivebaseMaxSpeed * magnification; // side
-    rotSpeed = rotLimiter.calculate(main.getRightX()) * drivebaseMaxSpeed;
+    xSpeed = -xLimiter.calculate(main.getLeftY()) * drivebaseMaxSpeed * magnification; // forward
+    ySpeed = -yLimiter.calculate(main.getLeftX()) * drivebaseMaxSpeed * magnification; // side
+    rotSpeed = -rotLimiter.calculate(main.getRightX()) * drivebaseMaxSpeed;
     drivebase.noteTracking(xSpeed, ySpeed, rotSpeed);
   }
 

@@ -285,10 +285,10 @@ public final class Constants {
         public static final double kMaxModuleSpeed = 3.36;
         public static final double kDrivebaseRadius = 2.17;
 
-        public static final double kMaxVelocity = 3.36;
-        public static final double kMaxAcceleration = 3.36;
+        public static final double kMaxVelocity = 3.35;
+        public static final double kMaxAcceleration = 9.67;
         public static final double kMaxAngularVelocity = 453.38;
-        public static final double kMaxAngularAcceleration = 453.38;
+        public static final double kMaxAngularAcceleration = 1292.82;
         public static final double kRotationDelayDistance = 0.0;
 
         public static final Pose2d leftPose2d = new Pose2d(0.76, 6.53, Rotation2d.fromDegrees(60));

@@ -33,9 +33,9 @@ public class TagDriveCmd extends Command {
   @Override
   public void execute() {
     magnification = drivebase.getMagnification();
-    xSpeed = xLimiter.calculate(main.getLeftY()) * drivebaseMaxSpeed * magnification; // forward
-    ySpeed = yLimiter.calculate(main.getLeftX()) * drivebaseMaxSpeed * magnification; // side
-    rotSpeed = rotLimiter.calculate(main.getRightX()) * drivebaseMaxSpeed;
+    xSpeed = -xLimiter.calculate(main.getLeftY()) * drivebaseMaxSpeed * magnification; // forward
+    ySpeed = -yLimiter.calculate(main.getLeftX()) * drivebaseMaxSpeed * magnification; // side
+    rotSpeed = -rotLimiter.calculate(main.getRightX()) * drivebaseMaxSpeed;
     drivebase.tagTracking(xSpeed, ySpeed, rotSpeed);
   }
 
