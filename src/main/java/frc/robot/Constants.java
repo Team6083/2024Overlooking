@@ -22,8 +22,8 @@ public final class Constants {
         public static final int kDownMotorChannel = 25;
         public static final int kUpEncoderChannelA = 8;
         public static final int kUpEncoderChannelB = 9;
-        public static final int kDownEncoderChannelA = 1;
-        public static final int kDownEncoderChannelB = 2;
+        public static final int kDownEncoderChannelA = 0;
+        public static final int kDownEncoderChannelB = 1;
         public static final Boolean kUpMotorInverted = false;
         public static final Boolean kDownMotorInverted = false;
         public static final Boolean kUpEncoderInverted = true;
@@ -50,7 +50,7 @@ public final class Constants {
         public static final int kRotateShooterChannel = 21;
         public static final Boolean kRotateShooterInverted = true;
         public static final Boolean kEncoderInverted = true;
-        public static final int kEncoderChannel = 3;
+        public static final int kEncoderChannel = 2;
         public static final double kInitDegree = 58.0;
         public static final double kCarryDegree = 20.0;
         public static final double kManualVoltage = 4.0;
