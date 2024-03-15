@@ -104,7 +104,7 @@ public final class Constants {
         public static final double kILine = 0.0001;
         public static final double kDLine = 0.001;
         public static final int kLeftEncoderChannel = 5;
-        public static final int kRightEncoderChannel =4 ;
+        public static final int kRightEncoderChannel = 4;
         public static final double kHookPositionConversionfactor = 1.0;
         public static final double kLinePositionMax = 60.0;
         public static final double kLinePositionMin = 0.0;
@@ -223,6 +223,14 @@ public final class Constants {
         public static final String Amp5 = "ampAndAmpB5";
         public static final String Amp6 = "ampAndAmpB6";
         public static final String Amp7 = "ampAndAmpB7";
+        
+        public static final String Middle1 = "middleAndMiddleB1";
+        public static final String Middle2 = "middleAndMiddleB2";
+        public static final String Middle3 = "middleAndMiddleB3";
+        public static final String Middle4 = "middleAndMiddleB4";
+        public static final String Middle5 = "middleAndMiddleB5";
+        public static final String Middle6 = "middleAndMiddleB6";
+        public static final String Middle7 = "middleAndMiddleB7";
         
 
         public static final String LBSToNote1 = "LBSToNote1";
