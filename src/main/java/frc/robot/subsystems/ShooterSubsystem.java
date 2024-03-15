@@ -71,7 +71,7 @@ public class ShooterSubsystem extends SubsystemBase {
     rotatePID = new PIDController(RotateShooterConstants.kP, RotateShooterConstants.kI, RotateShooterConstants.kD);
     this.tagTracking = tagTracking;
     rotatePID.enableContinuousInput(-180.0, 180.0);
-    rotatePID.setSetpoint(57);
+    rotatePID.setSetpoint(58);
   }
 
   public void stopMotor() {

@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
 import frc.robot.Constants.DrivebaseConstants;
+import frc.robot.commands.Autos;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.TimeStopIntakeCmd;
@@ -41,10 +42,10 @@ public class RobotContainer {
     private final IntakeSubsystem intakeSubsystem;
     private final ShooterSubsystem shooterSubsystem;
     private final TransportSubsystem transportSubsystem;
-    private final HookSubsystem hookSubsystem;
+//     private final HookSubsystem hookSubsystem;
     private final TagTracking tagTracking;
     private final NoteTracking noteTracking;
-    // private SendableChooser<Command> autoChooser;
+    private SendableChooser<Command> autoChooser;
     // private SendableChooser<String> initialChooser;
 
     public RobotContainer() {
@@ -58,14 +59,8 @@ public class RobotContainer {
         intakeSubsystem = new IntakeSubsystem(powerDistributionSubsystem);
         shooterSubsystem = new ShooterSubsystem(tagTracking);
         transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
-        hookSubsystem = new HookSubsystem(powerDistributionSubsystem);
+        // hookSubsystem = new HookSubsystem(powerDistributionSubsystem);
 
-        // NamedCommands.registerCommand("AutoTransportToShoot",
-        // new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
-        // NamedCommands.registerCommand("AutoRotateShooter",
-        // drivebase.tagTracking2Cmd());
-        // NamedCommands.registerCommand("AutoTag",
-        // new TagDriveCmd(drivebase, mainController));
         // NamedCommands.registerCommand("AutoIntakeDown",
         //         new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
         // NamedCommands.registerCommand("AutoIntakeWithTransport",
@@ -80,8 +75,14 @@ public class RobotContainer {
         //         new TagDriveCmd(drivebase, mainController));
 
         // autoChooser = AutoBuilder.buildAutoChooser();
-
-        // SmartDashboard.putData("Auto Chooser", autoChooser);
+        autoChooser = new SendableChooser<Command>();
+        autoChooser.setDefaultOption("Do Nothing", Commands.none());
+        autoChooser.addOption("blueAmp", Autos.blueAmp(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
+        autoChooser.addOption("redAmp", Autos.redAmp(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
+        autoChooser.addOption("redMiddle",Autos.redMiddle(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
+        autoChooser.addOption("blueMiddle", Autos.blueMiddle(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
+        autoChooser.addOption("oneNote", Autos.oneNote(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
+        SmartDashboard.putData("Auto Chooser", autoChooser);
         // SmartDashboard.putData("shootSubsystem", shooterSubsystem);
         // SmartDashboard.putData("IntakeSubsystem", intakeSubsystem);
         // SmartDashboard.putData("HookSubsystem", hookSubsystem);
@@ -119,8 +120,10 @@ public class RobotContainer {
 
         shooterSubsystem
                 .setDefaultCommand(shooterSubsystem.setInitControlCmd());
-        mainController.b()
-                .toggleOnTrue(shooterSubsystem.aimControlCmd().alongWith(new TagDriveCmd(drivebase, mainController)));
+        // mainController.b()
+        //         .toggleOnTrue(shooterSubsystem.aimControlCmd().alongWith(new TagDriveCmd(drivebase, mainController)));
+        mainController.b().toggleOnTrue(shooterSubsystem.aimControlCmd().alongWith(new TagDriveCmd(drivebase, mainController)));
+
 
         mainController.pov(0).whileTrue(shooterSubsystem.manualUpCmd().onlyWhile(
                 () -> shooterSubsystem.getIsManual()));
@@ -139,18 +142,18 @@ public class RobotContainer {
         mainController.start().toggleOnTrue(transportSubsystem.transportIntakeCmd().withTimeout(0.5));
 
         // hook
-        mainController.rightTrigger(0.5)
-                .whileTrue(hookSubsystem.upAllCmd());
-        mainController.leftTrigger(0.5)
-                .whileTrue(hookSubsystem.downAllCmd());
-        controlPanel.button(1)
-                .whileTrue(hookSubsystem.leftUpIndivisualCmd());
-        controlPanel.button(2)
-                .whileTrue(hookSubsystem.leftDownIndivisualCmd());
-        controlPanel.button(3)
-                .whileTrue(hookSubsystem.rightUpIndivisualCmd());
-        controlPanel.button(4)
-                .whileTrue(hookSubsystem.rightDownIndivisualCmd());
+        // mainController.rightTrigger(0.5)
+        //         .whileTrue(hookSubsystem.upAllCmd());
+        // mainController.leftTrigger(0.5)
+        //         .whileTrue(hookSubsystem.downAllCmd());
+        // controlPanel.button(1)
+        //         .whileTrue(hookSubsystem.leftUpIndivisualCmd());
+        // controlPanel.button(2)
+        //         .whileTrue(hookSubsystem.leftDownIndivisualCmd());
+        // controlPanel.button(3)
+        //         .whileTrue(hookSubsystem.rightUpIndivisualCmd());
+        // controlPanel.button(4)
+        //         .whileTrue(hookSubsystem.rightDownIndivisualCmd());
 
         // reset
         mainController.back().onTrue(drivebase.gyroResetCmd());
@@ -158,7 +161,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // if (autoChooser.getSelected().isScheduled()) {
-        // return autoChooser.getSelected();
+        return autoChooser.getSelected();
         // }
         // String autoNumber = SmartDashboard.getString("auto", "null");
         // String initial = initialChooser.getSelected();
@@ -172,6 +175,6 @@ public class RobotContainer {
         // }
         // return Autos.autoOptimize(drivebase, shooterSubsystem, transportSubsystem,
         // intakeSubsystem, autoNumber, initial);
-        return Commands.none();
+        // return Commands.none();
     }
 }
