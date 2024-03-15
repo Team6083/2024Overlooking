@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DrivebaseConstants;
 // import frc.robot.commands.autoCmds.PoseRotateShooterCmd;
 import frc.robot.commands.autoCmds.AutoTransportToShootCmd;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -16,6 +17,10 @@ import frc.robot.subsystems.TransportSubsystem;
 import frc.robot.subsystems.drive.Drivebase;
 
 public final class Autos {
+
+    // public static Command auto(Drivebase drivebase) {
+    //     Command cmd = drivebase.followPathCommand(AutoConstants.Amp1);
+    // }
 /* 
     public static Command autoOptimize(Drivebase drivebase,
             ShooterSubsystem shooterSubsystem, TransportSubsystem transportSubsystem, IntakeSubsystem intakeSubsystem,

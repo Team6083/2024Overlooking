@@ -44,7 +44,7 @@ public class RobotContainer {
     private final HookSubsystem hookSubsystem;
     private final TagTracking tagTracking;
     private final NoteTracking noteTracking;
-    private SendableChooser<Command> autoChooser;
+    // private SendableChooser<Command> autoChooser;
     // private SendableChooser<String> initialChooser;
 
     public RobotContainer() {
@@ -66,22 +66,27 @@ public class RobotContainer {
         // drivebase.tagTracking2Cmd());
         // NamedCommands.registerCommand("AutoTag",
         // new TagDriveCmd(drivebase, mainController));
-        NamedCommands.registerCommand("AutoIntakeDown",
-                new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
-        NamedCommands.registerCommand("AutoIntakeWithTransport",
-                new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-        NamedCommands.registerCommand("AutoAimControl",
-                shooterSubsystem.aimControlCmd()); // rate and rotate
-        NamedCommands.registerCommand("AutoTransport",
-                transportSubsystem.transportIntakeCmd().withTimeout(0.5));
-        NamedCommands.registerCommand("AutoNote",
-                new NoteDriveCmd(drivebase, mainController).withTimeout(0.5));
-        NamedCommands.registerCommand("AutoTag",
-                new TagDriveCmd(drivebase, mainController));
+        // NamedCommands.registerCommand("AutoIntakeDown",
+        //         new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
+        // NamedCommands.registerCommand("AutoIntakeWithTransport",
+        //         new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+        // NamedCommands.registerCommand("AutoAimControl",
+        //         shooterSubsystem.aimControlCmd()); // rate and rotate
+        // NamedCommands.registerCommand("AutoTransport",
+        //         transportSubsystem.transportIntakeCmd().withTimeout(0.5));
+        // NamedCommands.registerCommand("AutoNote",
+        //         new NoteDriveCmd(drivebase, mainController).withTimeout(0.5));
+        // NamedCommands.registerCommand("AutoTag",
+        //         new TagDriveCmd(drivebase, mainController));
 
-        autoChooser = AutoBuilder.buildAutoChooser();
+        // autoChooser = AutoBuilder.buildAutoChooser();
 
-        SmartDashboard.putData("Auto Chooser", autoChooser);
+        // SmartDashboard.putData("Auto Chooser", autoChooser);
+        // SmartDashboard.putData("shootSubsystem", shooterSubsystem);
+        // SmartDashboard.putData("IntakeSubsystem", intakeSubsystem);
+        // SmartDashboard.putData("HookSubsystem", hookSubsystem);
+        // SmartDashboard.putData("TransportSubsystem", transportSubsystem);
+        // SmartDashboard.putData("Drivebase", drivebase);
 
         // initialChooser = new SendableChooser<String>();
         // initialChooser.setDefaultOption("none", "null");
@@ -108,36 +113,14 @@ public class RobotContainer {
         mainController.x()
                 .whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
         controlPanel.button(5)
-                .onTrue(intakeSubsystem.setUpIntakeCmd());
+                .whileTrue(intakeSubsystem.setUpIntakeCmd());
         controlPanel.button(6)
-                .onTrue(intakeSubsystem.setDownIntakeCmd());
-
-        // shooter
-        enum ShooterModeSelector {
-            Carry,
-            AutoShoot,
-        }
+                .whileTrue(intakeSubsystem.setDownIntakeCmd());
 
         shooterSubsystem
-                .setDefaultCommand(shooterSubsystem.setInitRateControlCmd()
-                        .alongWith(shooterSubsystem.manualOffsetAdjustCmd(controlPanel.getRawAxis(1))));
+                .setDefaultCommand(shooterSubsystem.setInitControlCmd());
         mainController.b()
-                .toggleOnTrue(Commands.select(
-                        Map.ofEntries(
-                                Map.entry(ShooterModeSelector.Carry, shooterSubsystem.carryControlCmd()),
-                                Map.entry(ShooterModeSelector.AutoShoot,
-                                        shooterSubsystem.aimControlCmd()
-                                                .alongWith(new TagDriveCmd(drivebase, mainController)))),
-                        () -> {
-                            if (controlPanel.button(8).getAsBoolean()) {
-                                return ShooterModeSelector.Carry;
-                            }
-                            if (controlPanel.button(9).getAsBoolean()) {
-                                return ShooterModeSelector.AutoShoot;
-                            }
-                            return shooterSubsystem.fixRateControlCmd()
-                                    .alongWith(new TagDriveCmd(drivebase, mainController));
-                        }));
+                .toggleOnTrue(shooterSubsystem.aimControlCmd().alongWith(new TagDriveCmd(drivebase, mainController)));
 
         mainController.pov(0).whileTrue(shooterSubsystem.manualUpCmd().onlyWhile(
                 () -> shooterSubsystem.getIsManual()));
@@ -147,8 +130,6 @@ public class RobotContainer {
         // tracking
         controlPanel.button(7)
                 .whileTrue(new NoteDriveCmd(drivebase, mainController));
-        mainController.b()
-                .toggleOnTrue(new TagDriveCmd(drivebase, mainController));
 
         // transport
         mainController.a()
@@ -177,7 +158,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // if (autoChooser.getSelected().isScheduled()) {
-        return autoChooser.getSelected();
+        // return autoChooser.getSelected();
         // }
         // String autoNumber = SmartDashboard.getString("auto", "null");
         // String initial = initialChooser.getSelected();
@@ -191,5 +172,6 @@ public class RobotContainer {
         // }
         // return Autos.autoOptimize(drivebase, shooterSubsystem, transportSubsystem,
         // intakeSubsystem, autoNumber, initial);
+        return Commands.none();
     }
 }

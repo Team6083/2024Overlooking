@@ -150,9 +150,9 @@ public final class Constants {
         public static final double kMinJoyStickValue = 0.35;
         public static final double kMaxAngularSpeed = 2.5 * Math.PI; // 1/2 rotation per second
 
-        public static final double kXLimiterRateLimit = 3.0;
-        public static final double kYLimiterRateLimit = 3.0;
-        public static final double kRotLimiterRateLimit = 3.0;
+        public static final double kXLimiterRateLimit = 5.0;
+        public static final double kYLimiterRateLimit = 5.0;
+        public static final double kRotLimiterRateLimit = 5.0;
 
         public static final boolean kFrontLeftDriveMotorInverted = true;
         public static final boolean kFrontRightDriveMotorInverted = false;
@@ -177,12 +177,12 @@ public final class Constants {
 
         public static final double kMaxModuleDriveVoltage = 12.0;
 
-        public static final double kDriveClosedLoopRampRate = 0.15;// 1 second 1 unit
-        public static final double kTurningClosedLoopRampRate = 0.15;
+        public static final double kDriveClosedLoopRampRate = 0.1;// 1 second 1 unit
+        public static final double kTurningClosedLoopRampRate = 0.1;
 
         public static final double kDesireSpeedtoMotorVoltage = kMaxModuleDriveVoltage / DrivebaseConstants.kMaxSpeed;
 
-        public static final double kMaxModuleTuringVoltage = 9.0;
+        public static final double kMaxModuleTuringVoltage = 10.0;
 
         public static final double kMaxSpeedTurningDegree = 160.0;
 
@@ -216,6 +216,14 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
+        public static final String Amp1 = "ampAndAmpB1";
+        public static final String Amp2 = "ampAndAmpB2";
+        public static final String Amp3 = "ampAndAmpB3";
+        public static final String Amp4 = "ampAndAmpB4";
+        public static final String Amp5 = "ampAndAmpB5";
+        public static final String Amp6 = "ampAndAmpB6";
+        public static final String Amp7 = "ampAndAmpB7";
+        
 
         public static final String LBSToNote1 = "LBSToNote1";
         public static final String LBSToNote2 = "LBSToNote2";

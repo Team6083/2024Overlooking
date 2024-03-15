@@ -151,6 +151,19 @@ public class ShooterSubsystem extends SubsystemBase {
     downShooterEncoder.reset();
   }
 
+  public void changeMode(boolean isCarry){
+    if(isCarry){
+      carryControl();
+    }else{
+      aimControl();
+    }
+  }
+
+  public Command changeModeCmd(boolean isCarry){
+    Command cmd = runEnd(()->changeModeCmd(isCarry), ()->stopAllMotor());
+    return cmd;
+  }
+
   public void aimControl() {
     setSetpoint(getSpeakerDegree(getSetpoint()));
     upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
@@ -165,7 +178,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void carryControl() {
-    setSetpoint(15);
+    setSetpoint(RotateShooterConstants.kCarryDegree);
     upGoalRate = ShooterConstants.kCarryShooterRate[0];
     downGoalRate = ShooterConstants.kCarryShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
@@ -177,25 +190,12 @@ public class ShooterSubsystem extends SubsystemBase {
     setShootMode(2);
   }
 
-  private void setInitRateControl() {
+  private void setInitControl() {
     setSetpoint(RotateShooterConstants.kInitDegree);
   }
 
-  private void fixRateControl() {
-    setSetpoint(RotateShooterConstants.kInitDegree);
-    upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
-    downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
-    final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
-        + rateShooterPID.calculate(getUpEncoderRate(), upGoalRate);
-    final double downMotorVoltage = downMotorFeedForwardController.calculate(downGoalRate)
-        + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
-    setUpMotorVoltage(upMotorVoltage);
-    setDownMotorVoltage(downMotorVoltage);
-    setShootMode(1);
-  }
-
-  public Command setInitRateControlCmd() {
-    Command cmd = run(this::setInitRateControl);
+  public Command setInitControlCmd() {
+    Command cmd = run(this::setInitControl);
     return cmd;
   }
 
@@ -402,10 +402,4 @@ public class ShooterSubsystem extends SubsystemBase {
     return cmd;
   }
 
-  public Command fixRateControlCmd() {
-    Command cmd = runEnd(
-        this::fixRateControl, this::stopAllMotor);
-    cmd.setName("fixRateControlCmd");
-    return cmd;
-  }
 }
