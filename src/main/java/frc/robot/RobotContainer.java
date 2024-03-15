@@ -117,13 +117,10 @@ public class RobotContainer {
                 .whileTrue(intakeSubsystem.setUpIntakeCmd());
         controlPanel.button(6)
                 .whileTrue(intakeSubsystem.setDownIntakeCmd());
-
+        // shooter
         shooterSubsystem
                 .setDefaultCommand(shooterSubsystem.setInitControlCmd());
-        // mainController.b()
-        //         .toggleOnTrue(shooterSubsystem.aimControlCmd().alongWith(new TagDriveCmd(drivebase, mainController)));
         mainController.b().toggleOnTrue(shooterSubsystem.aimControlCmd().alongWith(new TagDriveCmd(drivebase, mainController)));
-
 
         mainController.pov(0).whileTrue(shooterSubsystem.manualUpCmd().onlyWhile(
                 () -> shooterSubsystem.getIsManual()));

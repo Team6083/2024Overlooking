@@ -71,7 +71,9 @@ public class ShooterSubsystem extends SubsystemBase {
     rotatePID = new PIDController(RotateShooterConstants.kP, RotateShooterConstants.kI, RotateShooterConstants.kD);
     this.tagTracking = tagTracking;
     rotatePID.enableContinuousInput(-180.0, 180.0);
-    rotatePID.setSetpoint(58);
+    rotatePID.setSetpoint(57);
+    SmartDashboard.putNumber("upRate", 0.0);
+    SmartDashboard.putNumber("downRate", 0.0);
   }
 
   public void stopMotor() {
@@ -135,6 +137,17 @@ public class ShooterSubsystem extends SubsystemBase {
     return currentDegree;
   }
 
+  public void testMode(){
+    upGoalRate = SmartDashboard.getNumber("upRate", 0.0);
+    downGoalRate = SmartDashboard.getNumber("downRate", 0.0);
+    final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
+        + rateShooterPID.calculate(getUpEncoderRate(), upGoalRate);
+    final double downMotorVoltage = downMotorFeedForwardController.calculate(downGoalRate)
+        + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
+    setUpMotorVoltage(upMotorVoltage);
+    setDownMotorVoltage(downMotorVoltage);
+  }
+
   /**
    * Stop both up and down shooter motor.
    */
@@ -151,16 +164,17 @@ public class ShooterSubsystem extends SubsystemBase {
     downShooterEncoder.reset();
   }
 
-  public void changeMode(boolean isCarry){
-    if(isCarry){
+  public void changeMode(boolean isCarry) {
+    if (isCarry) {
       carryControl();
-    }else{
+    } else {
       aimControl();
     }
   }
 
-  public Command changeModeCmd(boolean isCarry){
-    Command cmd = runEnd(()->changeModeCmd(isCarry), ()->stopAllMotor());
+  public Command changeModeCmd(boolean isCarry) {
+    SmartDashboard.putBoolean("isCarry", isCarry);
+    Command cmd = runEnd(() -> changeModeCmd(isCarry), () -> stopAllMotor());
     return cmd;
   }
 
@@ -175,6 +189,37 @@ public class ShooterSubsystem extends SubsystemBase {
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
     setShootMode(1);
+  }
+
+  public void shootControl(boolean isAutoAim) {
+    if (isAutoAim) {
+      setSetpoint(getSpeakerDegree(getSetpoint()));
+    }
+    else{
+      setSetpoint(58);
+    }
+    upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
+    downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
+    final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
+        + rateShooterPID.calculate(getUpEncoderRate(), upGoalRate);
+    final double downMotorVoltage = downMotorFeedForwardController.calculate(downGoalRate)
+        + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
+    setUpMotorVoltage(upMotorVoltage);
+    setDownMotorVoltage(downMotorVoltage);
+    setShootMode(1);
+  }
+
+  public void changeMode2(boolean isCarry, boolean isAuto) {
+    if (isCarry) {
+      carryControl();
+    } else {
+      shootControl(isAuto);
+    }
+  }
+
+  public Command changeMode2Cmd(boolean isCarry, boolean isAuto){
+    Command cmd = runEnd(()->changeMode2(isCarry, isAuto), ()->stopAllMotor());
+    return cmd;
   }
 
   public void carryControl() {
@@ -387,6 +432,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     SmartDashboard.putData(rotatePID);
     SmartDashboard.putNumber("rotateEncoderDegree", getAngle());
+    SmartDashboard.putNumber("limelightDegree", getSpeakerDegree(getSetpoint()));
     SmartDashboard.putNumber("rotateUpMotorVoltage", upShooterMotor.getMotorOutputVoltage());
     SmartDashboard.putNumber("rotateDownMotorVoltage", downShooterMotor.getMotorOutputVoltage());
     SmartDashboard.putNumber("rotateSetpoint", setPoint);
