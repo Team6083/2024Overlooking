@@ -43,7 +43,6 @@ public class HookSubsystem extends SubsystemBase {
     lineEncoder = lineMotor.getEncoder();
     leftEncoder = new Encoder(HookConstants.kLeftEncoderChannelA, HookConstants.kLeftEncoderChannelB);
     rightEncoder = new Encoder(HookConstants.kRightEncoderChannelA, HookConstants.kRightEncoderChannelB);
-    lineEncoder.setPositionConversionFactor(HookConstants.kHookPositionConversionfactor);
     leftMotor.setInverted(HookConstants.kLeftMotorInverted);
     rightMotor.setInverted(HookConstants.kRightMotorInverted);
     lineMotor.setInverted(HookConstants.kLineMotorInverted);

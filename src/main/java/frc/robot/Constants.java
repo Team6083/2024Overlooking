@@ -104,7 +104,7 @@ public final class Constants {
         public static final double kPLine = 2.0;
         public static final double kILine = 0.0001;
         public static final double kDLine = 0.001;
-        public static final int kLeftEncoderChannelA = 3;//明天看
+        public static final int kLeftEncoderChannelA = 3;// 明天看
         public static final int kLeftEncoderChannelB = 4;
         public static final int kRightEncoderChannelA = 5;
         public static final int kRightEncoderChannelB = 6;
@@ -197,25 +197,25 @@ public final class Constants {
     }
 
     public static final class PowerDistributionConstants {
-        public static final int kIntakeMotorCurrrentchannel = 0;
-        public static final int kShooterDownMotorCurrentchannel = 1;
-        public static final int kShooterUpMotorCurrentchannel = 2;
-        public static final int kLineCurrentchannel = 3;
-        public static final int kHookLeftMotorCurrentchannel = 4;
-        public static final int kHookRightMotorCurrentchannel = 5;
-        public static final int kTransportCurrentchannel = 0;
-        public static final int kRiseShooterCurrentchannel = 1;
-        public static final int kRotateIntakeCurrentchannel = 7;
+        public static final int kIntakeMotorCurrrentchannel = 2;
+        public static final int kShooterUpMotorCurrentchannel = 13;
+        public static final int kShooterDownMotorCurrentchannel = 17;
+        public static final int kLineCurrentchannel = 6;
+        public static final int kHookLeftMotorCurrentchannel = 5;
+        public static final int kHookRightMotorCurrentchannel = 3;
+        public static final int kTransportCurrentchannel = 16;
+        public static final int kRiseShooterCurrentchannel = 4;
+        public static final int kRotateIntakeCurrentchannel = 14;
 
         public static final double kIntakeMotorMaxCurrent = 40.0;
-        public static final double kShooterDownMotorMaxCuurent = 40.0;
         public static final double kShooterUpMotorMaxCurrent = 40.0;
+        public static final double kShooterDownMotorMaxCuurent = 40.0;
         public static final double kLineMotorMaxCurrent = 40.0;
-        public static final double kHookMotor1MaxCurrent = 40.0;
-        public static final double kHookMotor2MaxCurrent = 40.0;
-        public static final double kTransportMaxCurrent = 40.0;
+        public static final double kHookLeftMotorMaxCurrent = 40.0;
+        public static final double kHookRightaxCurrent = 40.0;
+        public static final double kTransportMaxCurrent = 30.0;
         public static final double kRotateShooterMaxCurrent = 40.0;
-        public static final double kRotateIntakeMaxCurrent = 40.0;
+        public static final double kRotateIntakeMaxCurrent = 30.0;
     }
 
     public static final class AutoConstants {
