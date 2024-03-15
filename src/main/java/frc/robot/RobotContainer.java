@@ -77,10 +77,10 @@ public class RobotContainer {
         // autoChooser = AutoBuilder.buildAutoChooser();
         autoChooser = new SendableChooser<Command>();
         autoChooser.setDefaultOption("Do Nothing", Commands.none());
-        autoChooser.addOption("blueAmp", Autos.blueAmp(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
-        autoChooser.addOption("redAmp", Autos.redAmp(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
-        autoChooser.addOption("redMiddle",Autos.redMiddle(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
-        autoChooser.addOption("blueMiddle", Autos.blueMiddle(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
+        // autoChooser.addOption("blueAmp", Autos.blueAmp(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
+        // autoChooser.addOption("redAmp", Autos.redAmp(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
+        // autoChooser.addOption("redMiddle",Autos.redMiddle(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
+        // autoChooser.addOption("blueMiddle", Autos.blueMiddle(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
         autoChooser.addOption("oneNote", Autos.oneNote(drivebase, intakeSubsystem, transportSubsystem, shooterSubsystem, mainController));
         SmartDashboard.putData("Auto Chooser", autoChooser);
         // SmartDashboard.putData("shootSubsystem", shooterSubsystem);

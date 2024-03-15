@@ -24,17 +24,19 @@ public final class Autos {
         public static Command oneNote(Drivebase drivebase, IntakeSubsystem intakeSubsystem,
                         TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem,
                         CommandXboxController mainController) {
-                
+
                 Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
-                // Command AutoIntakeWithTransport = new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem);
+                // Command AutoIntakeWithTransport = new
+                // IntakeWithTransportCmd(transportSubsystem, intakeSubsystem);
                 Command AutoAimControl = shooterSubsystem.aimControlCmd();
                 Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
-                // Command AutoNote = new NoteDriveCmd(drivebase, mainController).withTimeout(0.5);
+                // Command AutoNote = new NoteDriveCmd(drivebase,
+                // mainController).withTimeout(0.5);
                 // Command AutoTag = new TagDriveCmd(drivebase, mainController);
 
                 Command cmd = new ParallelCommandGroup(AutoIntakeDown,
                                 new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport), AutoAimControl));
-                
+
                 return cmd;
         }
 
@@ -185,6 +187,21 @@ public final class Autos {
 
                 return cmd;
         }
+
+        // public static Command blueSource(Drivebase drivebase, IntakeSubsystem intakeSubsystem,
+        //                 TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem,
+        //                 CommandXboxController mainController) {
+        //         Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
+        //         Command AutoIntakeWithTransport = new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem);
+        //         Command AutoAimControl = shooterSubsystem.aimControlCmd();
+        //         Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
+        //         Command AutoNote = new NoteDriveCmd(drivebase, mainController).withTimeout(0.5);
+        //         Command AutoTag = new TagDriveCmd(drivebase, mainController);
+
+
+        //         Command cmd 
+        //         return cmd;
+        // }
 
         /*
          * public static Command autoOptimize(Drivebase drivebase,
