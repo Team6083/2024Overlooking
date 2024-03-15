@@ -32,6 +32,7 @@ public final class Constants {
         public static final double kDownMotorManualVoltage = 10.0;
         public static final double[] kSpeakerShooterRate = { 60.0, 60.0 };
         public static final double[] kCarryShooterRate = { 30.0, 30.0 };
+        public static final double[] kAmpShooterRate = { 32.0, 13.0 };
         public static final double kShooterRateOffset = 15;
         public static final double kP = 0.0;
         public static final double kI = 0.0;
@@ -46,12 +47,12 @@ public final class Constants {
         public static final double kManualDownVoltage = -3;
     }
 
-        public static class RotateShooterConstants {
+    public static class RotateShooterConstants {
         public static final int kRotateShooterChannel = 21;
         public static final Boolean kRotateShooterInverted = true;
         public static final Boolean kEncoderInverted = true;
         public static final int kEncoderChannel = 2;
-        public static final double kInitDegree = 57.0;
+        public static final double kInitDegree = 58.0;
         public static final double kCarryDegree = 20.0;
         public static final double kManualVoltage = 4.0;
         public static final double kRotateVoltLimit = 5.0;
@@ -59,7 +60,7 @@ public final class Constants {
         public static final double kRotateAngleMax = 67.0;
         public static final double kRotateDegreeErrorPoint = 3;
         public static final double kRotateOffset = 302.0;
-        public static final double kShooterOffset = 4.32;    
+        public static final double kShooterOffset = 4.32;
         public static final double kSpeakerHeight = 2.18;
         public static final double kAMPHeight = 0.89;
         public static final double kShooterHeight = 0.3;
@@ -81,7 +82,7 @@ public final class Constants {
         public static final int kRotateIntakeChannel = 29;
         public static final int kRotateEncoderChannel = 7;
         public static final Boolean kIntakeInverted = true;
-        public static final Boolean kRotateIntakeInverted = true;
+        public static final Boolean kRotateIntakeInverted = false;
         public static final Boolean kRotateEncoderInverted = false;
         public static final double kRotateOffset = 105;
         public static final double kIntakeVoltage = 7.0;
@@ -103,7 +104,7 @@ public final class Constants {
         public static final double kPLine = 2.0;
         public static final double kILine = 0.0001;
         public static final double kDLine = 0.001;
-        public static final int kLeftEncoderChannel = 4;
+        public static final int kLeftEncoderChannel = 4;//明天看
         public static final int kRightEncoderChannel = 3;
         public static final double kHookPositionConversionfactor = 1.0;
         public static final double kLinePositionMax = 60.0;
@@ -223,7 +224,7 @@ public final class Constants {
         public static final String Amp5 = "ampAndAmpB5";
         public static final String Amp6 = "ampAndAmpB6";
         public static final String Amp7 = "ampAndAmpB7";
-        
+
         public static final String Middle1 = "middleAndMiddleB1";
         public static final String Middle2 = "middleAndMiddleB2";
         public static final String Middle3 = "middleAndMiddleB3";
@@ -231,7 +232,6 @@ public final class Constants {
         public static final String Middle5 = "middleAndMiddleB5";
         public static final String Middle6 = "middleAndMiddleB6";
         public static final String Middle7 = "middleAndMiddleB7";
-        
 
         public static final String LBSToNote1 = "LBSToNote1";
         public static final String LBSToNote2 = "LBSToNote2";

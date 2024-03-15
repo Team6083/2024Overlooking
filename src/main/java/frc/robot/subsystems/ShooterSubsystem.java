@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.controller.PIDController;
@@ -151,16 +152,16 @@ public class ShooterSubsystem extends SubsystemBase {
     downShooterEncoder.reset();
   }
 
-  public void changeMode(boolean isCarry){
-    if(isCarry){
+  public void changeMode(boolean isCarry) {
+    if (isCarry) {
       carryControl();
-    }else{
+    } else {
       aimControl();
     }
   }
 
-  public Command changeModeCmd(boolean isCarry){
-    Command cmd = runEnd(()->changeModeCmd(isCarry), ()->stopAllMotor());
+  public Command changeModeCmd(boolean isCarry) {
+    Command cmd = runEnd(() -> changeModeCmd(isCarry), () -> stopAllMotor());
     return cmd;
   }
 
@@ -175,6 +176,19 @@ public class ShooterSubsystem extends SubsystemBase {
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
     setShootMode(1);
+  }
+
+  public void ampControl() {
+    setSetpoint(RotateShooterConstants.kInitDegree);
+    upGoalRate = ShooterConstants.kAmpShooterRate[0];
+    downGoalRate = ShooterConstants.kAmpShooterRate[1];
+    final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
+        + rateShooterPID.calculate(getUpEncoderRate(), upGoalRate);
+    final double downMotorVoltage = downMotorFeedForwardController.calculate(downGoalRate)
+        + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
+    setUpMotor(upMotorVoltage);
+    setDownMotor(downMotorVoltage);
+    setShootMode(3);
   }
 
   public void carryControl() {
@@ -301,6 +315,9 @@ public class ShooterSubsystem extends SubsystemBase {
       case 2:
         return (getUpEncoderRate() >= ShooterConstants.kCarryShooterRate[0] - ShooterConstants.kShooterRateOffset
             && getDownEncoderRate() >= ShooterConstants.kCarryShooterRate[1] - ShooterConstants.kShooterRateOffset);
+      case 3:
+        return (getUpEncoderRate() >= ShooterConstants.kAmpShooterRate[0] - ShooterConstants.kShooterRateOffset
+            && getDownEncoderRate() >= ShooterConstants.kAmpShooterRate[1] - ShooterConstants.kShooterRateOffset);
       default:
         return false;
     }
@@ -399,6 +416,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public Command aimControlCmd() {
     Command cmd = runEnd(this::aimControl, this::stopAllMotor);
+    return cmd;
+  }
+
+  public Command ampControlCmd(){
+    Command cmd = runEnd(this::ampControl, this::stopAllMotor);
     return cmd;
   }
 

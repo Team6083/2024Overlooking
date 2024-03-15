@@ -233,7 +233,7 @@ public class Drivebase extends SubsystemBase {
   }
 
   public void tagTracking(double xSpeed, double ySpeed, double rot) {
-    double robotRot = getFacingTagRot(rot);
+    double robotRot = -getFacingTagRot(rot);
     if (Math.abs(rot) > DrivebaseConstants.kMinRot) {
       robotRot = rot;
     }
