@@ -66,9 +66,9 @@ public class RobotContainer {
                 NamedCommands.registerCommand("AutoTransport",
                                 transportSubsystem.transportIntakeCmd().withTimeout(0.5));
                 NamedCommands.registerCommand("AutoNote",
-                                new NoteDriveCmd(drivebase, mainController).withTimeout(0.5));
+                                drivebase.noteTrackingCmd().withTimeout(0.5));
                 NamedCommands.registerCommand("AutoTag",
-                                new TagDriveCmd(drivebase, mainController));
+                                drivebase.tagTrackingCmd());
 
                 autoChooser = AutoBuilder.buildAutoChooser();
                 // autoChooser = new SendableChooser<Command>();
@@ -78,11 +78,11 @@ public class RobotContainer {
                 // autoChooser.addOption("redAmp", Autos.redAmp(drivebase, intakeSubsystem,
                 // transportSubsystem, shooterSubsystem, mainController));
                 SmartDashboard.putData("Auto Chooser", autoChooser);
-                // SmartDashboard.putData("shootSubsystem", shooterSubsystem);
-                // SmartDashboard.putData("IntakeSubsystem", intakeSubsystem);
-                // SmartDashboard.putData("HookSubsystem", hookSubsystem);
-                // SmartDashboard.putData("TransportSubsystem", transportSubsystem);
-                // SmartDashboard.putData("Drivebase", drivebase);
+                SmartDashboard.putData("shootSubsystem", shooterSubsystem);
+                SmartDashboard.putData("IntakeSubsystem", intakeSubsystem);
+                SmartDashboard.putData("HookSubsystem", hookSubsystem);
+                SmartDashboard.putData("TransportSubsystem", transportSubsystem);
+                SmartDashboard.putData("Drivebase", drivebase);
 
                 // initialChooser = new SendableChooser<String>();
                 // initialChooser.setDefaultOption("none", "null");
@@ -120,7 +120,7 @@ public class RobotContainer {
                 mainController.b()
                                 .toggleOnTrue(shooterSubsystem.aimControlCmd()
                                                 .alongWith(new TagDriveCmd(drivebase, mainController)));
-                mainController.back().toggleOnTrue(shooterSubsystem.ampControlCmd());
+                mainController.pov(90).toggleOnTrue(shooterSubsystem.ampControlCmd());
 
                 mainController.pov(0).whileTrue(shooterSubsystem.manualUpCmd().onlyWhile(
                                 () -> shooterSubsystem.getIsManual()));
@@ -145,14 +145,14 @@ public class RobotContainer {
                                 .whileTrue(hookSubsystem.upAllCmd());
                 mainController.leftTrigger(0.5)
                                 .whileTrue(hookSubsystem.downAllCmd());
-                // controlPanel.button(1)
-                // .whileTrue(hookSubsystem.leftUpIndivisualCmd());
-                // controlPanel.button(2)
-                // .whileTrue(hookSubsystem.leftDownIndivisualCmd());
-                // controlPanel.button(3)
-                // .whileTrue(hookSubsystem.rightUpIndivisualCmd());
-                // controlPanel.button(4)
-                // .whileTrue(hookSubsystem.rightDownIndivisualCmd());
+                controlPanel.button(1)
+                .whileTrue(hookSubsystem.leftUpIndivisualCmd());
+                controlPanel.button(2)
+                .whileTrue(hookSubsystem.leftDownIndivisualCmd());
+                controlPanel.button(3)
+                .whileTrue(hookSubsystem.rightUpIndivisualCmd());
+                controlPanel.button(4)
+                .whileTrue(hookSubsystem.rightDownIndivisualCmd());
 
                 // reset
                 mainController.back().onTrue(drivebase.gyroResetCmd());

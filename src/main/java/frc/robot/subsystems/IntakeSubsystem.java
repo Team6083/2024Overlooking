@@ -28,7 +28,6 @@ public class IntakeSubsystem extends SubsystemBase {
     rotateIntake = new VictorSPX(IntakeConstants.kRotateIntakeChannel);
     rotateIntake.setInverted(IntakeConstants.kRotateIntakeInverted);
     rotateEncoder = new DutyCycleEncoder(IntakeConstants.kRotateEncoderChannel);
-
     rotateEncoder.reset();
   }
 

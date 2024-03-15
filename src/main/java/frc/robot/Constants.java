@@ -302,7 +302,7 @@ public final class Constants {
         public static final double cameraHeight = 0.36;
         public static final double cameraWeight = 0.0;
         public static final double kCamYOffset = 0.1; // not sure yet
-        public static final double pitchDegree = -20.0;
+        public static final double pitchDegree = -30.0;
         public static final double yawDegree = 0;
         public static final double minNoteDistance = 0.2;
     }

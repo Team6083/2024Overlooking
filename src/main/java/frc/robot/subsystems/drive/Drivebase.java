@@ -238,6 +238,16 @@ public class Drivebase extends SubsystemBase {
     drive(xSpeed, ySpeed, robotRot, true);
   }
 
+  public Command tagTrackingCmd(){
+    Command cmd = runEnd(()->tagTracking(0, 0, 0), ()->drive(0, 0, 0, false));
+    return cmd;
+  }
+
+  public Command noteTrackingCmd(){
+    Command cmd = runEnd(()->noteTracking(0, 0, 0), ()->drive(0, 0, 0, false));
+    return cmd;
+  }
+
   public void setMagnification(double magnification) {
     this.magnification = magnification;
   }
