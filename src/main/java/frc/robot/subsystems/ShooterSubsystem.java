@@ -71,14 +71,14 @@ public class ShooterSubsystem extends SubsystemBase {
     rotatePID = new PIDController(RotateShooterConstants.kP, RotateShooterConstants.kI, RotateShooterConstants.kD);
     this.tagTracking = tagTracking;
     rotatePID.enableContinuousInput(-180.0, 180.0);
-    rotatePID.setSetpoint(57);
+    rotatePID.setSetpoint(setPoint);
   }
 
-  public void stopMotor() {
+  public void stopRotateMotor() {
     rotateMotor.setVoltage(0.0);
   }
 
-  public void setMotor(double voltage) {
+  public void setRotateMotor(double voltage) {
     rotateMotor.setVoltage(voltage);
   }
 
@@ -111,7 +111,7 @@ public class ShooterSubsystem extends SubsystemBase {
     if (Math.abs(modifiedRotateVoltage) > RotateShooterConstants.kRotateVoltLimit) {
       modifiedRotateVoltage = RotateShooterConstants.kRotateVoltLimit * (rotateVoltage > 0 ? 1 : -1);
     }
-    setMotor(modifiedRotateVoltage);
+    setRotateMotor(modifiedRotateVoltage);
   }
 
   public double getAngle() {
@@ -151,19 +151,6 @@ public class ShooterSubsystem extends SubsystemBase {
     downShooterEncoder.reset();
   }
 
-  public void changeMode(boolean isCarry){
-    if(isCarry){
-      carryControl();
-    }else{
-      aimControl();
-    }
-  }
-
-  public Command changeModeCmd(boolean isCarry){
-    Command cmd = runEnd(()->changeModeCmd(isCarry), ()->stopAllMotor());
-    return cmd;
-  }
-
   public void aimControl() {
     setSetpoint(getSpeakerDegree(getSetpoint()));
     upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
@@ -188,6 +175,19 @@ public class ShooterSubsystem extends SubsystemBase {
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
     setShootMode(2);
+  }
+
+  public void ampControl() {
+    setSetpoint(RotateShooterConstants.kInitDegree);
+    upGoalRate = ShooterConstants.kAmpShooterRate[0];
+    downGoalRate = ShooterConstants.kAmpShooterRate[1];
+    final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
+        + rateShooterPID.calculate(getUpEncoderRate(), upGoalRate);
+    final double downMotorVoltage = downMotorFeedForwardController.calculate(downGoalRate)
+        + rateShooterPID.calculate(getDownEncoderRate(), downGoalRate);
+    setUpMotor(upMotorVoltage);
+    setDownMotor(downMotorVoltage);
+    setShootMode(3);
   }
 
   private void setInitControl() {
@@ -301,6 +301,9 @@ public class ShooterSubsystem extends SubsystemBase {
       case 2:
         return (getUpEncoderRate() >= ShooterConstants.kCarryShooterRate[0] - ShooterConstants.kShooterRateOffset
             && getDownEncoderRate() >= ShooterConstants.kCarryShooterRate[1] - ShooterConstants.kShooterRateOffset);
+      case 3:
+        return (getUpEncoderRate() >= ShooterConstants.kAmpShooterRate[0] - ShooterConstants.kShooterRateOffset
+            && getDownEncoderRate() >= ShooterConstants.kAmpShooterRate[1] - ShooterConstants.kShooterRateOffset);
       default:
         return false;
     }
@@ -331,34 +334,24 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private void manualUp() {
-    setMotor(ShooterConstants.kManualUpVoltage);
+    setRotateMotor(ShooterConstants.kManualUpVoltage);
     rotatePID.setSetpoint(getAngle());
   }
 
   private void manualDown() {
-    setMotor(ShooterConstants.kManualDownVoltage);
+    setRotateMotor(ShooterConstants.kManualDownVoltage);
     rotatePID.setSetpoint(getAngle());
   }
 
   public Command manualUpCmd() {
-    Command cmd = runEnd(this::manualUp, this::stopMotor);
+    Command cmd = runEnd(this::manualUp, this::stopRotateMotor);
     setName("manualUpCmd");
     return cmd;
   }
 
   public Command manualDownCmd() {
-    Command cmd = runEnd(this::manualDown, this::stopMotor);
+    Command cmd = runEnd(this::manualDown, this::stopRotateMotor);
     setName("manualDownCmd");
-    return cmd;
-  }
-
-  private void manualOffsetAdjust(double adjustValue) {
-    setSetpoint(getSetpoint() + adjustValue);
-  }
-
-  public Command manualOffsetAdjustCmd(double adjustValue) {
-    Command cmd = runOnce(() -> manualOffsetAdjust(adjustValue));
-    setName("manualOffsetAdjustCmd");
     return cmd;
   }
 
@@ -392,14 +385,18 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("rotateSetpoint", setPoint);
   }
 
-  public Command carryControlCmd() {
-    Command cmd = runEnd(this::carryControl, this::stopAllMotor);
-    return cmd;
-  }
-
   public Command aimControlCmd() {
     Command cmd = runEnd(this::aimControl, this::stopAllMotor);
     return cmd;
   }
 
+  public Command carryControlCmd() {
+    Command cmd = runEnd(this::carryControl, this::stopAllMotor);
+    return cmd;
+  }
+
+  public Command ampControlCmd() {
+    Command cmd = runEnd(this::ampControl, this::stopAllMotor);
+    return cmd;
+  }
 }

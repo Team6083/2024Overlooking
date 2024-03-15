@@ -11,7 +11,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -27,8 +27,8 @@ public class HookSubsystem extends SubsystemBase {
   private final VictorSPX leftMotor;
   private final VictorSPX rightMotor;
   private final RelativeEncoder lineEncoder;
-  private final DutyCycleEncoder leftEncoder;
-  private final DutyCycleEncoder rightEncoder;
+  private final Encoder leftEncoder;
+  private final Encoder rightEncoder;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
   private double leftSetpointOffset = 0.0;
   private double rightSetpointOffset = 0.0;
@@ -41,9 +41,8 @@ public class HookSubsystem extends SubsystemBase {
     leftPID = new PIDController(HookConstants.kPHook, HookConstants.kIHook, HookConstants.kDHook);
     rightPID = new PIDController(HookConstants.kPHook, HookConstants.kIHook, HookConstants.kDHook);
     lineEncoder = lineMotor.getEncoder();
-    leftEncoder = new DutyCycleEncoder(HookConstants.kLeftEncoderChannel);
-    rightEncoder = new DutyCycleEncoder(HookConstants.kRightEncoderChannel);
-    lineEncoder.setPositionConversionFactor(HookConstants.kHookPositionConversionfactor);
+    leftEncoder = new Encoder(HookConstants.kLeftEncoderChannelA, HookConstants.kLeftEncoderChannelB);
+    rightEncoder = new Encoder(HookConstants.kRightEncoderChannelA, HookConstants.kRightEncoderChannelB);
     leftMotor.setInverted(HookConstants.kLeftMotorInverted);
     rightMotor.setInverted(HookConstants.kRightMotorInverted);
     lineMotor.setInverted(HookConstants.kLineMotorInverted);
@@ -144,11 +143,11 @@ public class HookSubsystem extends SubsystemBase {
   }
 
   public double getLeftPosition() {
-    return (-leftEncoder.getAbsolutePosition() * 360);
+    return (-leftEncoder.getDistance() * 360);
   }
 
   public double getRightPosition() {
-    return (rightEncoder.getAbsolutePosition() * 360);
+    return (rightEncoder.getDistance()* 360);
   }
 
   private double getLeftMotorBusVoltage() {

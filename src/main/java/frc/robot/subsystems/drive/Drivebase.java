@@ -6,9 +6,6 @@ package frc.robot.subsystems.drive;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.FollowPathHolonomic;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -22,17 +19,13 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DrivebaseConstants;
-import frc.robot.Constants.FieldConstants;
-import frc.robot.Constants.NoteTrackingConstants;
 import frc.robot.subsystems.visionProcessing.NoteTracking;
 import frc.robot.subsystems.visionProcessing.TagTracking;
 
@@ -62,8 +55,6 @@ public class Drivebase extends SubsystemBase {
   private final Field2d field2d;
 
   private double magnification;
-
-  private boolean isTagTracking = false;
 
   private SwerveModuleState[] swerveModuleStates = new SwerveModuleState[4];
 
@@ -151,8 +142,7 @@ public class Drivebase extends SubsystemBase {
           }
           return false;
         },
-        this // Reference to this subsystem to set requirements
-    );
+        this);
   }
 
   public void resetGyro() {
@@ -213,10 +203,6 @@ public class Drivebase extends SubsystemBase {
         backRight.getState());
   }
 
-  public boolean hasTargets() {
-    return noteTracking.hasTargets();
-  }
-
   public double getFacingTagRot(double currentRot) {
     if (tagTracking.getTv() == 1 && tagTracking.getTID() != 3.0 && tagTracking.getTID() != 8.0) {
       return -trackingPID.calculate(tagTracking.getTx(), 0.0);
@@ -233,7 +219,7 @@ public class Drivebase extends SubsystemBase {
   }
 
   public void tagTracking(double xSpeed, double ySpeed, double rot) {
-    double robotRot = getFacingTagRot(rot);
+    double robotRot = -getFacingTagRot(rot);
     if (Math.abs(rot) > DrivebaseConstants.kMinRot) {
       robotRot = rot;
     }
@@ -250,46 +236,6 @@ public class Drivebase extends SubsystemBase {
       robotRot = rot;
     }
     drive(xSpeed, ySpeed, robotRot, true);
-  }
-
-  public void noteTracking2() {
-    double Rot = 0;
-    double xSpeed = 0;
-    double ySpeed = 0;
-    if (noteTracking.getTx().size() != 0) {
-      double yaw = noteTracking.getTx().indexOf(0.0);
-      double x = noteTracking.getLastPose().getX();
-      double y = noteTracking.getLastPose().getY();
-      Rot = -trackingPID.calculate(yaw, 0);
-      xSpeed = -trackingPID.calculate(x, NoteTrackingConstants.minNoteDistance);
-      // ySpeed = -trackingPID.calculate();
-    }
-    drive(xSpeed, ySpeed, Rot, true);
-  }
-
-  public void tagTracking2() {
-    double Rot = 0;
-    double xSpeed = 0;
-    double ySpeed = 0;
-    double offset = tagTracking.getTx();
-    if (tagTracking.getTv() == 1) {
-
-      Rot = -trackingPID.calculate(offset, 0);
-    }
-    if (Math.abs(offset) >= 0.05) {
-      isTagTracking=true;
-      drive(xSpeed, ySpeed, Rot, true);
-    } else{
-      isTagTracking = false;
-    }
-  }
-
-  public Command tagTrackingCmd(double xSpeed, double ySpeed, double rot) {
-    Command cmd = runEnd(
-        () -> tagTracking(xSpeed, ySpeed, rot),
-        () -> drive(0, 0, 0, false));
-    cmd.setName("TagTrackingCmd");
-    return cmd;
   }
 
   public void setMagnification(double magnification) {
@@ -325,64 +271,10 @@ public class Drivebase extends SubsystemBase {
   }
 
   public void putDashboard() {
-    // SmartDashboard.putNumber("frontLeft_speed",
-    // swerveModuleStates[0].speedMetersPerSecond);
-    // SmartDashboard.putNumber("frontRight_speed",
-    // swerveModuleStates[1].speedMetersPerSecond);
-    // SmartDashboard.putNumber("backLeft_speed",
-    // swerveModuleStates[2].speedMetersPerSecond);
-    // SmartDashboard.putNumber("backRight_speed",
-    // swerveModuleStates[3].speedMetersPerSecond);
     SmartDashboard.putNumber("gyro_heading", gyro.getRotation2d().getDegrees());
     SmartDashboard.putNumber("poseX", getPose2d().getX());
     SmartDashboard.putNumber("poseY", getPose2d().getY());
     SmartDashboard.putNumber("poseRotationDegree", getPose2d().getRotation().getDegrees());
-  }
-
-  public double calShooterAngleByPose2d() {
-    double x = getPose2d().getX();
-    double y = getPose2d().getY();
-    double distance = Math.sqrt(x * x + y * y);
-    double backAngleDegree = Math.toDegrees(Math.atan((FieldConstants.speakerBackTall - 32.464) / distance));
-    double frontAngleDegree = Math.toDegrees(Math.atan((FieldConstants.speakerFrontTall - 32.464) / distance));
-    return (backAngleDegree + frontAngleDegree) / 2;
-  }
-
-  // auto drive
-  public Command followPathCommand(String pathName) {
-    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-
-    return new FollowPathHolonomic(
-        path,
-        this::getPose2d, // Robot pose supplier
-        this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(AutoConstants.kPTranslation, AutoConstants.kITranslation, AutoConstants.kDTranslation), // Translation
-                                                                                                                     // PID
-                                                                                                                     // constants
-            new PIDConstants(AutoConstants.kPRotation, AutoConstants.kIRotation, AutoConstants.kDRotation), // Rotation
-                                                                                                            // PID
-                                                                                                            // constants
-            DrivebaseConstants.kMaxSpeed, // Max module speed, in m/s
-            AutoConstants.kDrivebaseRadius, // Drive base radius in meters. Distance from robot center to furthest
-                                            // module.
-            new ReplanningConfig() // Default path replanning config. See the API for the options here
-        ),
-        () -> {
-          // Boolean supplier that controls when the path will be mirrored for the red
-          // alliance
-          // This will flip the path being followed to the red side of the field.
-          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-          var alliance = DriverStation.getAlliance();
-          if (alliance.isPresent()) {
-            return alliance.get() == DriverStation.Alliance.Red;
-          }
-          return false;
-        },
-        this // Reference to this subsystem to set requirementsme
-    );
   }
 
   @Override
@@ -398,43 +290,4 @@ public class Drivebase extends SubsystemBase {
     cmd.setName("gyroResetCmd");
     return cmd;
   }
-
-  public Command pathFindingThenFollowPath(String pathName, double maxVelocity, double maxAcceleration,
-      double maxAngularVelocity, double maxAngularAcceleration, double rotationDelayDistance) {
-    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-    PathConstraints constraints = new PathConstraints(
-        maxVelocity, maxAcceleration,
-        Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration));
-    return AutoBuilder.pathfindThenFollowPath(path, constraints, rotationDelayDistance);
-  }
-
-  public Command pathFindingToPose(double x, double y, double degrees, double maxVelocity, double maxAcceleration,
-      double maxAngularVelocity, double maxAngularAcceleration, double goalEndVelocity,
-      double rotationDelayDistance) {
-
-    Pose2d targetPose = new Pose2d(x, y, Rotation2d.fromDegrees(degrees));
-    PathConstraints constraints = new PathConstraints(
-        maxVelocity, maxAcceleration,
-        Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration));
-    return AutoBuilder.pathfindToPose(targetPose, constraints, goalEndVelocity, rotationDelayDistance);
-  }
-
-  public Command setTagVisionModeCmd() {
-    Command cmd = Commands.runEnd(() -> tagTracking.isVisionOn(), () -> tagTracking.setCamMode());
-    return cmd;
-  }
-
-  public Command noteTracking2Cmd() {
-    Command cmd = this.runOnce(this::noteTracking2);
-    cmd.setName("noteTracking2Cmd");
-    return cmd;
-  }
-
-  public Command tagTracking2Cmd() {
-    Command cmd = Commands.runEnd(() -> tagTracking.setAutoCamOn(), () -> tagTracking.setAutoCamOff()).onlyWhile(()->isTagTracking);
-    cmd.setName("tagTrackin2Cmd");
-    return cmd;
-  }
-
-  
 }

@@ -41,7 +41,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   private void setDownIntake() {
-    setRotateMotorVoltage(IntakeConstants.kRotateVoltage);
+    setRotateMotorVoltage(-IntakeConstants.kRotateVoltage);
   }
 
   private void setUpIntake(){
