@@ -50,7 +50,7 @@ public final class Constants {
         public static final int kRotateShooterChannel = 21;
         public static final Boolean kRotateShooterInverted = true;
         public static final Boolean kEncoderInverted = true;
-        public static final int kEncoderChannel = 3;
+        public static final int kEncoderChannel = 2;
         public static final double kInitDegree = 58.0;
         public static final double kCarryDegree = 20.0;
         public static final double kManualVoltage = 4.0;
