@@ -148,9 +148,7 @@ public final class Constants {
         public static final double kBackRightCanCoderMagOffset = -0.160156;
 
         public static final double kMaxSpeed = 5;
-        public static final double kMinSpeed = 0.25;
         public static final double kMinRot = 0.1;
-        public static final double kMinJoyStickValue = 0.35;
         public static final double kMaxAngularSpeed = 2.5 * Math.PI; // 1/2 rotation per second
 
         public static final double kXLimiterRateLimit = 5.0;
@@ -219,63 +217,6 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
-        public static final String Amp1 = "ampAndAmpB1";
-        public static final String Amp2 = "ampAndAmpB2";
-        public static final String Amp3 = "ampAndAmpB3";
-        public static final String Amp4 = "ampAndAmpB4";
-        public static final String Amp5 = "ampAndAmpB5";
-        public static final String Amp6 = "ampAndAmpB6";
-        public static final String Amp7 = "ampAndAmpB7";
-
-        public static final String Middle1 = "middleAndMiddleB1";
-        public static final String Middle2 = "middleAndMiddleB2";
-        public static final String Middle3 = "middleAndMiddleB3";
-        public static final String Middle4 = "middleAndMiddleB4";
-        public static final String Middle5 = "middleAndMiddleB5";
-        public static final String Middle6 = "middleAndMiddleB6";
-        public static final String Middle7 = "middleAndMiddleB7";
-
-        public static final String LBSToNote1 = "LBSToNote1";
-        public static final String LBSToNote2 = "LBSToNote2";
-        public static final String LBSToNote3 = "LBSToNote3";
-        public static final String LBSToNote4 = "LBSToNote4";
-        public static final String LBSToNote5 = "LBSToNote5";
-        public static final String LBSToNote6 = "LBSToNote6";
-        public static final String LBSToNote7 = "LBSToNote7";
-        public static final String LBSToNote8 = "LBSToNote8";
-
-        public static final String LTSToNote1 = "LTSToNote1";
-        public static final String LTSToNote2 = "LTSToNote2";
-        public static final String LTSToNote3 = "LTSToNote3";
-        public static final String LTSToNote4 = "LTSToNote4";
-        public static final String LTSToNote5 = "LTSToNote5";
-        public static final String LTSToNote6 = "LTSToNote6";
-        public static final String LTSToNote7 = "LTSToNote7";
-        public static final String LTSToNote8 = "LTSToNote8";
-
-        public static final String RBSToNote1 = "RBSToNote1";
-        public static final String RBSToNote2 = "RBSToNote2";
-        public static final String RBSToNote3 = "RBSToNote3";
-        public static final String RBSToNote4 = "RBSToNote4";
-        public static final String RBSToNote5 = "RBSToNote5";
-        public static final String RBSToNote6 = "RBSToNote6";
-        public static final String RBSToNote7 = "RBSToNote7";
-        public static final String RBSToNote8 = "RBSToNote8";
-
-        public static final String RTSToNote1 = "RTSToNote1";
-        public static final String RTSToNote2 = "RTSToNote2";
-        public static final String RTSToNote3 = "RTSToNote3";
-        public static final String RTSToNote4 = "RTSToNote4";
-        public static final String RTSToNote5 = "RTSToNote5";
-        public static final String RTSToNote6 = "RTSToNote6";
-        public static final String RTSToNote7 = "RTSToNote7";
-        public static final String RTSToNote8 = "RTSToNote8";
-
-        public static final String bottomRelayToLBS = "bottomRelayToLBS";
-        public static final String bottomRelayToRBS = "bottomRelayToRBS";
-        public static final String topRelayToLTS = "topRelayToLTS";
-        public static final String topRelayToRTS = "topRelayToRTS";
-
         public static final double kPTranslation = 2.0;
         public static final double kITranslation = 0.001;
         public static final double kDTranslation = 0.01;
