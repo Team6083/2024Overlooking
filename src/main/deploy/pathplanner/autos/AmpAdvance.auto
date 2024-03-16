@@ -67,15 +67,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "ampAdvance2"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "AutoIntakeWithTransport"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "ampAdvance2"
                 }
               }
             ]
@@ -136,15 +136,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "ampAdvance5"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "AutoIntakeWithTransport"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "ampAdvance5"
                 }
               }
             ]
