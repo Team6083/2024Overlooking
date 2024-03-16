@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.5,
-        "y": 6.75
+        "x": 2.0,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6525273050546114,
-        "y": 6.423379769836463
+        "x": 2.596764424298081,
+        "y": 7.044997166917411
       },
       "isLocked": false,
-      "linkedName": "RightTopShoot"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.123151169379263,
-        "y": 5.4860202028096365
+        "x": 2.5,
+        "y": 6.5
       },
       "prevControl": {
-        "x": 1.9060784275414715,
-        "y": 6.413512827025654
+        "x": 2.3914636290811044,
+        "y": 6.766407455891835
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,9 +33,9 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.35,
-    "maxAcceleration": 3.35,
-    "maxAngularVelocity": 453.3,
-    "maxAngularAcceleration": 453.3
+    "maxAcceleration": 6.7,
+    "maxAngularVelocity": 453.38,
+    "maxAngularAcceleration": 906.76
   },
   "goalEndState": {
     "velocity": 0,
@@ -43,9 +43,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "RTSToNote",
+  "folder": "Test",
   "previewStartingState": {
-    "rotation": 12.25,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

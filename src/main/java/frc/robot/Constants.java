@@ -32,7 +32,7 @@ public final class Constants {
         public static final double kDownMotorManualVoltage = 10.0;
         public static final double[] kSpeakerShooterRate = { 60.0, 60.0 };
         public static final double[] kCarryShooterRate = { 30.0, 30.0 };
-        public static final double[] kAmpShooterRate = { 32.0, 13.0 };
+        public static final double[] kAmpShooterRate = { 33.0, 14.1 };
         public static final double kShooterRateOffset = 15;
         public static final double kP = 0.0;
         public static final double kI = 0.0;
@@ -282,13 +282,13 @@ public final class Constants {
         public static final double kPRotation = 2.0;
         public static final double kIRotation = 0.001;
         public static final double kDRotation = 0.01;
-        public static final double kMaxModuleSpeed = 3.36;
+        public static final double kMaxModuleSpeed = 5.0;
         public static final double kDrivebaseRadius = 2.17;
 
-        public static final double kMaxVelocity = 3.36;
-        public static final double kMaxAcceleration = 3.36;
+        public static final double kMaxVelocity = 3.35;
+        public static final double kMaxAcceleration = 6.70;
         public static final double kMaxAngularVelocity = 453.38;
-        public static final double kMaxAngularAcceleration = 453.38;
+        public static final double kMaxAngularAcceleration = 906.76;
         public static final double kRotationDelayDistance = 0.0;
 
         public static final Pose2d leftPose2d = new Pose2d(0.76, 6.53, Rotation2d.fromDegrees(60));

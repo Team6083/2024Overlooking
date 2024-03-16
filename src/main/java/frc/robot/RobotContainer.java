@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
@@ -38,7 +39,7 @@ public class RobotContainer {
         private final IntakeSubsystem intakeSubsystem;
         private final ShooterSubsystem shooterSubsystem;
         private final TransportSubsystem transportSubsystem;
-        private final HookSubsystem hookSubsystem;
+        // private final HookSubsystem hookSubsystem;
         private final TagTracking tagTracking;
         private final NoteTracking noteTracking;
         private SendableChooser<Command> autoChooser;
@@ -55,7 +56,7 @@ public class RobotContainer {
                 intakeSubsystem = new IntakeSubsystem(powerDistributionSubsystem);
                 shooterSubsystem = new ShooterSubsystem(tagTracking);
                 transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
-                hookSubsystem = new HookSubsystem(powerDistributionSubsystem);
+                // hookSubsystem = new HookSubsystem(powerDistributionSubsystem);
 
                 NamedCommands.registerCommand("AutoIntakeDown",
                                 new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
@@ -65,8 +66,10 @@ public class RobotContainer {
                                 shooterSubsystem.aimControlCmd(null)); // rate and rotate
                 NamedCommands.registerCommand("AutoTransport",
                                 transportSubsystem.transportIntakeCmd().withTimeout(0.5));
-                NamedCommands.registerCommand("AutoNote",
-                                drivebase.noteTrackingCmd().withTimeout(0.5));
+                // NamedCommands.registerCommand("AutoNote",
+                // drivebase.noteTrackingCmd().withTimeout(0.5));
+                NamedCommands.registerCommand("AutoNote", new WaitCommand(0.01));
+
                 NamedCommands.registerCommand("AutoTag",
                                 drivebase.tagTrackingCmd());
 
@@ -78,9 +81,10 @@ public class RobotContainer {
                 // autoChooser.addOption("redAmp", Autos.redAmp(drivebase, intakeSubsystem,
                 // transportSubsystem, shooterSubsystem, mainController));
                 SmartDashboard.putData("Auto Chooser", autoChooser);
+                SmartDashboard.putData("drivebase", drivebase);
                 SmartDashboard.putData("shootSubsystem", shooterSubsystem);
                 SmartDashboard.putData("IntakeSubsystem", intakeSubsystem);
-                SmartDashboard.putData("HookSubsystem", hookSubsystem);
+                // SmartDashboard.putData("HookSubsystem", hookSubsystem);
                 SmartDashboard.putData("TransportSubsystem", transportSubsystem);
                 SmartDashboard.putData("Drivebase", drivebase);
 
@@ -142,18 +146,18 @@ public class RobotContainer {
                 mainController.start().toggleOnTrue(transportSubsystem.transportIntakeCmd().withTimeout(0.5));
 
                 // hook
-                mainController.rightTrigger(0.5)
-                                .whileTrue(hookSubsystem.upAllCmd());
-                mainController.leftTrigger(0.5)
-                                .whileTrue(hookSubsystem.downAllCmd());
-                controlPanel.button(1)
-                                .whileTrue(hookSubsystem.leftUpIndivisualCmd());
-                controlPanel.button(2)
-                                .whileTrue(hookSubsystem.leftDownIndivisualCmd());
-                controlPanel.button(3)
-                                .whileTrue(hookSubsystem.rightUpIndivisualCmd());
-                controlPanel.button(4)
-                                .whileTrue(hookSubsystem.rightDownIndivisualCmd());
+                // mainController.rightTrigger(0.5)
+                // .whileTrue(hookSubsystem.upAllCmd());
+                // mainController.leftTrigger(0.5)
+                // .whileTrue(hookSubsystem.downAllCmd());
+                // controlPanel.button(1)
+                // .whileTrue(hookSubsystem.leftUpIndivisualCmd());
+                // controlPanel.button(2)
+                // .whileTrue(hookSubsystem.leftDownIndivisualCmd());
+                // controlPanel.button(3)
+                // .whileTrue(hookSubsystem.rightUpIndivisualCmd());
+                // controlPanel.button(4)
+                // .whileTrue(hookSubsystem.rightDownIndivisualCmd());
 
                 // reset
                 mainController.back().onTrue(drivebase.gyroResetCmd());

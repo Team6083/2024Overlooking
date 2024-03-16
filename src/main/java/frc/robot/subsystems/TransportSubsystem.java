@@ -66,7 +66,7 @@ public class TransportSubsystem extends SubsystemBase {
    */
   public boolean isGetNote() {
     if (distanceSensor.isGetTarget()) {
-      return distanceSensor.getTargetDistance() <= TransportConstants.kDistanceRange;
+      return distanceSensor.getTargetDistance() <= TransportConstants.kDistanceRange && distanceSensor.getTargetDistance() > 0;
     }
     return false;
   }

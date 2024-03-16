@@ -70,9 +70,6 @@ public class SwerveModule extends SubsystemBase {
 
   public void configDriveMotor() {
     driveMotor.setSmartCurrentLimit(10, 80);
-    driveMotor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus0, 40);
-    driveMotor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus1, 150);
-    driveMotor.setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame.kStatus2, 150);
     driveMotor.setClosedLoopRampRate(ModuleConstants.kDriveClosedLoopRampRate);
     driveMotor.setIdleMode(IdleMode.kBrake);
     driveMotor.enableVoltageCompensation(ModuleConstants.kMaxModuleDriveVoltage);
