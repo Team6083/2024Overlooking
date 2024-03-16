@@ -148,9 +148,7 @@ public final class Constants {
         public static final double kBackRightCanCoderMagOffset = -0.160156;
 
         public static final double kMaxSpeed = 5;
-        public static final double kMinSpeed = 0.25;
         public static final double kMinRot = 0.1;
-        public static final double kMinJoyStickValue = 0.35;
         public static final double kMaxAngularSpeed = 2.5 * Math.PI; // 1/2 rotation per second
 
         public static final double kXLimiterRateLimit = 5.0;

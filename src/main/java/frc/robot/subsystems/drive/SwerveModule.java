@@ -133,14 +133,10 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public void setDesiredState(SwerveModuleState desiredState) {
-    if (Math.abs(desiredState.speedMetersPerSecond) < DrivebaseConstants.kMinJoyStickValue) {
-      stopModule();
-    } else {
       var moduleState = optimizeOutputVoltage(desiredState, getRotation());
       driveMotor.setVoltage(moduleState[0]);
       turningMotor.setVoltage(moduleState[1]);
       SmartDashboard.putNumber(name + "_voltage", moduleState[0]);
-    }
   }
 
   public Command setDesiredStateCmd(SwerveModuleState state){
