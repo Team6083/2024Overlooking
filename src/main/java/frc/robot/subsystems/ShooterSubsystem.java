@@ -130,7 +130,7 @@ public class ShooterSubsystem extends SubsystemBase {
       double horizonDistance = tagTracking.getHorizontalDistanceByCT();
       double speakerToShooterHeight = RotateShooterConstants.kSpeakerHeight - RotateShooterConstants.kShooterHeight;
       double degree = Math.toDegrees(Math.atan(speakerToShooterHeight / horizonDistance));
-      return degree + 9.0 * horizonDistance / 3.6;
+      return degree + 4.0 * horizonDistance / 4.0;
     }
     return currentDegree;
   }

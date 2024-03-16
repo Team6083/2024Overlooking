@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
@@ -65,8 +66,10 @@ public class RobotContainer {
                                 shooterSubsystem.aimControlCmd()); // rate and rotate
                 NamedCommands.registerCommand("AutoTransport",
                                 transportSubsystem.transportIntakeCmd().withTimeout(0.5));
-                NamedCommands.registerCommand("AutoNote",
-                                drivebase.noteTrackingCmd().withTimeout(0.5));
+                // NamedCommands.registerCommand("AutoNote",
+                // drivebase.noteTrackingCmd().withTimeout(0.5));
+                NamedCommands.registerCommand("AutoNote", new WaitCommand(0.01));
+
                 NamedCommands.registerCommand("AutoTag",
                                 drivebase.tagTrackingCmd());
 
@@ -143,9 +146,9 @@ public class RobotContainer {
 
                 // hook
                 // mainController.rightTrigger(0.5)
-                //                 .whileTrue(hookSubsystem.upAllCmd());
+                // .whileTrue(hookSubsystem.upAllCmd());
                 // mainController.leftTrigger(0.5)
-                //                 .whileTrue(hookSubsystem.downAllCmd());
+                // .whileTrue(hookSubsystem.downAllCmd());
                 // controlPanel.button(1)
                 // .whileTrue(hookSubsystem.leftUpIndivisualCmd());
                 // controlPanel.button(2)
