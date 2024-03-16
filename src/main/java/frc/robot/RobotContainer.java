@@ -122,8 +122,11 @@ public class RobotContainer {
                 shooterSubsystem
                                 .setDefaultCommand(shooterSubsystem.setInitControlCmd());
                 mainController.b()
-                                .toggleOnTrue(shooterSubsystem.aimControlCmd()
-                                                .alongWith(new TagDriveCmd(drivebase, mainController)));
+                                .toggleOnTrue(Commands.either(
+                                                shooterSubsystem.aimControlCmd()
+                                                                .alongWith(new TagDriveCmd(drivebase, mainController)),
+                                                shooterSubsystem.carryControlCmd(),
+                                                () -> controlPanel.button(11).getAsBoolean()));
                 mainController.pov(90).toggleOnTrue(shooterSubsystem.ampControlCmd());
 
                 mainController.pov(0).whileTrue(shooterSubsystem.manualUpCmd().onlyWhile(
@@ -134,7 +137,7 @@ public class RobotContainer {
                                 .onFalse(shooterSubsystem.isManualOffCmd());
                 // tracking
                 // controlPanel.button(7)
-                                // .whileTrue(new NoteDriveCmd(drivebase, mainController));
+                // .whileTrue(new NoteDriveCmd(drivebase, mainController));
 
                 // transport
                 mainController.a()
