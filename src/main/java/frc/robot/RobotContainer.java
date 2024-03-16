@@ -19,7 +19,7 @@ import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.TimeStopIntakeCmd;
-import frc.robot.commands.driveControls.NoteDriveCmd;
+// import frc.robot.commands.driveControls.NoteDriveCmd;
 import frc.robot.commands.driveControls.SwerveJoystickCmd;
 import frc.robot.commands.driveControls.TagDriveCmd;
 import frc.robot.subsystems.HookSubsystem;
@@ -28,7 +28,7 @@ import frc.robot.subsystems.PowerDistributionSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TransportSubsystem;
 import frc.robot.subsystems.drive.Drivebase;
-import frc.robot.subsystems.visionProcessing.NoteTracking;
+// import frc.robot.subsystems.visionProcessing.NoteTracking;
 import frc.robot.subsystems.visionProcessing.TagTracking;
 
 public class RobotContainer {
@@ -41,18 +41,18 @@ public class RobotContainer {
         private final TransportSubsystem transportSubsystem;
         // private final HookSubsystem hookSubsystem;
         private final TagTracking tagTracking;
-        private final NoteTracking noteTracking;
+        // private final NoteTracking noteTracking;
         private SendableChooser<Command> autoChooser;
         // private SendableChooser<String> initialChooser;
 
         public RobotContainer() {
                 tagTracking = new TagTracking();
-                noteTracking = new NoteTracking();
+                // noteTracking = new NoteTracking();
                 // define subsystems
                 mainController = new CommandXboxController(DriveControllerConstants.kMainController);
                 controlPanel = new CommandGenericHID(DriveControllerConstants.kControlPanel);
                 powerDistributionSubsystem = new PowerDistributionSubsystem();
-                drivebase = new Drivebase(tagTracking, noteTracking);
+                drivebase = new Drivebase(tagTracking);
                 intakeSubsystem = new IntakeSubsystem(powerDistributionSubsystem);
                 shooterSubsystem = new ShooterSubsystem(tagTracking);
                 transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
@@ -133,8 +133,8 @@ public class RobotContainer {
                 controlPanel.button(10).onTrue(shooterSubsystem.isManualOnCmd())
                                 .onFalse(shooterSubsystem.isManualOffCmd());
                 // tracking
-                controlPanel.button(7)
-                                .whileTrue(new NoteDriveCmd(drivebase, mainController));
+                // controlPanel.button(7)
+                                // .whileTrue(new NoteDriveCmd(drivebase, mainController));
 
                 // transport
                 mainController.a()

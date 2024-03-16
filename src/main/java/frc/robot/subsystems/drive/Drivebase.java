@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DrivebaseConstants;
-import frc.robot.subsystems.visionProcessing.NoteTracking;
+// import frc.robot.subsystems.visionProcessing.NoteTracking;
 import frc.robot.subsystems.visionProcessing.TagTracking;
 
 public class Drivebase extends SubsystemBase {
@@ -45,7 +45,7 @@ public class Drivebase extends SubsystemBase {
   private final SwerveDriveOdometry odometry;
 
   private final TagTracking tagTracking;
-  private final NoteTracking noteTracking;
+  // private final NoteTracking noteTracking;
 
   private final PIDController trackingPID;
 
@@ -58,9 +58,9 @@ public class Drivebase extends SubsystemBase {
 
   private SwerveModuleState[] swerveModuleStates = new SwerveModuleState[4];
 
-  public Drivebase(TagTracking tagTracking, NoteTracking noteTracking) {
+  public Drivebase(TagTracking tagTracking) {
     this.tagTracking = tagTracking;
-    this.noteTracking = noteTracking;
+    // this.noteTracking = noteTracking;
     frontLeftLocation = new Translation2d(0.3, 0.3);
     frontRightLocation = new Translation2d(0.3, -0.3);
     backLeftLocation = new Translation2d(-0.3, 0.3);
@@ -210,13 +210,13 @@ public class Drivebase extends SubsystemBase {
     return currentRot;
   }
 
-  public double getFacingNoteRot(double currentRot) {
-    if (noteTracking.getTx().size() != 0) {
-      double yaw = noteTracking.getTx().get(0);
-      return -trackingPID.calculate(yaw, 0);
-    }
-    return currentRot;
-  }
+  // public double getFacingNoteRot(double currentRot) {
+  //   if (noteTracking.getTx().size() != 0) {
+  //     double yaw = noteTracking.getTx().get(0);
+  //     return -trackingPID.calculate(yaw, 0);
+  //   }
+  //   return currentRot;
+  // }
 
   public void tagTracking(double xSpeed, double ySpeed, double rot) {
     double robotRot = -getFacingTagRot(rot);
@@ -226,27 +226,27 @@ public class Drivebase extends SubsystemBase {
     drive(xSpeed, ySpeed, robotRot, true);
   }
 
-  public void noteTracking(double xSpeed, double ySpeed, double rot) {
-    double robotRot = rot;
-    if (noteTracking.getTx().size() != 0) {
-      double yaw = noteTracking.getTx().indexOf(0.0);
-      robotRot = -trackingPID.calculate(yaw, 0);
-    }
-    if (Math.abs(rot) > DrivebaseConstants.kMinRot) {
-      robotRot = rot;
-    }
-    drive(xSpeed, ySpeed, robotRot, true);
-  }
+  // public void noteTracking(double xSpeed, double ySpeed, double rot) {
+  //   double robotRot = rot;
+  //   if (noteTracking.getTx().size() != 0) {
+  //     double yaw = noteTracking.getTx().indexOf(0.0);
+  //     robotRot = -trackingPID.calculate(yaw, 0);
+  //   }
+  //   if (Math.abs(rot) > DrivebaseConstants.kMinRot) {
+  //     robotRot = rot;
+  //   }
+  //   drive(xSpeed, ySpeed, robotRot, true);
+  // }
 
   public Command tagTrackingCmd(){
     Command cmd = runEnd(()->tagTracking(0, 0, 0), ()->drive(0, 0, 0, false));
     return cmd;
   }
 
-  public Command noteTrackingCmd(){
-    Command cmd = runEnd(()->noteTracking(0, 0, 0), ()->drive(0, 0, 0, false));
-    return cmd;
-  }
+  // public Command noteTrackingCmd(){
+  //   Command cmd = runEnd(()->noteTracking(0, 0, 0), ()->drive(0, 0, 0, false));
+  //   return cmd;
+  // }
 
   public void setMagnification(double magnification) {
     this.magnification = magnification;
