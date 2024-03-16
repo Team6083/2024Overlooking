@@ -276,17 +276,17 @@ public final class Constants {
         public static final String topRelayToLTS = "topRelayToLTS";
         public static final String topRelayToRTS = "topRelayToRTS";
 
-        public static final double kPTranslation = 2.0;
+        public static final double kPTranslation = 4.0;
         public static final double kITranslation = 0.001;
         public static final double kDTranslation = 0.01;
         public static final double kPRotation = 2.0;
         public static final double kIRotation = 0.001;
         public static final double kDRotation = 0.01;
         public static final double kMaxModuleSpeed = 5.0;
-        public static final double kDrivebaseRadius = 2.17;
+        public static final double kDrivebaseRadius = 0.282575;
 
         public static final double kMaxVelocity = 3.35;
-        public static final double kMaxAcceleration = 6.70;
+        public static final double kMaxAcceleration = 9.67;
         public static final double kMaxAngularVelocity = 453.38;
         public static final double kMaxAngularAcceleration = 906.76;
         public static final double kRotationDelayDistance = 0.0;
