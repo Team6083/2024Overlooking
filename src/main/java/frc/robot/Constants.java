@@ -72,8 +72,8 @@ public final class Constants {
     public static class TransportConstants {
         public static final int kTransportChannel = 22;
         public static final boolean kTransportInverted = true;
-        public static final double kTransVoltage = 5;
-        public static final double kReTransVoltage = -5;
+        public static final double kTransVoltage = 4.5;
+        public static final double kReTransVoltage = -4.5;
         public static final double kDistanceRange = 3.0;
     }
 
@@ -85,7 +85,7 @@ public final class Constants {
         public static final Boolean kRotateIntakeInverted = false;
         public static final Boolean kRotateEncoderInverted = false;
         public static final double kRotateOffset = 105;
-        public static final double kIntakeVoltage = 7.0;
+        public static final double kIntakeVoltage = 6.3;
         public static final double kThrowVoltage = -4.0;
         public static final double kRotateVoltage = 12.0;
         public static final double kStopTime = 2.52;

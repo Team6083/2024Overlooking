@@ -153,10 +153,12 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void aimControl(Supplier<Double> manualOffsetSupplier) {
+    var calculatedSetpoint = getSpeakerDegree(getSetpoint());
     if (manualOffsetSupplier != null) {
-      setSetpoint(getSpeakerDegree(getSetpoint())+manualOffsetSupplier.get());
+      calculatedSetpoint += manualOffsetSupplier.get();
     }
-    setSetpoint(getSpeakerDegree(getSetpoint()));
+
+    setSetpoint(calculatedSetpoint);
     double upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
     double downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
@@ -392,7 +394,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public Command aimControlCmd(Supplier<Double> joystickManualOffsetSupplier) {
-    Command cmd = runEnd(()->aimControl(joystickManualOffsetSupplier), this::stopAllMotor);
+    Command cmd = runEnd(() -> aimControl(joystickManualOffsetSupplier), this::stopAllMotor);
     return cmd;
   }
 
