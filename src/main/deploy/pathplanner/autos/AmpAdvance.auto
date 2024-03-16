@@ -98,7 +98,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.5
+                        "waitTime": 0.6
                       }
                     },
                     {
@@ -129,12 +129,6 @@
           "type": "path",
           "data": {
             "pathName": "ampAdvance4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoNote"
           }
         },
         {
@@ -173,7 +167,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.5
+                        "waitTime": 0.6
                       }
                     },
                     {
@@ -198,6 +192,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ampAdvance7"
           }
         }
       ]

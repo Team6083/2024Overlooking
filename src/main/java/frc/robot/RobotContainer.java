@@ -65,7 +65,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand("AutoAimControl",
                                 shooterSubsystem.aimControlCmd()); // rate and rotate
                 NamedCommands.registerCommand("AutoTransport",
-                                transportSubsystem.transportIntakeCmd().withTimeout(0.5));
+                                transportSubsystem.transportIntakeCmd().withTimeout(0.6));
                 // NamedCommands.registerCommand("AutoNote",
                 // drivebase.noteTrackingCmd().withTimeout(0.5));
                 NamedCommands.registerCommand("AutoNote", new WaitCommand(0.01));
@@ -134,7 +134,7 @@ public class RobotContainer {
                                 .onFalse(shooterSubsystem.isManualOffCmd());
                 // tracking
                 // controlPanel.button(7)
-                                // .whileTrue(new NoteDriveCmd(drivebase, mainController));
+                // .whileTrue(new NoteDriveCmd(drivebase, mainController));
 
                 // transport
                 mainController.a()
