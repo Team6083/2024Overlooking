@@ -96,6 +96,7 @@ public class ShooterSubsystem extends SubsystemBase {
     if (hasExceedPhysicalLimit(currentSetpoint) != 0) {
       return;
     }
+    rotatePID.reset();
     double rotateDegree = setpoint + rotateDegreeError;
     if (hasExceedPhysicalLimit(rotateDegree) == -1) {
       rotateDegree = RotateShooterConstants.kRotateAngleMin;
@@ -130,7 +131,7 @@ public class ShooterSubsystem extends SubsystemBase {
       double horizonDistance = tagTracking.getHorizontalDistanceByCT();
       double speakerToShooterHeight = RotateShooterConstants.kSpeakerHeight - RotateShooterConstants.kShooterHeight;
       double degree = Math.toDegrees(Math.atan(speakerToShooterHeight / horizonDistance));
-      return degree + 4.0 * horizonDistance / 4.0;
+      return degree + 9.0 * horizonDistance / 3.6;
     }
     return currentDegree;
   }
