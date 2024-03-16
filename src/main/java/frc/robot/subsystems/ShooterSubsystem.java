@@ -157,7 +157,6 @@ public class ShooterSubsystem extends SubsystemBase {
     if (manualOffsetSupplier != null) {
       calculatedSetpoint += manualOffsetSupplier.get();
     }
-
     setSetpoint(calculatedSetpoint);
     double upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
     double downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
