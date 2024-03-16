@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.513940720189134,
-        "y": 1.8352513628104188
+        "x": 2.0,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.362947187432837,
-        "y": 1.4701744788104976
+        "x": 2.596764424298081,
+        "y": 7.044997166917411
       },
       "isLocked": false,
-      "linkedName": "BottomRelay"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 3.0
+        "x": 2.5,
+        "y": 6.5
       },
       "prevControl": {
-        "x": 2.843437994568298,
-        "y": 1.7760497059455664
+        "x": 2.3914636290811044,
+        "y": 6.766407455891835
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "LeftBottomShoot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,17 +33,17 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.35,
-    "maxAcceleration": 9.67,
+    "maxAcceleration": 6.7,
     "maxAngularVelocity": 453.38,
-    "maxAngularAcceleration": 1292.82
+    "maxAngularAcceleration": 906.76
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -52.25,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Relay To Shoot Point",
+  "folder": "Test",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

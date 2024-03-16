@@ -3,18 +3,9 @@
   "robotLength": 0.68,
   "holonomicMode": true,
   "pathFolders": [
-    "AmpAndAmp",
     "AmpAndAmpB",
-    "LBSToNote",
-    "LTSToNote",
-    "LeftAndLeft(failed)",
-    "MiddleAndMiddle",
     "MiddleAndMiddleB",
     "MiddleFour",
-    "RBSToNote",
-    "RTSToNote",
-    "Relay To Shoot Point",
-    "SourceAndSource",
     "SourceAndSourceB",
     "Test"
   ],
@@ -22,8 +13,8 @@
     "Test"
   ],
   "defaultMaxVel": 3.35,
-  "defaultMaxAccel": 9.67,
+  "defaultMaxAccel": 6.7,
   "defaultMaxAngVel": 453.38,
-  "defaultMaxAngAccel": 1292.82,
-  "maxModuleSpeed": 3.35
+  "defaultMaxAngAccel": 906.76,
+  "maxModuleSpeed": 5.0
 }

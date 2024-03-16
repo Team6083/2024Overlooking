@@ -130,7 +130,7 @@ public class ShooterSubsystem extends SubsystemBase {
       double horizonDistance = tagTracking.getHorizontalDistanceByCT();
       double speakerToShooterHeight = RotateShooterConstants.kSpeakerHeight - RotateShooterConstants.kShooterHeight;
       double degree = Math.toDegrees(Math.atan(speakerToShooterHeight / horizonDistance));
-      return degree + 9.0 * horizonDistance / 2.9;
+      return degree + 9.0 * horizonDistance / 3.6;
     }
     return currentDegree;
   }
@@ -178,7 +178,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void ampControl() {
-    setSetpoint(RotateShooterConstants.kInitDegree);
+    setSetpoint(50.0);
     double upGoalRate = ShooterConstants.kAmpShooterRate[0];
     double downGoalRate = ShooterConstants.kAmpShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
