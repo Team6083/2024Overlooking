@@ -63,7 +63,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand("AutoIntakeWithTransport",
                                 new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
                 NamedCommands.registerCommand("AutoAimControl",
-                                shooterSubsystem.aimControlCmd()); // rate and rotate
+                                shooterSubsystem.aimControlCmd(null)); // rate and rotate
                 NamedCommands.registerCommand("AutoTransport",
                                 transportSubsystem.transportIntakeCmd().withTimeout(0.6));
                 // NamedCommands.registerCommand("AutoNote",
@@ -122,7 +122,8 @@ public class RobotContainer {
                 shooterSubsystem
                                 .setDefaultCommand(shooterSubsystem.setInitControlCmd());
                 mainController.b()
-                                .toggleOnTrue(shooterSubsystem.aimControlCmd()
+                                .toggleOnTrue(shooterSubsystem.aimControlCmd(
+                                                () -> controlPanel.getRawAxis(4))
                                                 .alongWith(new TagDriveCmd(drivebase, mainController)));
                 mainController.pov(90).toggleOnTrue(shooterSubsystem.ampControlCmd());
 

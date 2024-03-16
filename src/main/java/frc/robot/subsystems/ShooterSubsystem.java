@@ -152,7 +152,10 @@ public class ShooterSubsystem extends SubsystemBase {
     downShooterEncoder.reset();
   }
 
-  public void aimControl() {
+  public void aimControl(Supplier<Double> manualOffsetSupplier) {
+    if (manualOffsetSupplier != null) {
+      setSetpoint(getSpeakerDegree(getSetpoint())+manualOffsetSupplier.get());
+    }
     setSetpoint(getSpeakerDegree(getSetpoint()));
     double upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
     double downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
@@ -388,8 +391,8 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("rotateSetpoint", setPoint);
   }
 
-  public Command aimControlCmd() {
-    Command cmd = runEnd(this::aimControl, this::stopAllMotor);
+  public Command aimControlCmd(Supplier<Double> joystickManualOffsetSupplier) {
+    Command cmd = runEnd(()->aimControl(joystickManualOffsetSupplier), this::stopAllMotor);
     return cmd;
   }
 

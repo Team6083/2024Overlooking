@@ -34,9 +34,21 @@ public class SwerveJoystickCmd extends Command {
   @Override
   public void execute() {
     magnification = drivebase.getMagnification();
-    xSpeed = -xLimiter.calculate(main.getLeftY()) * drivebaseMaxSpeed * magnification; // forward
-    ySpeed = -yLimiter.calculate(main.getLeftX()) * drivebaseMaxSpeed * magnification; // side
-    rotSpeed = -rotLimiter.calculate(main.getRightX()) * drivebaseMaxSpeed;
+    if(main.getLeftY()>0.1){
+      xSpeed = -xLimiter.calculate(main.getLeftY()) * drivebaseMaxSpeed * magnification;
+    }else{
+      xSpeed = 0;
+    }
+    if(main.getLeftX()>0.1){
+       ySpeed = -yLimiter.calculate(main.getLeftX()) * drivebaseMaxSpeed * magnification;
+    }else{
+      ySpeed = 0;
+    }
+    if(main.getRightX()>0.1){
+      rotSpeed = -rotLimiter.calculate(main.getRightX()) * drivebaseMaxSpeed;
+    }else{
+      rotSpeed = 0;
+    }
     drivebase.drive(xSpeed, ySpeed, rotSpeed, true);
   }
 
