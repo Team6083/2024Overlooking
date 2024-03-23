@@ -65,7 +65,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // rotate shooter
     rotateMotor = new CANSparkMax(RotateShooterConstants.kRotateShooterChannel, MotorType.kBrushless);
     rotateMotor.setInverted(RotateShooterConstants.kRotateShooterInverted);
-    rotateEncoder = new DutyCycleEncoder(RotateShooterConstants.kEncoderChannel);
+    rotateEncoder = new DutyCycleEncoder(RotateShooterConstants.kRotateEncoderChannel);
     rotatePID = new PIDController(RotateShooterConstants.kP, RotateShooterConstants.kI, RotateShooterConstants.kD);
     this.tagTracking = tagTracking;
     rotatePID.setSetpoint(RotateShooterConstants.kInitDegree);
