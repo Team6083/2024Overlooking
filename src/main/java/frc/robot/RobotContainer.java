@@ -124,7 +124,7 @@ public class RobotContainer {
                                                 shooterSubsystem.manualControlCmd(
                                                                 () -> mainController.getHID().getPOV()),
                                                 shooterSubsystem.initControlCmd(),
-                                                () -> controlPanel.button(10).getAsBoolean()));
+                                                () -> controlPanel.button(12).getAsBoolean()));
                 mainController.b()
                                 .toggleOnTrue(Commands.either(
                                                 shooterSubsystem.speakerControlCmd(() -> controlPanel.getRawAxis(4))
