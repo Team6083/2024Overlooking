@@ -37,7 +37,6 @@ public class ShooterSubsystem extends SubsystemBase {
   private final CANSparkMax rotateMotor;
   private final DutyCycleEncoder rotateEncoder;
   private final PIDController rotatePID;
-  private double manualDegree = -1000;
 
   public ShooterSubsystem(TagTracking tagTracking) {
     // shooter
@@ -109,10 +108,6 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private void setSetpoint(double setpoint) {
-    if (manualDegree != -1000.0) {
-      rotatePID.setSetpoint(manualDegree);
-      return;
-    }
     double currentSetpoint = getSetpoint();
     if (hasExceedPhysicalLimit(currentSetpoint) != 0) {
       return;
@@ -173,9 +168,11 @@ public class ShooterSubsystem extends SubsystemBase {
     downShooterEncoder.reset();
   }
 
-  private void speakerControl(Supplier<Double> manualOffsetSupplier) {
-    var calculatedSetpoint = getSpeakerDegree(getSetpoint());
-    setSetpoint(calculatedSetpoint);
+  private void speakerControl(Supplier<Double> manualOffsetSupplier, Supplier<Boolean> isManualSetpointSupplier) {
+    if (isManualSetpointSupplier.get() == null && !isManualSetpointSupplier.get()) {
+      var calculatedSetpoint = getSpeakerDegree(getSetpoint());
+      setSetpoint(calculatedSetpoint);
+    }
     double upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
     double downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
@@ -187,8 +184,10 @@ public class ShooterSubsystem extends SubsystemBase {
     setShootMode(1);
   }
 
-  private void carryControl() {
-    setSetpoint(RotateShooterConstants.kCarryDegree);
+  private void carryControl(Supplier<Boolean> isManualSetpointSupplier) {
+    if (isManualSetpointSupplier.get() == null || !isManualSetpointSupplier.get()) {
+      setSetpoint(RotateShooterConstants.kCarryDegree);
+    }
     double upGoalRate = ShooterConstants.kCarryShooterRate[0];
     double downGoalRate = ShooterConstants.kCarryShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
@@ -200,8 +199,10 @@ public class ShooterSubsystem extends SubsystemBase {
     setShootMode(2);
   }
 
-  private void ampControl() {
-    setSetpoint(RotateShooterConstants.kAmpDegree);
+  private void ampControl(Supplier<Boolean> isManualSetpointSupplier) {
+    if (isManualSetpointSupplier.get() == null || !isManualSetpointSupplier.get()) {
+      setSetpoint(RotateShooterConstants.kAmpDegree);
+    }
     double upGoalRate = ShooterConstants.kAmpShooterRate[0];
     double downGoalRate = ShooterConstants.kAmpShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
@@ -215,18 +216,17 @@ public class ShooterSubsystem extends SubsystemBase {
     setShootMode(3);
   }
 
-  private void manualControl(Supplier<Integer> inverted) {
-    if (inverted.get() == null) {
+  private void manualControl(Supplier<Integer> manualMode) {
+    if (manualMode.get() == null) {
       return;
     }
-    setRotateMotor(inverted.get() == 0 ? RotateShooterConstants.kManualVoltage
-        : (inverted.get() == 180 ? -RotateShooterConstants.kManualVoltage : 0));
-    manualDegree = getAngle();
-    setSetpoint(manualDegree);
+    setRotateMotor(manualMode.get() == 0 ? RotateShooterConstants.kManualVoltage
+        : (manualMode.get() == 180 ? -RotateShooterConstants.kManualVoltage : 0));
+    rotatePID.setSetpoint(getAngle());
   }
 
-  public Command manualControlCmd(Supplier<Integer> inverted) {
-    Command cmd = run(() -> manualControl(inverted));
+  public Command manualControlCmd(Supplier<Integer> manualMode) {
+    Command cmd = run(() -> manualControl(manualMode));
     cmd.setName("ManualControlCmd");
     return cmd;
   }
@@ -353,20 +353,22 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("rotateDownMotorVoltage", downShooterMotor.getMotorOutputVoltage());
   }
 
-  public Command speakerControlCmd(Supplier<Double> joystickManualOffsetSupplier) {
-    Command cmd = runEnd(() -> speakerControl(joystickManualOffsetSupplier), this::stopAllMotor);
+  public Command speakerControlCmd(Supplier<Double> joystickManualOffsetSupplier,
+      Supplier<Boolean> isManualSetpointSupplier) {
+    Command cmd = runEnd(() -> speakerControl(joystickManualOffsetSupplier, isManualSetpointSupplier),
+        this::stopAllMotor);
     cmd.setName("SpeakerControlCmd");
     return cmd;
   }
 
-  public Command carryControlCmd() {
-    Command cmd = runEnd(this::carryControl, this::stopAllMotor);
+  public Command carryControlCmd(Supplier<Boolean> isManualSetpointSupplier) {
+    Command cmd = runEnd(() -> carryControl(isManualSetpointSupplier), this::stopAllMotor);
     cmd.setName("CarryControlCmd");
     return cmd;
   }
 
-  public Command ampControlCmd() {
-    Command cmd = runEnd(this::ampControl, this::stopAllMotor);
+  public Command ampControlCmd(Supplier<Boolean> isManualSetpointSupplier) {
+    Command cmd = runEnd(() -> ampControl(isManualSetpointSupplier), this::stopAllMotor);
     cmd.setName("AmpControlCmd");
     return cmd;
   }
