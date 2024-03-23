@@ -120,7 +120,11 @@ public class RobotContainer {
                                 .whileTrue(intakeSubsystem.setDownIntakeCmd());
 
                 shooterSubsystem
-                                .setDefaultCommand(Commands.either(shooterSubsystem.manualControlCmd(false), shooterSubsystem.initControlCmd(), ()->controlPanel.button(10).getAsBoolean()));
+                                .setDefaultCommand(Commands.either(
+                                                shooterSubsystem.manualControlCmd(
+                                                                () -> mainController.getHID().getPOV()),
+                                                shooterSubsystem.initControlCmd(),
+                                                () -> controlPanel.button(10).getAsBoolean()));
                 mainController.b()
                                 .toggleOnTrue(Commands.either(
                                                 shooterSubsystem.speakerControlCmd(() -> controlPanel.getRawAxis(4))

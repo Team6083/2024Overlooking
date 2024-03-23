@@ -215,24 +215,28 @@ public class ShooterSubsystem extends SubsystemBase {
     setShootMode(3);
   }
 
-  private void manualControl(boolean inverted) {
-    setRotateMotor(inverted ? RotateShooterConstants.kManualVoltage : -RotateShooterConstants.kManualVoltage);
+  private void manualControl(Supplier<Integer> inverted) {
+    if (inverted.get() == null) {
+      return;
+    }
+    setRotateMotor(inverted.get() == 0 ? RotateShooterConstants.kManualVoltage
+        : (inverted.get() == 180 ? -RotateShooterConstants.kManualVoltage : 0));
     manualDegree = getAngle();
     setSetpoint(manualDegree);
   }
 
-  public Command manualControlCmd(boolean inverted) {
+  public Command manualControlCmd(Supplier<Integer> inverted) {
     Command cmd = run(() -> manualControl(inverted));
     cmd.setName("ManualControlCmd");
     return cmd;
   }
 
-  private void setInitControl() {
+  private void initControl() {
     setSetpoint(RotateShooterConstants.kInitDegree);
   }
 
   public Command initControlCmd() {
-    Command cmd = run(this::setInitControl);
+    Command cmd = run(this::initControl);
     cmd.setName("InitControlCmd");
     return cmd;
   }
