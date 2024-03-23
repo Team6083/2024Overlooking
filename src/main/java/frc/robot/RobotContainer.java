@@ -63,7 +63,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand("AutoIntakeWithTransport",
                                 new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
                 NamedCommands.registerCommand("AutoAimControl",
-                                shooterSubsystem.aimControlCmd(null)); // rate and rotate
+                                shooterSubsystem.speakerControlCmd(null)); // rate and rotate
                 NamedCommands.registerCommand("AutoTransport",
                                 transportSubsystem.transportIntakeCmd().withTimeout(0.6));
                 // NamedCommands.registerCommand("AutoNote",
@@ -120,10 +120,10 @@ public class RobotContainer {
                                 .whileTrue(intakeSubsystem.setDownIntakeCmd());
 
                 shooterSubsystem
-                                .setDefaultCommand(shooterSubsystem.setInitControlCmd());
+                                .setDefaultCommand(Commands.either(shooterSubsystem.manualControlCmd(false), shooterSubsystem.initControlCmd(), ()->controlPanel.button(10).getAsBoolean()));
                 mainController.b()
                                 .toggleOnTrue(Commands.either(
-                                                shooterSubsystem.aimControlCmd(() -> controlPanel.getRawAxis(4))
+                                                shooterSubsystem.speakerControlCmd(() -> controlPanel.getRawAxis(4))
                                                                 .alongWith(new TagDriveCmd(drivebase, mainController)),
                                                 shooterSubsystem.carryControlCmd(),
                                                 () -> controlPanel.button(11).getAsBoolean()));
