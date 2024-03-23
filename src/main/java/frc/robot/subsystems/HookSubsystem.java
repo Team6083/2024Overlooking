@@ -47,7 +47,6 @@ public class HookSubsystem extends SubsystemBase {
     rightMotor.setInverted(HookConstants.kRightMotorInverted);
     lineMotor.setInverted(HookConstants.kLineMotorInverted);
     this.powerDistributionSubsystem = powerDistributionSubsystem;
-
     resetEncoder();
   }
 
@@ -143,11 +142,11 @@ public class HookSubsystem extends SubsystemBase {
   }
 
   public double getLeftPosition() {
-    return (-leftEncoder.getDistance() * 360);
+    return leftEncoder.getDistance();
   }
 
   public double getRightPosition() {
-    return (rightEncoder.getDistance()* 360);
+    return rightEncoder.getDistance();
   }
 
   private double getLeftMotorBusVoltage() {

@@ -54,6 +54,7 @@ public final class Constants {
         public static final int kEncoderChannel = 2;
         public static final double kInitDegree = 58.0;
         public static final double kCarryDegree = 20.0;
+        public static final double kAmpDegree = 50.0;
         public static final double kManualVoltage = 4.0;
         public static final double kRotateVoltLimit = 5.0;
         public static final double kRotateAngleMin = 20.0;

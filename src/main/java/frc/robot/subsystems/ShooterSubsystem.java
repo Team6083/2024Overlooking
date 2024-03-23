@@ -34,12 +34,10 @@ public class ShooterSubsystem extends SubsystemBase {
   private int shootMode = 1;
   // rotate shooter
   private final TagTracking tagTracking;
-  private boolean isManual;
   private final CANSparkMax rotateMotor;
   private final DutyCycleEncoder rotateEncoder;
   private final PIDController rotatePID;
-  private double rotateDegreeError = 0.0;
-  private double setPoint = RotateShooterConstants.kInitDegree;
+  private double manualDegree = -1000;
 
   public ShooterSubsystem(TagTracking tagTracking) {
     // shooter
@@ -70,8 +68,7 @@ public class ShooterSubsystem extends SubsystemBase {
     rotateEncoder = new DutyCycleEncoder(RotateShooterConstants.kEncoderChannel);
     rotatePID = new PIDController(RotateShooterConstants.kP, RotateShooterConstants.kI, RotateShooterConstants.kD);
     this.tagTracking = tagTracking;
-    rotatePID.enableContinuousInput(-180.0, 180.0);
-    rotatePID.setSetpoint(setPoint);
+    rotatePID.setSetpoint(RotateShooterConstants.kInitDegree);
   }
 
   public void stopRotateMotor() {
@@ -80,6 +77,26 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setRotateMotor(double voltage) {
     rotateMotor.setVoltage(voltage);
+  }
+
+    /**
+   * Set up motor voltage to a specific rate, so the speed won't be affected by
+   * the busvoltage now.
+   * 
+   * @param voltage
+   */
+  private void setUpMotorVoltage(double voltage) {
+    setUpMotor(voltage / getUpMotorBusVoltage());
+  }
+
+  /**
+   * Set down motor voltage to a specific rate, so the speed won't be affected by
+   * the busvoltage now.
+   * 
+   * @param voltage
+   */
+  private void setDownMotorVoltage(double voltage) {
+    setDownMotor(voltage / getDownMotorBusVoltage());
   }
 
   private int hasExceedPhysicalLimit(double angle) {
@@ -92,12 +109,16 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setSetpoint(double setpoint) {
+    if(manualDegree!=-1000.0){
+      rotatePID.setSetpoint(manualDegree); 
+      return;
+    }
     double currentSetpoint = getSetpoint();
     if (hasExceedPhysicalLimit(currentSetpoint) != 0) {
       return;
     }
     rotatePID.reset();
-    double rotateDegree = setpoint + rotateDegreeError;
+    double rotateDegree = setpoint;
     if (hasExceedPhysicalLimit(rotateDegree) == -1) {
       rotateDegree = RotateShooterConstants.kRotateAngleMin;
     } else if (hasExceedPhysicalLimit(rotateDegree) == 1) {
@@ -154,9 +175,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void aimControl(Supplier<Double> manualOffsetSupplier) {
     var calculatedSetpoint = getSpeakerDegree(getSetpoint());
-    // if (manualOffsetSupplier != null) {
-    //   calculatedSetpoint += manualOffsetSupplier.get();
-    // }
     setSetpoint(calculatedSetpoint);
     double upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
     double downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
@@ -183,7 +201,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void ampControl() {
-    setSetpoint(50.0);
+    setSetpoint(RotateShooterConstants.kAmpDegree);
     double upGoalRate = ShooterConstants.kAmpShooterRate[0];
     double downGoalRate = ShooterConstants.kAmpShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
@@ -195,6 +213,12 @@ public class ShooterSubsystem extends SubsystemBase {
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
     setShootMode(3);
+  }
+
+  public void manualControl(boolean inverted){
+    setRotateMotor(inverted?RotateShooterConstants.kManualVoltage:-RotateShooterConstants.kManualVoltage);
+    manualDegree = getAngle();
+    setSetpoint(manualDegree);
   }
 
   private void setInitControl() {
@@ -224,25 +248,7 @@ public class ShooterSubsystem extends SubsystemBase {
     return downShooterEncoder.getRate() / 2048.0;
   }
 
-  /**
-   * Set up motor voltage to a specific rate, so the speed won't be affected by
-   * the busvoltage now.
-   * 
-   * @param voltage
-   */
-  private void setUpMotorVoltage(double voltage) {
-    setUpMotor(voltage / getUpMotorBusVoltage());
-  }
 
-  /**
-   * Set down motor voltage to a specific rate, so the speed won't be affected by
-   * the busvoltage now.
-   * 
-   * @param voltage
-   */
-  private void setDownMotorVoltage(double voltage) {
-    setDownMotor(voltage / getDownMotorBusVoltage());
-  }
 
   /**
    * Get up motor bus voltage.
@@ -316,52 +322,6 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
 
-  private void isManualOn() {
-    isManual = true;
-  }
-
-  private void isManualOff() {
-    isManual = false;
-  }
-
-  public Command isManualOnCmd() {
-    Command cmd = runOnce(this::isManualOn);
-    setName("isManualOnCmd");
-    return cmd;
-  }
-
-  public Command isManualOffCmd() {
-    Command cmd = runOnce(this::isManualOff);
-    setName("isManualOffCmd");
-    return cmd;
-  }
-
-  public boolean getIsManual() {
-    return isManual;
-  }
-
-  private void manualUp() {
-    setRotateMotor(ShooterConstants.kManualUpVoltage);
-    rotatePID.setSetpoint(getAngle());
-  }
-
-  private void manualDown() {
-    setRotateMotor(ShooterConstants.kManualDownVoltage);
-    rotatePID.setSetpoint(getAngle());
-  }
-
-  public Command manualUpCmd() {
-    Command cmd = runEnd(this::manualUp, this::stopRotateMotor);
-    setName("manualUpCmd");
-    return cmd;
-  }
-
-  public Command manualDownCmd() {
-    Command cmd = runEnd(this::manualDown, this::stopRotateMotor);
-    setName("manualDownCmd");
-    return cmd;
-  }
-
   /**
    * Set shooter rate mode.
    * 
@@ -371,25 +331,17 @@ public class ShooterSubsystem extends SubsystemBase {
     shootMode = mode;
   }
 
-  public void isManual() {
-    isManual = true;
-  }
-
   @Override
   public void periodic() {
-    if (!isManual) {
-      setPIDControl();
-    }
-    SmartDashboard.putNumber("shooterUpEncoderRate", getUpEncoderRate());
-    SmartDashboard.putNumber("shooterDownEncoderRate", getDownEncoderRate());
-    SmartDashboard.putBoolean("shooterIsEnoughRate", isEnoughRate());
-    SmartDashboard.putNumber("shooterRateMode", shootMode);
-
+    setPIDControl();
+    SmartDashboard.putNumber("shootingUpMotorRate", getUpEncoderRate());
+    SmartDashboard.putNumber("shootingDownMotorRate", getDownEncoderRate());
+    SmartDashboard.putBoolean("shootingIsEnoughRate", isEnoughRate());
+    SmartDashboard.putNumber("shootingRateMode", shootMode);
     SmartDashboard.putData(rotatePID);
-    SmartDashboard.putNumber("rotateEncoderDegree", getAngle());
+    SmartDashboard.putNumber("rotateDegree", getAngle());
     SmartDashboard.putNumber("rotateUpMotorVoltage", upShooterMotor.getMotorOutputVoltage());
     SmartDashboard.putNumber("rotateDownMotorVoltage", downShooterMotor.getMotorOutputVoltage());
-    SmartDashboard.putNumber("rotateSetpoint", setPoint);
   }
 
   public Command aimControlCmd(Supplier<Double> joystickManualOffsetSupplier) {

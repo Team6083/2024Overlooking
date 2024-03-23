@@ -179,7 +179,6 @@ public class Drivebase extends SubsystemBase {
    *                      using the wpi function to set the speed of the swerve
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-
     swerveModuleStates = kinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
@@ -211,11 +210,11 @@ public class Drivebase extends SubsystemBase {
   }
 
   // public double getFacingNoteRot(double currentRot) {
-  //   if (noteTracking.getTx().size() != 0) {
-  //     double yaw = noteTracking.getTx().get(0);
-  //     return -trackingPID.calculate(yaw, 0);
-  //   }
-  //   return currentRot;
+  // if (noteTracking.getTx().size() != 0) {
+  // double yaw = noteTracking.getTx().get(0);
+  // return -trackingPID.calculate(yaw, 0);
+  // }
+  // return currentRot;
   // }
 
   public void tagTracking(double xSpeed, double ySpeed, double rot) {
@@ -227,25 +226,25 @@ public class Drivebase extends SubsystemBase {
   }
 
   // public void noteTracking(double xSpeed, double ySpeed, double rot) {
-  //   double robotRot = rot;
-  //   if (noteTracking.getTx().size() != 0) {
-  //     double yaw = noteTracking.getTx().indexOf(0.0);
-  //     robotRot = -trackingPID.calculate(yaw, 0);
-  //   }
-  //   if (Math.abs(rot) > DrivebaseConstants.kMinRot) {
-  //     robotRot = rot;
-  //   }
-  //   drive(xSpeed, ySpeed, robotRot, true);
+  // double robotRot = rot;
+  // if (noteTracking.getTx().size() != 0) {
+  // double yaw = noteTracking.getTx().indexOf(0.0);
+  // robotRot = -trackingPID.calculate(yaw, 0);
+  // }
+  // if (Math.abs(rot) > DrivebaseConstants.kMinRot) {
+  // robotRot = rot;
+  // }
+  // drive(xSpeed, ySpeed, robotRot, true);
   // }
 
-  public Command tagTrackingCmd(){
-    Command cmd = runEnd(()->tagTracking(0, 0, 0), ()->drive(0, 0, 0, false));
+  public Command tagTrackingCmd() {
+    Command cmd = runEnd(() -> tagTracking(0, 0, 0), () -> drive(0, 0, 0, false));
     return cmd;
   }
 
   // public Command noteTrackingCmd(){
-  //   Command cmd = runEnd(()->noteTracking(0, 0, 0), ()->drive(0, 0, 0, false));
-  //   return cmd;
+  // Command cmd = runEnd(()->noteTracking(0, 0, 0), ()->drive(0, 0, 0, false));
+  // return cmd;
   // }
 
   public void setMagnification(double magnification) {

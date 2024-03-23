@@ -19,7 +19,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.Constants.ModuleConstants;
 
 public class SwerveModule extends SubsystemBase {
@@ -32,6 +31,7 @@ public class SwerveModule extends SubsystemBase {
 
   private final RelativeEncoder driveEncoder;
 
+  private final PIDController driveController;
   private final PIDController rotController;
 
   private final String name;
@@ -53,7 +53,8 @@ public class SwerveModule extends SubsystemBase {
     turningEncoder.getConfigurator().apply(turningEncoderConfiguration);
 
     driveEncoder = driveMotor.getEncoder();
-
+    
+    driveController = new PIDController(1, 0, 0);
     rotController = new PIDController(ModuleConstants.kPRotationController, ModuleConstants.kIRotationController,
         ModuleConstants.kDRotationController);
     rotController.enableContinuousInput(-180.0, 180.0);
@@ -127,6 +128,7 @@ public class SwerveModule extends SubsystemBase {
   public double[] optimizeOutputVoltage(SwerveModuleState goalState, double currentTurningDegree) {
     goalState = SwerveModuleState.optimize(goalState, Rotation2d.fromDegrees(currentTurningDegree));
     double driveMotorVoltage = ModuleConstants.kDesireSpeedtoMotorVoltage * goalState.speedMetersPerSecond;
+    double testDriveMotorVoltage = driveController.calculate(getDriveRate(), goalState.speedMetersPerSecond);
     double turningMotorVoltage = rotController.calculate(currentTurningDegree, goalState.angle.getDegrees());
     double[] moduleState = { driveMotorVoltage, turningMotorVoltage };
     return moduleState;
@@ -149,6 +151,7 @@ public class SwerveModule extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber(name + "_degree", getRotation());
+    SmartDashboard.putNumber(name+"_Velocity", getDriveRate());
   }
 
 }
