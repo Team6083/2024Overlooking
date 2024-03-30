@@ -32,7 +32,7 @@ public final class Constants {
         public static final double kDownMotorManualVoltage = 10.0;
         public static final double[] kSpeakerShooterRate = { 60.0, 60.0 };
         public static final double[] kCarryShooterRate = { 30.0, 30.0 };
-        public static final double[] kAmpShooterRate = { 33.0, 14.1 };
+        public static final double[] kAmpShooterRate = { 41.0, 22.1 };
         public static final double kShooterRateOffset = 15;
         public static final double kP = 0.0;
         public static final double kI = 0.0;
@@ -60,7 +60,7 @@ public final class Constants {
         public static final double kRotateAngleMin = 20.0;
         public static final double kRotateAngleMax = 67.0;
         public static final double kRotateDegreeErrorPoint = 3;
-        public static final double kRotateOffset = 302.0;
+        public static final double kRotateOffset = 420.0;
         public static final double kShooterOffset = 4.32;
         public static final double kSpeakerHeight = 2.18;
         public static final double kAMPHeight = 0.89;
