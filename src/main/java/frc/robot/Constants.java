@@ -143,9 +143,9 @@ public final class Constants {
         public static final int kBackRightTurningEncoderChannel = 34;
 
         // can coder magnet offset value
-        public static final double kFrontLeftCanCoderMagOffset = -0.079590;
-        public static final double kFrontRightCanCoderMagOffset = -0.458984;
-        public static final double kBackLeftCanCoderMagOffset = 0.355225;
+        public static final double kFrontLeftCanCoderMagOffset = -0.012451;
+        public static final double kFrontRightCanCoderMagOffset = -0.123779;
+        public static final double kBackLeftCanCoderMagOffset = 0.357422;
         public static final double kBackRightCanCoderMagOffset = -0.160156;
 
         public static final double kMaxSpeed = 5;
@@ -177,14 +177,14 @@ public final class Constants {
 
         public static final double kWheelDiameterMeters = 0.15;
 
-        public static final double kMaxModuleDriveVoltage = 12.0;
+        public static final double kMaxModuleDriveVoltage = 4.0;
 
         public static final double kDriveClosedLoopRampRate = 0.1;// 1 second 1 unit
         public static final double kTurningClosedLoopRampRate = 0.1;
 
         public static final double kDesireSpeedtoMotorVoltage = kMaxModuleDriveVoltage / DrivebaseConstants.kMaxSpeed;
 
-        public static final double kMaxModuleTuringVoltage = 10.0;
+        public static final double kMaxModuleTuringVoltage = 10.0/3.0f;
 
         public static final double kMaxSpeedTurningDegree = 160.0;
 
