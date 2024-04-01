@@ -169,7 +169,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private void speakerControl(Supplier<Double> manualOffsetSupplier, Supplier<Boolean> isManualSetpointSupplier) {
-    if (isManualSetpointSupplier.get() == null && !isManualSetpointSupplier.get()) {
+    if (isManualSetpointSupplier.get() == null || !isManualSetpointSupplier.get()) {
       var calculatedSetpoint = getSpeakerDegree(getSetpoint());
       setSetpoint(calculatedSetpoint);
     }
