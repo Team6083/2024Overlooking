@@ -148,7 +148,7 @@ public class RobotContainer {
                                 Map.entry(
                                         ShooterRotMode.Speaker,
                                         shooterSubsystem
-                                                .speakerControlCmd(() -> controlPanel.getRawAxis(4),
+                                                .speakerControlCmd(controlPanel.getRawAxis(4),
                                                         () -> controlPanel.button(12).getAsBoolean())
                                                 .alongWith(new TagDriveCmd(drivebase, mainController))),
                                 Map.entry(

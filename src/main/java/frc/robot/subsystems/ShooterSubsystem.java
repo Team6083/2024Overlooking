@@ -168,11 +168,10 @@ public class ShooterSubsystem extends SubsystemBase {
     downShooterEncoder.reset();
   }
 
-  private void speakerControl(Supplier<Double> manualOffsetSupplier, Supplier<Boolean> isManualSetpointSupplier) {
+  private void speakerControl(double manualOffsetSupplier, Supplier<Boolean> isManualSetpointSupplier) {
     if (isManualSetpointSupplier.get() == null || !isManualSetpointSupplier.get()) {
       var calculatedSetpoint = getSpeakerDegree(getSetpoint());
-      setSetpoint(calculatedSetpoint);
-    }
+      setSetpoint(calculatedSetpoint+manualOffsetSupplier);
     double upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
     double downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
@@ -182,6 +181,7 @@ public class ShooterSubsystem extends SubsystemBase {
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
     setShootMode(1);
+    }
   }
 
   private void carryControl(Supplier<Boolean> isManualSetpointSupplier) {
@@ -353,7 +353,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("rotateDownMotorVoltage", downShooterMotor.getMotorOutputVoltage());
   }
 
-  public Command speakerControlCmd(Supplier<Double> joystickManualOffsetSupplier,
+  public Command speakerControlCmd(double joystickManualOffsetSupplier,
       Supplier<Boolean> isManualSetpointSupplier) {
     Command cmd = runEnd(() -> speakerControl(joystickManualOffsetSupplier, isManualSetpointSupplier),
         this::stopAllMotor);
