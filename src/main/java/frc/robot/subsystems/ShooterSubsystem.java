@@ -168,10 +168,10 @@ public class ShooterSubsystem extends SubsystemBase {
     downShooterEncoder.reset();
   }
 
-  private void speakerControl(double manualOffsetSupplier, Supplier<Boolean> isManualSetpointSupplier) {
+  private void speakerControl(double fineTuningSetpoint, Supplier<Boolean> isManualSetpointSupplier) {
     if (isManualSetpointSupplier.get() == null || !isManualSetpointSupplier.get()) {
       var calculatedSetpoint = getSpeakerDegree(getSetpoint());
-      setSetpoint(calculatedSetpoint+manualOffsetSupplier);
+      setSetpoint(calculatedSetpoint+fineTuningSetpoint);
     double upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
     double downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
