@@ -37,6 +37,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final CANSparkMax rotateMotor;
   private final DutyCycleEncoder rotateEncoder;
   private final PIDController rotatePID;
+  private int fineTuningTimes = 0;
 
   public ShooterSubsystem(TagTracking tagTracking) {
     // shooter
@@ -171,7 +172,21 @@ public class ShooterSubsystem extends SubsystemBase {
   private void speakerControl(double fineTuningSetpoint, Supplier<Boolean> isManualSetpointSupplier) {
     if (isManualSetpointSupplier.get() == null || !isManualSetpointSupplier.get()) {
       var calculatedSetpoint = getSpeakerDegree(getSetpoint());
-      setSetpoint(calculatedSetpoint+fineTuningSetpoint);
+      // if(Math.abs(fineTuningSetpoint)==1){
+        
+      //   setSetpoint(calculatedSetpoint+(10*fineTuningSetpoint));
+      // }else{
+      //   setSetpoint(calculatedSetpoint);
+      // }
+      //   setSetpoint(getSetpoint()+10*fineTuningSetpoint);
+      if(Math.abs(fineTuningSetpoint) == 1){
+        if(fineTuningSetpoint>0){
+          fineTuningTimes=fineTuningTimes+1;
+        }else{
+          fineTuningTimes=fineTuningTimes-1;
+        }
+      }
+      setSetpoint(calculatedSetpoint+(fineTuningTimes*10));
     double upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
     double downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
@@ -353,9 +368,9 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("rotateDownMotorVoltage", downShooterMotor.getMotorOutputVoltage());
   }
 
-  public Command speakerControlCmd(double joystickManualOffsetSupplier,
+  public Command speakerControlCmd(double fineTuningSetPoint,
       Supplier<Boolean> isManualSetpointSupplier) {
-    Command cmd = runEnd(() -> speakerControl(joystickManualOffsetSupplier, isManualSetpointSupplier),
+    Command cmd = runEnd(() -> speakerControl(fineTuningSetPoint, isManualSetpointSupplier),
         this::stopAllMotor);
     cmd.setName("SpeakerControlCmd");
     return cmd;
