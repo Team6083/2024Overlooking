@@ -16,7 +16,7 @@ import frc.robot.subsystems.TransportSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoTransportToShootCmd extends ParallelDeadlineGroup {
   /** Creates a new autoTransportToShootCmd. */
-  public AutoTransportToShootCmd( TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem, double fineTuningSetPoint, Supplier<Boolean> ManualSetpoint) {
+  public AutoTransportToShootCmd( TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem, Supplier<Double> fineTuningSetPoint, Supplier<Boolean> ManualSetpoint) {
     // Add the deadline command in the super() call. Add other commands using
     // addCommands().
     super(new WaitCommand(0.8));

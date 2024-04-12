@@ -37,7 +37,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final CANSparkMax rotateMotor;
   private final DutyCycleEncoder rotateEncoder;
   private final PIDController rotatePID;
-  private int fineTuningTimes = 0;
+  private double fineTuningTimes = 0;
 
   public ShooterSubsystem(TagTracking tagTracking) {
     // shooter
@@ -143,12 +143,12 @@ public class ShooterSubsystem extends SubsystemBase {
     return degree;
   }
 
-  private double getSpeakerDegree(double currentDegree) {
+  private double getSpeakerDegree(double currentDegree,double manualOffset) {
     if (tagTracking.getTv() == 1 && tagTracking.getHorDistanceByCal() > 1.1) {
       double horizonDistance = tagTracking.getHorizontalDistanceByCT();
       double speakerToShooterHeight = RotateShooterConstants.kSpeakerHeight - RotateShooterConstants.kShooterHeight;
       double degree = Math.toDegrees(Math.atan(speakerToShooterHeight / horizonDistance));
-      return degree + 6.0 * horizonDistance / 3.6;
+      return degree + 5.0 * horizonDistance / 3.6+manualOffset;
     }
     return currentDegree;
   }
@@ -169,9 +169,9 @@ public class ShooterSubsystem extends SubsystemBase {
     downShooterEncoder.reset();
   }
 
-  private void speakerControl(double fineTuningSetpoint, Supplier<Boolean> isManualSetpointSupplier) {
-    if (isManualSetpointSupplier.get() == null || !isManualSetpointSupplier.get()) {
-      var calculatedSetpoint = getSpeakerDegree(getSetpoint());
+  private void speakerControl(Supplier<Double> fineTuningSetpoint, Supplier<Boolean> isManualSetpointSupplier) {
+    // if (isManualSetpointSupplier.get() == null || !isManualSetpointSupplier.get()) {
+      var calculatedSetpoint = getSpeakerDegree(getSetpoint(), fineTuningSetpoint.get()*10);
       // if(Math.abs(fineTuningSetpoint)==1){
         
       //   setSetpoint(calculatedSetpoint+(10*fineTuningSetpoint));
@@ -179,14 +179,11 @@ public class ShooterSubsystem extends SubsystemBase {
       //   setSetpoint(calculatedSetpoint);
       // }
       //   setSetpoint(getSetpoint()+10*fineTuningSetpoint);
-      if(Math.abs(fineTuningSetpoint) == 1){
-        if(fineTuningSetpoint>0){
-          fineTuningTimes=fineTuningTimes+1;
-        }else{
-          fineTuningTimes=fineTuningTimes-1;
-        }
-      }
-      setSetpoint(calculatedSetpoint+(fineTuningTimes*10));
+      // if(Math.abs(fineTuningSetpoint.get()) == 1){
+      // }
+      SmartDashboard.putNumber("fineTuningSetpoint",fineTuningSetpoint.get());
+      SmartDashboard.putNumber("calculateSetpoint",calculatedSetpoint);
+      setSetpoint(calculatedSetpoint);
     double upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
     double downGoalRate = ShooterConstants.kSpeakerShooterRate[1];
     final double upMotorVoltage = upMotorFeedForwardController.calculate(upGoalRate)
@@ -196,7 +193,7 @@ public class ShooterSubsystem extends SubsystemBase {
     setUpMotorVoltage(upMotorVoltage);
     setDownMotorVoltage(downMotorVoltage);
     setShootMode(1);
-    }
+    // }
   }
 
   private void carryControl(Supplier<Boolean> isManualSetpointSupplier) {
@@ -366,9 +363,10 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("rotateDegree", getAngle());
     SmartDashboard.putNumber("rotateUpMotorVoltage", upShooterMotor.getMotorOutputVoltage());
     SmartDashboard.putNumber("rotateDownMotorVoltage", downShooterMotor.getMotorOutputVoltage());
+    SmartDashboard.putNumber("fineTuning",fineTuningTimes);
   }
 
-  public Command speakerControlCmd(double fineTuningSetPoint,
+  public Command speakerControlCmd(Supplier<Double> fineTuningSetPoint,
       Supplier<Boolean> isManualSetpointSupplier) {
     Command cmd = runEnd(() -> speakerControl(fineTuningSetPoint, isManualSetpointSupplier),
         this::stopAllMotor);
@@ -387,4 +385,9 @@ public class ShooterSubsystem extends SubsystemBase {
     cmd.setName("AmpControlCmd");
     return cmd;
   }
+  public Command stopCmd(){
+    Command cmd = runOnce(() -> stopAllMotor());
+    cmd.setName("stopCmcdd");
+    return cmd;
+  }  
 }

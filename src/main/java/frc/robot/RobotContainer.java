@@ -65,19 +65,20 @@ public class RobotContainer {
         NamedCommands.registerCommand("AutoIntakeWithTransport",
                 new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
         NamedCommands.registerCommand("AutoAimControl",
-                shooterSubsystem.speakerControlCmd(0, null)); // rate and rotate
+                shooterSubsystem.speakerControlCmd(null, null)); // rate and rotate
         NamedCommands.registerCommand("AutoTransport",
                 transportSubsystem.transportIntakeCmd().withTimeout(0.6));
         // NamedCommands.registerCommand("AutoNote",
         // drivebase.noteTrackingCmd().withTimeout(0.5));
         NamedCommands.registerCommand("AutoNote", new WaitCommand(0.01));
 
-        NamedCommands.registerCommand("AutoTag",
-                drivebase.tagTrackingCmd());
-
-        autoChooser = AutoBuilder.buildAutoChooser();
-        // autoChooser = new SendableChooser<Command>();
-        // autoChooser.setDefaultOption("Do Nothing", Commands.none());
+        // NamedCommands.registerCommand("AutoTag",
+        //         drivebase.tagTrackingCmd());
+        // NamedCommands.registerCommand("AutoTag",
+        //         null);
+        // autoChooser = AutoBuilder.buildAutoChooser();
+        autoChooser = new SendableChooser<Command>();        
+        autoChooser.setDefaultOption("Do Nothing", Commands.none());
         // autoChooser.addOption("blueAmp", Autos.blueAmp(drivebase, intakeSubsystem,
         // transportSubsystem, shooterSubsystem, mainController));
         // autoChooser.addOption("redAmp", Autos.redAmp(drivebase, intakeSubsystem,
@@ -148,7 +149,7 @@ public class RobotContainer {
                                 Map.entry(
                                         ShooterRotMode.Speaker,
                                         shooterSubsystem
-                                                .speakerControlCmd(controlPanel.getRawAxis(4),
+                                                .speakerControlCmd(()-> controlPanel.getRawAxis(4),
                                                         () -> controlPanel.button(12).getAsBoolean())
                                                 .alongWith(new TagDriveCmd(drivebase, mainController))),
                                 Map.entry(
@@ -181,7 +182,8 @@ public class RobotContainer {
                 .toggleOnTrue(
                         transportSubsystem.transportIntakeCmd().onlyWhile(
                                 () -> shooterSubsystem.isEnoughRate())
-                                .withTimeout(0.5));
+                                .withTimeout(0.5).alongWith(Commands.waitSeconds(0.5).andThen(shooterSubsystem.stopCmd())));
+                                
         mainController.start().toggleOnTrue(transportSubsystem.transportIntakeCmd().withTimeout(0.5));
 
         //hook
@@ -204,7 +206,8 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // if (autoChooser.getSelected().isScheduled()) {
-        return autoChooser.getSelected();
+        // return autoChooser.getSelected();
+        return null;
         // }
         // String autoNumber = SmartDashboard.getString("auto", "null");
         // String initial = initialChooser.getSelected();
