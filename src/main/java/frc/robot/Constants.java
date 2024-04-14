@@ -258,6 +258,9 @@ public final class Constants {
         public static final String topRelayToLTS = "topRelayToLTS";
         public static final String topRelayToRTS = "topRelayToRTS";
 
+        public static final String horizontal = "horizontal";
+        public static final String vertical = "vertical";
+
         public static final double kPTranslation = 2.0;
         public static final double kITranslation = 0.001;
         public static final double kDTranslation = 0.01;

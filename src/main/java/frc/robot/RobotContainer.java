@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
 import frc.robot.commands.AimControlAllCmd;
+import frc.robot.commands.Autos;
 // import frc.robot.commands.AimControlAllCmd;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
@@ -62,7 +63,8 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
-
+    autoChooser.setDefaultOption("DoNothing", null);
+    autoChooser.addOption("test", Autos.TestCmd(drivebase, shooterSubsystem, transportSubsystem, intakeSubsystem));
     // initialChooser = new SendableChooser<String>();
     // initialChooser.setDefaultOption("none", "null");
     // initialChooser.addOption("left", "left");

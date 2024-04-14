@@ -6,16 +6,27 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.AutoConstants;
-// import frc.robot.commands.autoCmds.PoseRotateShooterCmd;
-import frc.robot.commands.autoCmds.AutoTransportToShootCmd;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TransportSubsystem;
 import frc.robot.subsystems.drive.Drivebase;
 
 public final class Autos {
+    public static Command TestCmd(Drivebase drivebase, ShooterSubsystem shooterSubsystem, 
+        TransportSubsystem transportSubsystem, IntakeSubsystem intakeSubsystem) {
+        Command HorizontalAndIntakeCmd = Commands.parallel(drivebase.followPathCommand(AutoConstants.horizontal), intakeSubsystem.intakeCmd());
+        Command VerticalAndTagCmd = Commands.parallel(drivebase.followPathCommand(AutoConstants.vertical), drivebase.tagTracking2Cmd());
+        Command TransAndShootCmd = Commands.parallel(transportSubsystem.transportIntakeCmd(),shooterSubsystem.speakerRateControlCmd());
+        return Commands.sequence(HorizontalAndIntakeCmd, new WaitCommand(0.3), VerticalAndTagCmd, new WaitCommand(0.3),TransAndShootCmd);
+    }
+    // public class Test extends SequentialCommandGroup {
+    //     public Test(TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem) {
+    //         addCommands(shooterSubsystem.speakerRateControlCmd(), new WaitCommand(0.3).andThen(transportSubsystem.transportIntakeCmd()));
+    // }
+
+
 /* 
     public static Command autoOptimize(Drivebase drivebase,
             ShooterSubsystem shooterSubsystem, TransportSubsystem transportSubsystem, IntakeSubsystem intakeSubsystem,
