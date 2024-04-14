@@ -80,7 +80,7 @@ public final class Constants {
         public static final double kRotateAngleMax = 74;
         public static final double kRotateDegreeErrorPoint = 3;
         public static final double kRotateTriggerValue = 0.15;
-        public static final double kRotateOffset = 304.0;
+        public static final double kRotateOffset = 54.6;
         public static final double kShooterOffset = 4.32;    
         public static final double kSpeakerHeight = 2.18;
         public static final double kAMPHeight = 0.89;
@@ -139,10 +139,10 @@ public final class Constants {
         public static final int kBackRightTurningEncoderChannel = 34;
 
         // can coder magnet offset value
-        public static final double kFrontLeftCanCoderMagOffset = -0.079590;
-        public static final double kFrontRightCanCoderMagOffset = -0.458984;
-        public static final double kBackLeftCanCoderMagOffset = 0.355225;
-        public static final double kBackRightCanCoderMagOffset = -0.160156;
+        public static final double kFrontLeftCanCoderMagOffset = -0.000488;
+        public static final double kFrontRightCanCoderMagOffset = -0.099854;
+        public static final double kBackLeftCanCoderMagOffset = 0.371094;
+        public static final double kBackRightCanCoderMagOffset = -0.187012;
 
         public static final double kMaxSpeed = 5;
         public static final double kMinSpeed = 0.25;

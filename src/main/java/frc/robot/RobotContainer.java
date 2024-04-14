@@ -64,7 +64,9 @@ public class RobotContainer {
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
     autoChooser.setDefaultOption("DoNothing", null);
-    autoChooser.addOption("test", Autos.TestCmd(drivebase, shooterSubsystem, transportSubsystem, intakeSubsystem));
+    autoChooser.addOption("verticalShoot", Autos.TestCmd(drivebase, shooterSubsystem, transportSubsystem, intakeSubsystem));
+    autoChooser.addOption("horizintal", Autos.HorizontalCmd(drivebase, shooterSubsystem, transportSubsystem, intakeSubsystem));
+    autoChooser.addOption("vertical", Autos.VerticalCmd(drivebase, shooterSubsystem, transportSubsystem, intakeSubsystem));
     // initialChooser = new SendableChooser<String>();
     // initialChooser.setDefaultOption("none", "null");
     // initialChooser.addOption("left", "left");
