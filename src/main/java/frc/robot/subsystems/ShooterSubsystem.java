@@ -147,7 +147,7 @@ public class ShooterSubsystem extends SubsystemBase {
       double horizonDistance = tagTracking.getHorizontalDistanceByCT();
       double speakerToShooterHeight = RotateShooterConstants.kSpeakerHeight - RotateShooterConstants.kShooterHeight;
       double degree = Math.toDegrees(Math.atan(speakerToShooterHeight / horizonDistance));
-      return degree + 6.0 * horizonDistance / 3.6 + manualOffsetSupplier.get();
+      return degree + 6.0 * horizonDistance / 3.6 + manualOffsetSupplier.get()*3.0;
     }
     return currentDegree;
   }
@@ -169,9 +169,11 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   private void speakerControl(Supplier<Double> manualOffsetSupplier, Supplier<Boolean> isManualSetpointSupplier) {
-    if (isManualSetpointSupplier.get() == null || !isManualSetpointSupplier.get()) {
+    if (!isManualSetpointSupplier.get()) {
       var calculatedSetpoint = getSpeakerDegree(getSetpoint(), manualOffsetSupplier);
       setSetpoint(calculatedSetpoint);
+    }else{
+      rotatePID.setSetpoint(getSetpoint());
     }
     double upGoalRate = ShooterConstants.kSpeakerShooterRate[0];
     double downGoalRate = ShooterConstants.kSpeakerShooterRate[1];

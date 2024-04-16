@@ -75,20 +75,20 @@ public class RobotContainer {
         NamedCommands.registerCommand("AutoTag",
                 drivebase.tagTrackingCmd());
 
-        autoChooser = AutoBuilder.buildAutoChooser();
-        // autoChooser = new SendableChooser<Command>();
-        // autoChooser.setDefaultOption("Do Nothing", Commands.none());
-        // autoChooser.addOption("blueAmp", Autos.blueAmp(drivebase, intakeSubsystem,
-        // transportSubsystem, shooterSubsystem, mainController));
-        // autoChooser.addOption("redAmp", Autos.redAmp(drivebase, intakeSubsystem,
-        // transportSubsystem, shooterSubsystem, mainController));
-        SmartDashboard.putData("Auto Chooser", autoChooser);
-        SmartDashboard.putData("drivebase", drivebase);
-        SmartDashboard.putData("shootSubsystem", shooterSubsystem);
-        SmartDashboard.putData("IntakeSubsystem", intakeSubsystem);
-        // SmartDashboard.putData("HookSubsystem", hookSubsystem);
-        SmartDashboard.putData("TransportSubsystem", transportSubsystem);
-        SmartDashboard.putData("Drivebase", drivebase);
+        // autoChooser = AutoBuilder.buildAutoChooser();
+        // // autoChooser = new SendableChooser<Command>();
+        // // autoChooser.setDefaultOption("Do Nothing", Commands.none());
+        // // autoChooser.addOption("blueAmp", Autos.blueAmp(drivebase, intakeSubsystem,
+        // // transportSubsystem, shooterSubsystem, mainController));
+        // // autoChooser.addOption("redAmp", Autos.redAmp(drivebase, intakeSubsystem,
+        // // transportSubsystem, shooterSubsystem, mainController));
+        // SmartDashboard.putData("Auto Chooser", autoChooser);
+        // SmartDashboard.putData("drivebase", drivebase);
+        // SmartDashboard.putData("shootSubsystem", shooterSubsystem);
+        // SmartDashboard.putData("IntakeSubsystem", intakeSubsystem);
+        // // SmartDashboard.putData("HookSubsystem", hookSubsystem);
+        // SmartDashboard.putData("TransportSubsystem", transportSubsystem);
+        // SmartDashboard.putData("Drivebase", drivebase);
 
         // initialChooser = new SendableChooser<String>();
         // initialChooser.setDefaultOption("none", "null");
@@ -122,7 +122,7 @@ public class RobotContainer {
                 .whileTrue(intakeSubsystem.setDownIntakeCmd());
 
         shooterSubsystem
-                .setDefaultCommand(shooterSubsystem.initControlCmd());
+                .setDefaultCommand(shooterSubsystem.initControlCmd().onlyIf(() -> !controlPanel.button(12).getAsBoolean()));
         // mainController.b()
         //         .toggleOnTrue(Commands.either(
         //                 shooterSubsystem.carryControlCmd(() -> controlPanel.button(12).getAsBoolean()),
@@ -132,9 +132,9 @@ public class RobotContainer {
         //                 () -> controlPanel.button(11).getAsBoolean()));
 
         mainController.pov(0).whileTrue(
-                shooterSubsystem.manualControlCmd(() -> 1).onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
+                shooterSubsystem.manualControlCmd(() -> 0).onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
         mainController.pov(180).whileTrue(
-                shooterSubsystem.manualControlCmd(() -> -1).onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
+                shooterSubsystem.manualControlCmd(() -> 180).onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
         enum ShooterRotMode {
             Speaker,
             Amp,
