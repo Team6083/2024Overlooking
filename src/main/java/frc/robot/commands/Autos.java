@@ -17,25 +17,18 @@ import frc.robot.subsystems.drive.Drivebase;
 public final class Autos {
     public static Command TestCmd(Drivebase drivebase, ShooterSubsystem shooterSubsystem, 
         TransportSubsystem transportSubsystem, IntakeSubsystem intakeSubsystem) {
-    //     Command HorizontalAndIntakeCmd = Commands.parallel(drivebase.followPathCommand(AutoConstants.horizontal), intakeSubsystem.intakeCmd());
+        Command HorizontalAndIntakeCmd = Commands.deadline(new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem), drivebase.followPathCommand(AutoConstants.horizontal));
         Command VerticalAndTagCmd = Commands.parallel(drivebase.followPathCommand(AutoConstants.vertical), drivebase.tagTracking2Cmd());
-        Command TransAndShootCmd = Commands.parallel(transportSubsystem.transportIntakeCmd(), shooterSubsystem.speakerRateControlCmd());
-        return Commands.sequence(new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
+        return Commands.sequence(HorizontalAndIntakeCmd, VerticalAndTagCmd, new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
     }
 
     public static Command HorizontalCmd(Drivebase drivebase, ShooterSubsystem shooterSubsystem, 
         TransportSubsystem transportSubsystem, IntakeSubsystem intakeSubsystem) {
-        // Command HorizontalAndIntakeCmd = Commands.parallel(drivebase.followPathCommand(AutoConstants.horizontal), intakeSubsystem.intakeCmd());
-        // Command VerticalAndTagCmd = Commands.parallel(drivebase.followPathCommand(AutoConstants.vertical), drivebase.tagTracking2Cmd());
-        // Command TransAndShootCmd = Commands.parallel(transportSubsystem.transportIntakeCmd(),shooterSubsystem.speakerRateControlCmd());
         return drivebase.followPathCommand(AutoConstants.horizontal);
     }
 
     public static Command VerticalCmd(Drivebase drivebase, ShooterSubsystem shooterSubsystem, 
         TransportSubsystem transportSubsystem, IntakeSubsystem intakeSubsystem) {
-        // Command HorizontalAndIntakeCmd = Commands.parallel(drivebase.followPathCommand(AutoConstants.horizontal), intakeSubsystem.intakeCmd());
-        // Command VerticalAndTagCmd = Commands.parallel(drivebase.followPathCommand(AutoConstants.vertical), drivebase.tagTracking2Cmd());
-        // Command TransAndShootCmd = Commands.parallel(transportSubsystem.transportIntakeCmd(),shooterSubsystem.speakerRateControlCmd());
         return drivebase.followPathCommand(AutoConstants.vertical);
     }
 
