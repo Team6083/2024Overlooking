@@ -45,7 +45,7 @@ public class RobotContainer {
   private final TagTracking tagTracking;
   private final NoteTracking noteTracking;
   private SendableChooser<Command> autoChooser;
-  private SendableChooser<String> initialChooser;
+  // private SendableChooser<String> initialChooser;
 
   public RobotContainer() {
     tagTracking = new TagTracking();
@@ -63,24 +63,24 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
-    // autoChooser.setDefaultOption("DoNothing", null);
-    // autoChooser.addOption("verticalShoot", Autos.TestCmd(drivebase, shooterSubsystem, transportSubsystem, intakeSubsystem));
-    // autoChooser.addOption("horizontal", Autos.HorizontalCmd(drivebase, shooterSubsystem, transportSubsystem, intakeSubsystem));
-    // autoChooser.addOption("vertical", Autos.VerticalCmd(drivebase, shooterSubsystem, transportSubsystem, intakeSubsystem));
-    initialChooser = new SendableChooser<String>();
-    initialChooser.setDefaultOption("none", "null");
-    initialChooser.addOption("horizontal", "horizontal");
-    initialChooser.addOption("vertical", "vertical");
-    // initialChooser.addOption("right", "right");
-    SmartDashboard.putString("auto", "null");
-    SmartDashboard.putData(initialChooser);
+    autoChooser.setDefaultOption("DoNothing", null);
+    autoChooser.addOption("half", Autos.TestCmd(drivebase, shooterSubsystem, transportSubsystem, intakeSubsystem));
+    autoChooser.addOption("horizontal", Autos.HorizontalCmd(drivebase, shooterSubsystem, transportSubsystem, intakeSubsystem));
+    autoChooser.addOption("vertical", Autos.VerticalCmd(drivebase, shooterSubsystem, transportSubsystem, intakeSubsystem));
+    // initialChooser = new SendableChooser<String>();
+    // initialChooser.setDefaultOption("none", "null");
+    // initialChooser.addOption("horizontal", "horizontal");
+    // initialChooser.addOption("vertical", "vertical");
+    // initialChooser.addOption("test", "test");
+    // SmartDashboard.putString("auto", "null");
+    // SmartDashboard.putData(initialChooser);
 
     NamedCommands.registerCommand("AutoTransportToShoot", new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
     NamedCommands.registerCommand("AutoIntakeWithTransport", new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
     NamedCommands.registerCommand("AutoRotateShooter", drivebase.tagTracking2Cmd());
-    NamedCommands.registerCommand("AutoIntakeDown", new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
-    NamedCommands.registerCommand("AutoNote", new NoteDriveCmd(drivebase, mainController).withTimeout(0.5));
-    NamedCommands.registerCommand("AutoTag", new TagDriveCmd(drivebase, mainController));
+    // NamedCommands.registerCommand("AutoIntakeDown", new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
+    // NamedCommands.registerCommand("AutoNote", new NoteDriveCmd(drivebase, mainController).withTimeout(0.5));
+    // NamedCommands.registerCommand("AutoTag", new TagDriveCmd(drivebase, mainController));
   }
 
   private void configureBindings() {

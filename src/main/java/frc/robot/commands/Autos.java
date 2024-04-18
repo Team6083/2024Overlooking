@@ -17,9 +17,9 @@ import frc.robot.subsystems.drive.Drivebase;
 public final class Autos {
     public static Command TestCmd(Drivebase drivebase, ShooterSubsystem shooterSubsystem, 
         TransportSubsystem transportSubsystem, IntakeSubsystem intakeSubsystem) {
-        Command HorizontalAndIntakeCmd = Commands.deadline(new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem), drivebase.followPathCommand(AutoConstants.horizontal));
+        // Command HorizontalAndIntakeCmd = Commands.deadline(new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem), drivebase.followPathCommand(AutoConstants.horizontal));
         Command VerticalAndTagCmd = Commands.parallel(drivebase.followPathCommand(AutoConstants.vertical), drivebase.tagTracking2Cmd());
-        return Commands.sequence(HorizontalAndIntakeCmd, VerticalAndTagCmd, new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
+        return Commands.sequence( VerticalAndTagCmd.withTimeout(0.3), new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem));
     }
 
     public static Command HorizontalCmd(Drivebase drivebase, ShooterSubsystem shooterSubsystem, 
