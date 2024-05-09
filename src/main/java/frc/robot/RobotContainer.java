@@ -57,7 +57,7 @@ public class RobotContainer {
         drivebase = new Drivebase(tagTracking);
         intakeSubsystem = new IntakeSubsystem(powerDistributionSubsystem);
         shooterSubsystem = new ShooterSubsystem(tagTracking);
-        transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
+        transportSubsystem = new TransportSubsystem(powerDistributionSubsystem, shooterSubsystem);
         hookSubsystem = new HookSubsystem(powerDistributionSubsystem);
 
         NamedCommands.registerCommand("AutoIntakeDown",
@@ -168,7 +168,8 @@ public class RobotContainer {
                             }
 
                             return ShooterRotMode.Speaker;
-                        }));
+                        }))
+                .toggleOnTrue(transportSubsystem.shootAndStopTransportsCmd());
 
         // mainController.pov(90).toggleOnTrue(shooterSubsystem.ampControlCmd());
 
@@ -183,6 +184,7 @@ public class RobotContainer {
                                 () -> shooterSubsystem.isEnoughRate())
                                 .withTimeout(0.5));
         mainController.start().toggleOnTrue(transportSubsystem.transportIntakeCmd().withTimeout(0.5));
+        
 
         //hook
         mainController.rightTrigger(0.5)

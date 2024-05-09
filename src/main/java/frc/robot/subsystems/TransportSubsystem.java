@@ -4,10 +4,12 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.Rev2mDistanceSensor.Port;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,8 +23,10 @@ public class TransportSubsystem extends SubsystemBase {
   private final CANSparkMax transportMotor;
   private DistanceSensorInterface distanceSensor;
   private final PowerDistributionSubsystem powerDistributionSubsystem;
+  private final ShooterSubsystem shooterSubsystem;
+  private Timer timer;
 
-  public TransportSubsystem(PowerDistributionSubsystem powerDistribution) {
+  public TransportSubsystem(PowerDistributionSubsystem powerDistribution,ShooterSubsystem shooterSubsystem) {
 
     transportMotor = new CANSparkMax(TransportConstants.kTransportChannel, MotorType.kBrushless);
     transportMotor.setInverted(TransportConstants.kTransportInverted);
@@ -33,9 +37,10 @@ public class TransportSubsystem extends SubsystemBase {
       distanceSensor = new SimDistanceSensor();
       System.out.println("distance sensor not detected");
     }
-
+      timer = new Timer();
     distanceSensor.setAutomaticMode(true);
     this.powerDistributionSubsystem = powerDistribution;
+    this.shooterSubsystem = shooterSubsystem;
   }
 
   /**
@@ -55,9 +60,20 @@ public class TransportSubsystem extends SubsystemBase {
   /**
    * Stop transporting.
    */
+  
   public void stopMotor() {
     transportMotor.set(0);
   }
+
+  public void shootAndStopTransports(){
+    timer.reset();
+    timer.start();
+    if(timer.get()>3){
+      transportMotor.set(0);
+    }
+  }
+
+
 
   /**
    * Detect note. Returns true if note is detected.
@@ -105,6 +121,16 @@ public class TransportSubsystem extends SubsystemBase {
    * @return reTransportIntakeCmd
    */
   public Command reTransportIntakeCmd() {
-    return this.runEnd(this::setReTransport, this::stopMotor);
+    return this.runEnd(this::setReTransport,this::stopMotor);
+  }
+  
+    /**
+   * Command of shooting then stop motor.
+   * 
+   * @return shootAndStopTransportsCmd
+   */
+  public Command shootAndStopTransportsCmd() {
+    return this.runEnd(this::shootAndStopTransportsCmd, this::stopMotor);
+
   }
 }
