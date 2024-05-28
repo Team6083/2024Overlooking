@@ -319,7 +319,7 @@ public class ShooterSubsystem extends SubsystemBase {
     switch (shootMode) {
       case 1:
         return (getUpEncoderRate() >= ShooterConstants.kSpeakerShooterRate[0] - ShooterConstants.kShooterRateOffset
-            && getDownEncoderRate() >= ShooterConstants.kSpeakerShooterRate[1] - ShooterConstants.kShooterRateOffset);
+            || getDownEncoderRate() >= ShooterConstants.kSpeakerShooterRate[1] - ShooterConstants.kShooterRateOffset);
       case 2:
         return (getUpEncoderRate() >= ShooterConstants.kCarryShooterRate[0] - ShooterConstants.kShooterRateOffset
             && getDownEncoderRate() >= ShooterConstants.kCarryShooterRate[1] - ShooterConstants.kShooterRateOffset);
@@ -370,6 +370,11 @@ public class ShooterSubsystem extends SubsystemBase {
   public Command ampControlCmd(Supplier<Boolean> isManualSetpointSupplier) {
     Command cmd = runEnd(() -> ampControl(isManualSetpointSupplier), this::stopAllMotor);
     cmd.setName("AmpControlCmd");
+    return cmd;
+  }
+  public Command stopAllMotorCmd(){
+    Command cmd = runOnce(() -> stopAllMotor());
+    cmd.setName("StopAllMotor");
     return cmd;
   }
 }
