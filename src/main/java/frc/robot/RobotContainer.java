@@ -172,7 +172,7 @@ public class RobotContainer {
 																		.isEnoughRate())
 														.andThen(transportSubsystem
 																.transportIntakeCmd())
-														.withTimeout(1.0))),
+														.withTimeout(2.0))),
 								Map.entry(
 										ShooterRotMode.Amp,
 										shooterSubsystem.ampControlCmd(
@@ -184,6 +184,7 @@ public class RobotContainer {
 												// .onlyWhile(
 												// () -> shooterSubsystem
 												// .isEnoughRate()))),
+												// .alongWith(Commands.waitSeconds(10.0))
 												.alongWith(Commands
 														.none()
 														.until(
@@ -191,7 +192,7 @@ public class RobotContainer {
 																		.isEnoughRate())
 														.andThen(transportSubsystem
 																.transportIntakeCmd()))
-												.withTimeout(1.0)),
+												.withTimeout(2.0)),
 								Map.entry(
 										ShooterRotMode.Carry,
 										shooterSubsystem
@@ -204,9 +205,10 @@ public class RobotContainer {
 														.until(
 																() -> shooterSubsystem
 																		.isEnoughRate())
+														// .alongWith(Commands.waitSeconds(0.5))
 														.andThen(transportSubsystem
 																.transportIntakeCmd()))
-												.withTimeout(1.0)
+												.withTimeout(2.0)
 								// .andThen(shooterSubsystem
 								// .stopAllMotorCmd())
 								)),
