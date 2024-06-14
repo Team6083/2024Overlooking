@@ -144,7 +144,7 @@ public final class Constants {
 
         // can coder magnet offset value
         public static final double kFrontLeftCanCoderMagOffset = 0.003174;
-        public static final double kFrontRightCanCoderMagOffset = -0.059326 ;
+        public static final double kFrontRightCanCoderMagOffset = 0.042236 ;
         public static final double kBackLeftCanCoderMagOffset = 0.347656;
         public static final double kBackRightCanCoderMagOffset = -0.178955;
 
