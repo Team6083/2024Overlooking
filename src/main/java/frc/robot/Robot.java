@@ -16,10 +16,14 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  private boolean saveLogs = false;
+
   @Override
   public void robotInit() {
-    DataLogManager.start();
-    DriverStation.startDataLog(DataLogManager.getLog());
+    if (saveLogs) {
+      DataLogManager.start();
+      DriverStation.startDataLog(DataLogManager.getLog());
+    }
     CameraServer.startAutomaticCapture();
     m_robotContainer = new RobotContainer();
   }

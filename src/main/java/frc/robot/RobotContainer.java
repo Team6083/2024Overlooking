@@ -34,245 +34,200 @@ import frc.robot.subsystems.drive.Drivebase;
 import frc.robot.subsystems.visionProcessing.TagTracking;
 
 public class RobotContainer {
-	private final CommandXboxController mainController;
-	private final CommandGenericHID controlPanel;
-	private final PowerDistributionSubsystem powerDistributionSubsystem;
-	private final Drivebase drivebase;
-	private final IntakeSubsystem intakeSubsystem;
-	private final ShooterSubsystem shooterSubsystem;
-	private final TransportSubsystem transportSubsystem;
-	private final HookSubsystem hookSubsystem;
-	private final TagTracking tagTracking;
-	// private final NoteTracking noteTracking;
-	// private SendableChooser<Command> autoChooser;
-	// private SendableChooser<String> initialChooser;
+    private final CommandXboxController mainController;
+    private final CommandGenericHID controlPanel;
+    private final PowerDistributionSubsystem powerDistributionSubsystem;
+    private final Drivebase drivebase;
+    private final IntakeSubsystem intakeSubsystem;
+    private final ShooterSubsystem shooterSubsystem;
+    private final TransportSubsystem transportSubsystem;
+    private final HookSubsystem hookSubsystem;
+    private final TagTracking tagTracking;
+    // private final NoteTracking noteTracking;
+    // private SendableChooser<Command> autoChooser;
+    // private SendableChooser<String> initialChooser;
 
-	public RobotContainer() {
-		tagTracking = new TagTracking();
-		// noteTracking = new NoteTracking();
-		// define subsystems
-		mainController = new CommandXboxController(DriveControllerConstants.kMainController);
-		controlPanel = new CommandGenericHID(DriveControllerConstants.kControlPanel);
-		powerDistributionSubsystem = new PowerDistributionSubsystem();
-		drivebase = new Drivebase(tagTracking);
-		intakeSubsystem = new IntakeSubsystem(powerDistributionSubsystem);
-		shooterSubsystem = new ShooterSubsystem(tagTracking);
-		transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
-		hookSubsystem = new HookSubsystem(powerDistributionSubsystem);
+    public RobotContainer() {
+        tagTracking = new TagTracking();
+        // noteTracking = new NoteTracking();
+        // define subsystems
+        mainController = new CommandXboxController(DriveControllerConstants.kMainController);
+        controlPanel = new CommandGenericHID(DriveControllerConstants.kControlPanel);
+        powerDistributionSubsystem = new PowerDistributionSubsystem();
+        drivebase = new Drivebase(tagTracking);
+        intakeSubsystem = new IntakeSubsystem(powerDistributionSubsystem);
+        shooterSubsystem = new ShooterSubsystem(tagTracking);
+        transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
+        hookSubsystem = new HookSubsystem(powerDistributionSubsystem);
 
-		// NamedCommands.registerCommand("AutoIntakeDown",
-		// new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
-		// NamedCommands.registerCommand("AutoIntakeWithTransport",
-		// new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-		// NamedCommands.registerCommand("AutoAimControl",
-		// shooterSubsystem.speakerControlCmd(null, null)); // rate and rotate
-		// NamedCommands.registerCommand("AutoTransport",
-		// transportSubsystem.transportIntakeCmd().withTimeout(0.6));
-		// // NamedCommands.registerCommand("AutoNote",
-		// // drivebase.noteTrackingCmd().withTimeout(0.5));
-		// NamedCommands.registerCommand("AutoNote", new WaitCommand(0.01));
+        // NamedCommands.registerCommand("AutoIntakeDown",
+        // new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
+        // NamedCommands.registerCommand("AutoIntakeWithTransport",
+        // new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+        // NamedCommands.registerCommand("AutoAimControl",
+        // shooterSubsystem.speakerControlCmd(null, null)); // rate and rotate
+        // NamedCommands.registerCommand("AutoTransport",
+        // transportSubsystem.transportIntakeCmd().withTimeout(0.6));
+        // // NamedCommands.registerCommand("AutoNote",
+        // // drivebase.noteTrackingCmd().withTimeout(0.5));
+        // NamedCommands.registerCommand("AutoNote", new WaitCommand(0.01));
 
-		// NamedCommands.registerCommand("AutoTag",
-		// drivebase.tagTrackingCmd());
+        // NamedCommands.registerCommand("AutoTag",
+        // drivebase.tagTrackingCmd());
 
-		// autoChooser = AutoBuilder.buildAutoChooser();
-		// autoChooser = new SendableChooser<Command>();
-		// autoChooser.setDefaultOption("Do Nothing", Commands.none());
-		// autoChooser.addOption("blueAmp", Autos.blueAmp(drivebase, intakeSubsystem,
-		// transportSubsystem, shooterSubsystem, mainController));
-		// autoChooser.addOption("redAmp", Autos.redAmp(drivebase, intakeSubsystem,
-		// transportSubsystem, shooterSubsystem, mainController));
-		// SmartDashboard.putData("Auto Chooser", autoChooser);
-		SmartDashboard.putData("drivebase", drivebase);
-		SmartDashboard.putData("shootSubsystem", shooterSubsystem);
-		SmartDashboard.putData("IntakeSubsystem", intakeSubsystem);
-		// SmartDashboard.putData("HookSubsystem", hookSubsystem);
-		SmartDashboard.putData("TransportSubsystem", transportSubsystem);
-		SmartDashboard.putData("Drivebase", drivebase);
+        // autoChooser = AutoBuilder.buildAutoChooser();
+        // autoChooser = new SendableChooser<Command>();
+        // autoChooser.setDefaultOption("Do Nothing", Commands.none());
+        // autoChooser.addOption("blueAmp", Autos.blueAmp(drivebase, intakeSubsystem,
+        // transportSubsystem, shooterSubsystem, mainController));
+        // autoChooser.addOption("redAmp", Autos.redAmp(drivebase, intakeSubsystem,
+        // transportSubsystem, shooterSubsystem, mainController));
+        // SmartDashboard.putData("Auto Chooser", autoChooser);
+        SmartDashboard.putData("drivebase", drivebase);
+        SmartDashboard.putData("shootSubsystem", shooterSubsystem);
+        SmartDashboard.putData("IntakeSubsystem", intakeSubsystem);
+        // SmartDashboard.putData("HookSubsystem", hookSubsystem);
+        SmartDashboard.putData("TransportSubsystem", transportSubsystem);
+        SmartDashboard.putData("Drivebase", drivebase);
 
-		// initialChooser = new SendableChooser<String>();
-		// initialChooser.setDefaultOption("none", "null");
-		// initialChooser.addOption("left", "left");
-		// initialChooser.addOption("middle", "middle");
-		// initialChooser.addOption("right", "right");
-		// SmartDashboard.putString("auto", "null");
-		// SmartDashboard.putData(initialChooser);
+        // initialChooser = new SendableChooser<String>();
+        // initialChooser.setDefaultOption("none", "null");
+        // initialChooser.addOption("left", "left");
+        // initialChooser.addOption("middle", "middle");
+        // initialChooser.addOption("right", "right");
+        // SmartDashboard.putString("auto", "null");
+        // SmartDashboard.putData(initialChooser);
 
-		configureBindings();
-	}
+        configureBindings();
+    }
 
-	private void configureBindings() {
-		// drivetrain
-		drivebase.setDefaultCommand(new SwerveJoystickCmd(drivebase, mainController));
-		mainController.rightBumper()
-				.onTrue(Commands.runOnce(() -> drivebase
-						.setMagnification(DrivebaseConstants.kHighMagnification)));
-		mainController.leftBumper()
-				.onTrue(Commands.runOnce(() -> drivebase
-						.setMagnification(DrivebaseConstants.kDefaultMagnification)));
+    private void configureBindings() {
+        // drivetrain
+        drivebase.setDefaultCommand(new SwerveJoystickCmd(drivebase, mainController));
+        mainController.rightBumper()
+                .onTrue(Commands.runOnce(() -> drivebase
+                        .setMagnification(DrivebaseConstants.kHighMagnification)));
+        mainController.leftBumper()
+                .onTrue(Commands.runOnce(() -> drivebase
+                        .setMagnification(DrivebaseConstants.kDefaultMagnification)));
 
-		// intake and transport
-		mainController.y()
-				.toggleOnTrue(new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-		mainController.x()
-				.whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-		controlPanel.button(5)
-				.whileTrue(intakeSubsystem.setUpIntakeCmd());
-		controlPanel.button(6)
-				.whileTrue(intakeSubsystem.setDownIntakeCmd());
+        // intake and transport
+        mainController.y()
+                .toggleOnTrue(new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+        mainController.x()
+                .whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+        controlPanel.button(5)
+                .whileTrue(intakeSubsystem.setUpIntakeCmd());
+        controlPanel.button(6)
+                .whileTrue(intakeSubsystem.setDownIntakeCmd());
 
-		shooterSubsystem
-				.setDefaultCommand(shooterSubsystem.initControlCmd());
-		// mainController.b()
-		// .toggleOnTrue(Commands.either(
-		// shooterSubsystem.carryControlCmd(() ->
-		// controlPanel.button(12).getAsBoolean()),
-		// shooterSubsystem.speakerControlCmd(() -> controlPanel.getRawAxis(4),
-		// () -> controlPanel.button(12).getAsBoolean())
-		// .alongWith(new TagDriveCmd(drivebase, mainController)),
-		// () -> controlPanel.button(11).getAsBoolean()));
+        shooterSubsystem
+                .setDefaultCommand(shooterSubsystem.initControlCmd());
 
-		mainController.pov(0).whileTrue(
-				shooterSubsystem.manualControlCmd(() -> 1)
-						.onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
-		mainController.pov(180).whileTrue(
-				shooterSubsystem.manualControlCmd(() -> -1)
-						.onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
-		enum ShooterRotMode {
-			Speaker,
-			Amp,
-			Carry,
-			Manual
-		}
+        mainController.pov(0).whileTrue(
+                shooterSubsystem.manualControlCmd(() -> 1)
+                        .onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
+        mainController.pov(180).whileTrue(
+                shooterSubsystem.manualControlCmd(() -> -1)
+                        .onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
 
-		mainController.b()
-				.toggleOnTrue(Commands.select(
-						Map.ofEntries(
-								Map.entry(
-										ShooterRotMode.Speaker,
-										shooterSubsystem
-												.speakerControlCmd(
-														() -> controlPanel
-																.getRawAxis(4),
-														() -> controlPanel
-																.button(12)
-																.getAsBoolean())
-												// .alongWith(new TagDriveCmd(
-												// drivebase,
-												// mainController)
-												// .alongWith(transportSubsystem
-												// .transportIntakeCmd()
-												// .onlyWhile(
-												// () -> shooterSubsystem
-												// .isEnoughRate())))),
-												.alongWith(Commands
-														.idle()
-														.until(
-																() -> shooterSubsystem
-																.isEnoughRate())
-														.andThen(transportSubsystem
-																.transportIntakeCmd()))
-												.withTimeout(2.0)),
-								Map.entry(
-										ShooterRotMode.Amp,
-										shooterSubsystem.ampControlCmd(
-												() -> controlPanel
-														.button(12)
-														.getAsBoolean())
-												// .alongWith(transportSubsystem
-												// .transportIntakeCmd()
-												// .onlyWhile(
-												// () -> shooterSubsystem
-												// .isEnoughRate()))),
-												// .alongWith(Commands.waitSeconds(10.0))
-												.alongWith(Commands
-														.idle()
-														.until(
-																() -> shooterSubsystem
-																		.isEnoughRate())
-														.andThen(transportSubsystem
-																.transportIntakeCmd()))
-												.withTimeout(5.0)),
-								Map.entry(
-										ShooterRotMode.Carry,
-										shooterSubsystem
-												.carryControlCmd(
-														() -> controlPanel
-																.button(12)
-																.getAsBoolean())
-												.alongWith(Commands
-														.idle()
-														.until(
-																() -> shooterSubsystem
-																		.isEnoughRate())
-														// .alongWith(Commands.waitSeconds(0.5))
-														.andThen(transportSubsystem
-																.transportIntakeCmd()))
-												.withTimeout(2.0)
-								// .andThen(shooterSubsystem
-								// .stopAllMotorCmd())
-								)),
-						() -> {
-							if (controlPanel.button(11).getAsBoolean()) {
-								return ShooterRotMode.Carry;
-							}
+        enum ShooterRotMode {
+            Speaker,
+            Amp,
+            Carry,
+            Manual
+        }
 
-							if (controlPanel.button(10).getAsBoolean()) {
-								return ShooterRotMode.Amp;
-							}
+        Map<ShooterRotMode, Command> shooterMap = Map.ofEntries(
+                Map.entry(ShooterRotMode.Speaker,
+                        shooterSubsystem
+                                .speakerControlCmd(
+                                        () -> controlPanel.getRawAxis(4),
+                                        () -> controlPanel.button(12).getAsBoolean())
+                                .alongWith(
+                                        Commands.idle().until(() -> shooterSubsystem.isEnoughRate())
+                                                .andThen(transportSubsystem.transportIntakeCmd()))
+                                .withTimeout(3.0)),
+                Map.entry(ShooterRotMode.Amp,
+                        shooterSubsystem
+                                .ampControlCmd(
+                                        () -> controlPanel.button(12).getAsBoolean())
+                                .alongWith(
+                                        Commands.idle().until(() -> shooterSubsystem.isEnoughRate())
+                                                .andThen(transportSubsystem.transportIntakeCmd()))
+                                .withTimeout(4.5)),
+                Map.entry(ShooterRotMode.Carry,
+                        shooterSubsystem
+                                .carryControlCmd(
+                                        () -> controlPanel.button(12).getAsBoolean())
+                                .alongWith(Commands.idle().until(() -> shooterSubsystem.isEnoughRate())
+                                        .andThen(transportSubsystem.transportIntakeCmd()))
+                                .withTimeout(2.0)));
 
-							return ShooterRotMode.Speaker;
-						}));
+        mainController.b()
+                .toggleOnTrue(Commands.select(
+                        shooterMap,
+                        () -> {
+                            if (controlPanel.button(11).getAsBoolean()) {
+                                return ShooterRotMode.Carry;
+                            }
 
-		// mainController.pov(90).toggleOnTrue(shooterSubsystem.ampControlCmd());
+                            if (controlPanel.button(10).getAsBoolean()) {
+                                return ShooterRotMode.Amp;
+                            }
 
-		// tracking
-		// controlPanel.button(7)
-		// .whileTrue(new NoteDriveCmd(drivebase, mainController));
+                            return ShooterRotMode.Speaker;
+                        }));
 
-		// transport
-		// mainController.a()
-		// .toggleOnTrue(
-		// transportSubsystem.transportIntakeCmd().onlyWhile(
-		// () -> shooterSubsystem.isEnoughRate())
-		// .withTimeout(0.5)
-		// .andThen(shooterSubsystem.stopAllMotorCmd()));
-		// mainController.start().toggleOnTrue(transportSubsystem.transportIntakeCmd().withTimeout(0.5));
+        // mainController.pov(90).toggleOnTrue(shooterSubsystem.ampControlCmd());
 
-		// hook
-		mainController.rightTrigger(0.5)
-				.whileTrue(hookSubsystem.upAllCmd());
-		mainController.leftTrigger(0.5)
-				.whileTrue(hookSubsystem.downAllCmd());
-		controlPanel.button(1)
-				.whileTrue(hookSubsystem.leftUpIndivisualCmd());
-		controlPanel.button(2)
-				.whileTrue(hookSubsystem.leftDownIndivisualCmd());
-		controlPanel.button(3)
-				.whileTrue(hookSubsystem.rightUpIndivisualCmd());
-		controlPanel.button(4)
-				.whileTrue(hookSubsystem.rightDownIndivisualCmd());
+        // tracking
+        // controlPanel.button(7)
+        // .whileTrue(new NoteDriveCmd(drivebase, mainController));
 
-		// reset
-		mainController.back().onTrue(drivebase.gyroResetCmd());
-	}
+        // transport
+        // mainController.a()
+        // .toggleOnTrue(
+        // transportSubsystem.transportIntakeCmd().onlyWhile(
+        // () -> shooterSubsystem.isEnoughRate())
+        // .withTimeout(0.5)
+        // .andThen(shooterSubsystem.stopAllMotorCmd()));
+        // mainController.start().toggleOnTrue(transportSubsystem.transportIntakeCmd().withTimeout(0.5));
 
-	public Command getAutonomousCommand() {
-		// if (autoChooser.getSelected().isScheduled()) {
-		return null;
-		// }
-		// String autoNumber = SmartDashboard.getString("auto", "null");
-		// String initial = initialChooser.getSelected();
-		// var alliance = DriverStation.getAlliance();
-		// if (initial == "null" && alliance.isPresent())
-		// return Commands.none();
-		// boolean isRed = alliance.get() == DriverStation.Alliance.Red;
-		// if (isRed) {
-		// initial = (initial == "left" ? "right" : (initial == "right" ? "left" :
-		// "middle"));
-		// }
-		// return Autos.autoOptimize(drivebase, shooterSubsystem, transportSubsystem,
-		// intakeSubsystem, autoNumber, initial);
-		// return Commands.none();
-	}
+        // hook
+        mainController.rightTrigger(0.5)
+                .whileTrue(hookSubsystem.upAllCmd());
+        mainController.leftTrigger(0.5)
+                .whileTrue(hookSubsystem.downAllCmd());
+        controlPanel.button(1)
+                .whileTrue(hookSubsystem.leftUpIndivisualCmd());
+        controlPanel.button(2)
+                .whileTrue(hookSubsystem.leftDownIndivisualCmd());
+        controlPanel.button(3)
+                .whileTrue(hookSubsystem.rightUpIndivisualCmd());
+        controlPanel.button(4)
+                .whileTrue(hookSubsystem.rightDownIndivisualCmd());
+
+        // reset
+        mainController.back().onTrue(drivebase.gyroResetCmd());
+    }
+
+    public Command getAutonomousCommand() {
+        // if (autoChooser.getSelected().isScheduled()) {
+        return null;
+        // }
+        // String autoNumber = SmartDashboard.getString("auto", "null");
+        // String initial = initialChooser.getSelected();
+        // var alliance = DriverStation.getAlliance();
+        // if (initial == "null" && alliance.isPresent())
+        // return Commands.none();
+        // boolean isRed = alliance.get() == DriverStation.Alliance.Red;
+        // if (isRed) {
+        // initial = (initial == "left" ? "right" : (initial == "right" ? "left" :
+        // "middle"));
+        // }
+        // return Autos.autoOptimize(drivebase, shooterSubsystem, transportSubsystem,
+        // intakeSubsystem, autoNumber, initial);
+        // return Commands.none();
+    }
 }
