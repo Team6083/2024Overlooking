@@ -256,7 +256,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @return rate/2048 (double)
    */
   private double getDownEncoderRate() {
-    return downShooterEncoder.getRate() / 2048.0;
+    return - downShooterEncoder.getRate() / 2048.0;
   }
 
   /**
