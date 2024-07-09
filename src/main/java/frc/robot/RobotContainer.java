@@ -75,18 +75,18 @@ public class RobotContainer {
         NamedCommands.registerCommand("AutoTag",
                 drivebase.tagTrackingCmd());
 
-        autoChooser = AutoBuilder.buildAutoChooser();
+        // autoChooser = AutoBuilder.buildAutoChooser();
         // autoChooser = new SendableChooser<Command>();
         // autoChooser.setDefaultOption("Do Nothing", Commands.none());
         // autoChooser.addOption("blueAmp", Autos.blueAmp(drivebase, intakeSubsystem,
         // transportSubsystem, shooterSubsystem, mainController));
         // autoChooser.addOption("redAmp", Autos.redAmp(drivebase, intakeSubsystem,
         // transportSubsystem, shooterSubsystem, mainController));
-        SmartDashboard.putData("Auto Chooser", autoChooser);
+        // SmartDashboard.putData("Auto Chooser", autoChooser);
         SmartDashboard.putData("drivebase", drivebase);
         SmartDashboard.putData("shootSubsystem", shooterSubsystem);
         SmartDashboard.putData("IntakeSubsystem", intakeSubsystem);
-        // SmartDashboard.putData("HookSubsystem", hookSubsystem);
+        SmartDashboard.putData("HookSubsystem", hookSubsystem);
         SmartDashboard.putData("TransportSubsystem", transportSubsystem);
         SmartDashboard.putData("Drivebase", drivebase);
 
@@ -184,7 +184,7 @@ public class RobotContainer {
                                 .withTimeout(0.5));
         mainController.start().toggleOnTrue(transportSubsystem.transportIntakeCmd().withTimeout(0.5));
 
-        //hook
+        // hook
         mainController.rightTrigger(0.5)
         .whileTrue(hookSubsystem.upAllCmd());
         mainController.leftTrigger(0.5)

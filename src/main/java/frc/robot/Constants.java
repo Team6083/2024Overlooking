@@ -106,9 +106,9 @@ public final class Constants {
         public static final double kILine = 0.0001;
         public static final double kDLine = 0.001;
         public static final int kLeftEncoderChannelA = 3;
-        public static final int kLeftEncoderChannelB = 4;
+        public static final int kLeftEncoderChannelB = 16;
         public static final int kRightEncoderChannelA = 5;
-        public static final int kRightEncoderChannelB = 6;
+        public static final int kRightEncoderChannelB = 14;
         public static final double kHookPositionConversionfactor = 1.0;
         public static final double kLinePositionMax = 60.0;
         public static final double kLinePositionMin = 0.0;
