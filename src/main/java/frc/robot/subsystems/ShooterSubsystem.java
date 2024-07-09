@@ -256,7 +256,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @return rate/2048 (double)
    */
   private double getDownEncoderRate() {
-    return downShooterEncoder.getRate() / 2048.0;
+    return - downShooterEncoder.getRate() / 2048.0;
   }
 
   /**
@@ -316,19 +316,24 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param 3    carry mode
    */
   public boolean isEnoughRate() {
+    double[] shooterRate;
+
     switch (shootMode) {
       case 1:
-        return (getUpEncoderRate() >= ShooterConstants.kSpeakerShooterRate[0] - ShooterConstants.kShooterRateOffset
-            && getDownEncoderRate() >= ShooterConstants.kSpeakerShooterRate[1] - ShooterConstants.kShooterRateOffset);
+        shooterRate = ShooterConstants.kSpeakerShooterRate;
+        break;
       case 2:
-        return (getUpEncoderRate() >= ShooterConstants.kCarryShooterRate[0] - ShooterConstants.kShooterRateOffset
-            && getDownEncoderRate() >= ShooterConstants.kCarryShooterRate[1] - ShooterConstants.kShooterRateOffset);
+        shooterRate = ShooterConstants.kCarryShooterRate;
+        break;
       case 3:
-        return (getUpEncoderRate() >= ShooterConstants.kAmpShooterRate[0] - ShooterConstants.kShooterRateOffset
-            && getDownEncoderRate() >= ShooterConstants.kAmpShooterRate[1] - ShooterConstants.kShooterRateOffset);
+        shooterRate = ShooterConstants.kAmpShooterRate;
+        break;
       default:
         return false;
     }
+
+    return (getUpEncoderRate() >= shooterRate[0] - ShooterConstants.kShooterRateOffset
+        && getDownEncoderRate() >= shooterRate[1] - ShooterConstants.kShooterRateOffset);
   }
 
   /**
@@ -370,6 +375,12 @@ public class ShooterSubsystem extends SubsystemBase {
   public Command ampControlCmd(Supplier<Boolean> isManualSetpointSupplier) {
     Command cmd = runEnd(() -> ampControl(isManualSetpointSupplier), this::stopAllMotor);
     cmd.setName("AmpControlCmd");
+    return cmd;
+  }
+
+  public Command stopAllMotorCmd() {
+    Command cmd = runOnce(() -> stopAllMotor());
+    cmd.setName("StopAllMotor");
     return cmd;
   }
 }
