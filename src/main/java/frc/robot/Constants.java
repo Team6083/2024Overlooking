@@ -32,7 +32,7 @@ public final class Constants {
         public static final double kDownMotorManualVoltage = 10.0;
         public static final double[] kSpeakerShooterRate = { 60.0, 60.0 };
         public static final double[] kCarryShooterRate = { 30.0, 30.0 };
-        public static final double[] kAmpShooterRate = { 24.0, 36.0};
+        public static final double[] kAmpShooterRate = { 25.5, 29.5};
         public static final double kShooterRateOffset = 15;
         public static final double kP = 0.0;
         public static final double kI = 0.0;
@@ -54,7 +54,7 @@ public final class Constants {
         public static final int kRotateEncoderChannel = 2;
         public static final double kInitDegree = 58.0;
         public static final double kCarryDegree = 20.0;
-        public static final double kAmpDegree = 50.0;
+        public static final double kAmpDegree = 52.0;
         public static final double kManualVoltage = 4.0;
         public static final double kRotateVoltLimit = 5.0;
         public static final double kRotateAngleMin = 20.0;
@@ -148,7 +148,7 @@ public final class Constants {
         public static final double kBackLeftCanCoderMagOffset = 0.347656;
         public static final double kBackRightCanCoderMagOffset = -0.178955;
 
-        public static final double kMaxSpeed = 5;
+        public static final double kMaxSpeed = 2.5;
         public static final double kMinRot = 0.1;
         public static final double kMaxAngularSpeed = 2.5 * Math.PI; // 1/2 rotation per second
 
