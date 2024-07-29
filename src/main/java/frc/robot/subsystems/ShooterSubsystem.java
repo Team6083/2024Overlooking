@@ -220,8 +220,8 @@ public class ShooterSubsystem extends SubsystemBase {
     if (manualMode.get() == null) {
       return;
     }
-    setRotateMotor(manualMode.get() == 0 ? RotateShooterConstants.kManualVoltage
-        : (manualMode.get() == 180 ? -RotateShooterConstants.kManualVoltage : 0));
+    setRotateMotor(manualMode.get() == 1 ? RotateShooterConstants.kManualVoltage
+        : (manualMode.get() == -1 ? -RotateShooterConstants.kManualVoltage : 0));
     rotatePID.setSetpoint(getAngle());
   }
 
