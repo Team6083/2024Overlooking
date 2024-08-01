@@ -118,7 +118,7 @@ public class RobotContainer {
                                 .alongWith(Commands.idle().until(() -> shooterSubsystem.canShoot(mainController.button(0)))
                                         .andThen(transportSubsystem.transportIntakeCmd()))
                                 .withTimeout(2.0)));
-        
+
         mainController.b()
                 .toggleOnTrue(Commands.select(
                         shooterMap,
@@ -133,7 +133,7 @@ public class RobotContainer {
 
                             return ShooterRotMode.Speaker;
                         }));
-
+        shooterSubsystem.canShootButton(mainController.button(0));
         // hook
         mainController.rightTrigger(0.5)
                 .whileTrue(hookSubsystem.upAllCmd());

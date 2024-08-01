@@ -318,7 +318,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param 2    amp mode
    * @param 3    carry mode
    */
-  public boolean canShoot(Trigger trigger) {
+  public boolean canShoot(Trigger canShootButton) {
     double[] shooterRate;
 
     switch (shootMode) {
@@ -334,7 +334,7 @@ public class ShooterSubsystem extends SubsystemBase {
       default:
         return false;
     }
-    if (trigger != null) {
+    if (canShootButton != null) {
       return true;
     } else if (getUpEncoderRate() >= shooterRate[0] - ShooterConstants.kShooterRateOffset
               && getDownEncoderRate() >= shooterRate[1] - ShooterConstants.kShooterRateOffset) {
