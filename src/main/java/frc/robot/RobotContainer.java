@@ -100,7 +100,7 @@ public class RobotContainer {
                                         () -> controlPanel.getRawAxis(4) * RotateShooterConstants.kManualOffsetSupplierMulti,
                                         () -> controlPanel.button(12).getAsBoolean())
                                 .alongWith(
-                                        Commands.idle().until(() -> shooterSubsystem.canShoot(mainController.button(0)))
+                                        Commands.idle().until(() -> shooterSubsystem.canShoot(mainController.button(0).getAsBoolean()))
                                                 .andThen(transportSubsystem.transportIntakeCmd()))
                                 .withTimeout(3.0)),
                 Map.entry(ShooterRotMode.Amp,
@@ -108,14 +108,14 @@ public class RobotContainer {
                                 .ampControlCmd(
                                         () -> controlPanel.button(12).getAsBoolean())
                                 .alongWith(
-                                        Commands.idle().until (() -> shooterSubsystem.canShoot(mainController.button(0)))
+                                        Commands.idle().until (() -> shooterSubsystem.canShoot(mainController.button(0).getAsBoolean()))
                                                 .andThen(transportSubsystem.transportIntakeCmd()))
                                 .withTimeout(4.5)),
                 Map.entry(ShooterRotMode.Carry,
                         shooterSubsystem
                                 .carryControlCmd(
                                         () -> controlPanel.button(12).getAsBoolean())
-                                .alongWith(Commands.idle().until(() -> shooterSubsystem.canShoot(mainController.button(0)))
+                                .alongWith(Commands.idle().until(() -> shooterSubsystem.canShoot(mainController.button(0).getAsBoolean()))
                                         .andThen(transportSubsystem.transportIntakeCmd()))
                                 .withTimeout(2.0)));
 

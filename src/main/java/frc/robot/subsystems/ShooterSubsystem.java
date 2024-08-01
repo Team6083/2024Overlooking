@@ -33,7 +33,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private final SimpleMotorFeedforward upMotorFeedForwardController;
   private final SimpleMotorFeedforward downMotorFeedForwardController;
   private int shootMode = 1;
-  private Trigger canShootButton;
+  private Boolean canShootButton;
   // rotate shooter
   private final TagTracking tagTracking;
   private final CANSparkMax rotateMotor;
@@ -318,7 +318,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param 2    amp mode
    * @param 3    carry mode
    */
-  public boolean canShoot(Trigger canShootButton) {
+  public boolean canShoot(Boolean canShootButton) {
     double[] shooterRate;
 
     switch (shootMode) {
@@ -335,7 +335,7 @@ public class ShooterSubsystem extends SubsystemBase {
         return false;
     }
     if (canShootButton != null) {
-      return true;
+      return canShootButton;
     } else if (getUpEncoderRate() >= shooterRate[0] - ShooterConstants.kShooterRateOffset
               && getDownEncoderRate() >= shooterRate[1] - ShooterConstants.kShooterRateOffset) {
       return true;
@@ -345,7 +345,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void canShootButton(Trigger canShootButton){
-    this.canShootButton = canShootButton;
+    this.canShootButton = canShootButton.getAsBoolean();
   }
 
   /**
