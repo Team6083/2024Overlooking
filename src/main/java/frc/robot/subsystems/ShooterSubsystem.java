@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.RotateShooterConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.visionProcessing.TagTracking;
@@ -32,11 +33,13 @@ public class ShooterSubsystem extends SubsystemBase {
   private final SimpleMotorFeedforward upMotorFeedForwardController;
   private final SimpleMotorFeedforward downMotorFeedForwardController;
   private int shootMode = 1;
+  private Trigger canShootButton;
   // rotate shooter
   private final TagTracking tagTracking;
   private final CANSparkMax rotateMotor;
   private final DutyCycleEncoder rotateEncoder;
   private final PIDController rotatePID;
+  
 
   public ShooterSubsystem(TagTracking tagTracking) {
     // shooter
@@ -256,7 +259,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @return rate/2048 (double)
    */
   private double getDownEncoderRate() {
-    return - downShooterEncoder.getRate() / 2048.0;
+    return -downShooterEncoder.getRate() / 2048.0;
   }
 
   /**
@@ -315,7 +318,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param 2    amp mode
    * @param 3    carry mode
    */
-  public boolean isEnoughRate() {
+  public boolean canShoot(Trigger trigger) {
     double[] shooterRate;
 
     switch (shootMode) {
@@ -331,9 +334,18 @@ public class ShooterSubsystem extends SubsystemBase {
       default:
         return false;
     }
+    if (trigger != null) {
+      return true;
+    } else if (getUpEncoderRate() >= shooterRate[0] - ShooterConstants.kShooterRateOffset
+              && getDownEncoderRate() >= shooterRate[1] - ShooterConstants.kShooterRateOffset) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-    return (getUpEncoderRate() >= shooterRate[0] - ShooterConstants.kShooterRateOffset
-        && getDownEncoderRate() >= shooterRate[1] - ShooterConstants.kShooterRateOffset);
+  public void canShootButton(Trigger canShootButton){
+    this.canShootButton = canShootButton;
   }
 
   /**
@@ -350,7 +362,7 @@ public class ShooterSubsystem extends SubsystemBase {
     setPIDControl();
     SmartDashboard.putNumber("shootingUpMotorRate", getUpEncoderRate());
     SmartDashboard.putNumber("shootingDownMotorRate", getDownEncoderRate());
-    SmartDashboard.putBoolean("shootingIsEnoughRate", isEnoughRate());
+    SmartDashboard.putBoolean("shootingIsEnoughRate", canShoot(canShootButton));
     SmartDashboard.putNumber("shootingRateMode", shootMode);
     SmartDashboard.putData(rotatePID);
     SmartDashboard.putNumber("rotateDegree", getAngle());
