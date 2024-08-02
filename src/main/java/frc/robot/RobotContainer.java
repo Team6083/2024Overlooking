@@ -44,6 +44,7 @@ public class RobotContainer {
         private final TransportSubsystem transportSubsystem;
         private final HookSubsystem hookSubsystem;
         private final TagTracking tagTracking;
+        private final SendableChooser<Command> autoChooser;
         
 
         public RobotContainer() {
@@ -71,13 +72,10 @@ public class RobotContainer {
                 NamedCommands.registerCommand("AutoTag",
                                 drivebase.tagTrackingCmd());
 
-                //autoChooser = AutoBuilder.buildAutoChooser();
-                //autoChooser.setDefaultOption("Do Nothing", Commands.none());
-                //autoChooser.addOption("blueAmp", Autos.blueAmp(drivebase, intakeSubsystem,
-                                //transportSubsystem, shooterSubsystem, mainController));
-                //autoChooser.addOption("redAmp", Autos.redAmp(drivebase, intakeSubsystem,
-                                //transportSubsystem, shooterSubsystem, mainController));
-                //SmartDashboard.putData("Auto Chooser", autoChooser);
+                autoChooser= AutoBuilder.buildAutoChooser();
+                autoChooser.setDefaultOption("Do Nothing", Commands.none());
+                autoChooser.addOption("test", Forward2meterCommand());
+                SmartDashboard.putData("Auto Chooser", autoChooser);
 
                 SmartDashboard.putData("drivebase", drivebase);
                 SmartDashboard.putData("shootSubsystem", shooterSubsystem);
@@ -203,9 +201,13 @@ public class RobotContainer {
                 mainController.back().onTrue(drivebase.gyroResetCmd());
         }
 
-        public Command getAutonomousCommand() {
+        public Command Forward2meterCommand() {
                 PathPlannerPath path = PathPlannerPath.fromPathFile("Forward2meter");
                 return AutoBuilder.followPath(path);
         }
 
-}
+       public Command getAutonomousCommand() {
+        return autoChooser.getSelected();
+      }
+    }
+
