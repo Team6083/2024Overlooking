@@ -32,7 +32,7 @@ public final class Constants {
         public static final double kDownMotorManualVoltage = 10.0;
         public static final double[] kSpeakerShooterRate = { 60.0, 60.0 };
         public static final double[] kCarryShooterRate = { 30.0, 30.0 };
-        public static final double[] kAmpShooterRate = { 27.0, 32.0 };
+        public static final double[] kAmpShooterRate = { 25.5, 29.5};
         public static final double kShooterRateOffset = 15;
         public static final double kP = 0.0;
         public static final double kI = 0.0;
@@ -54,7 +54,7 @@ public final class Constants {
         public static final int kRotateEncoderChannel = 2;
         public static final double kInitDegree = 58.0;
         public static final double kCarryDegree = 20.0;
-        public static final double kAmpDegree = 50.0;
+        public static final double kAmpDegree = 52.0;
         public static final double kManualVoltage = 4.0;
         public static final double kRotateVoltLimit = 5.0;
         public static final double kRotateAngleMin = 20.0;
@@ -63,6 +63,7 @@ public final class Constants {
         public static final double kRotateOffset = 420.0;
         public static final double kShooterOffset = 4.32;
         public static final double kSpeakerHeight = 2.18;
+        public static final double kManualOffsetSupplierMulti =4;
         public static final double kAMPHeight = 0.89;
         public static final double kShooterHeight = 0.3;
         public static final double kP = 0.085;
@@ -106,9 +107,9 @@ public final class Constants {
         public static final double kILine = 0.0001;
         public static final double kDLine = 0.001;
         public static final int kLeftEncoderChannelA = 3;
-        public static final int kLeftEncoderChannelB = 4;
+        public static final int kLeftEncoderChannelB = 16;
         public static final int kRightEncoderChannelA = 5;
-        public static final int kRightEncoderChannelB = 6;
+        public static final int kRightEncoderChannelB = 14;
         public static final double kHookPositionConversionfactor = 1.0;
         public static final double kLinePositionMax = 60.0;
         public static final double kLinePositionMin = 0.0;
@@ -144,13 +145,13 @@ public final class Constants {
 
         // can coder magnet offset value
         public static final double kFrontLeftCanCoderMagOffset = 0.003174;
-        public static final double kFrontRightCanCoderMagOffset = 0.042236 ;
+        public static final double kFrontRightCanCoderMagOffset = 0.117676 ;
         public static final double kBackLeftCanCoderMagOffset = 0.347656;
         public static final double kBackRightCanCoderMagOffset = -0.178955;
 
         public static final double kMaxSpeed = 5;
         public static final double kMinRot = 0.1;
-        public static final double kMaxAngularSpeed = 2.5 * Math.PI; // 1/2 rotation per second
+        public static final double kMaxAngularSpeed = 5 * Math.PI; // 1/2 rotation per second
 
         public static final double kXLimiterRateLimit = 5.0;
         public static final double kYLimiterRateLimit = 5.0;
