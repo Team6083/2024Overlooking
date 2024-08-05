@@ -3,14 +3,16 @@
   "robotLength": 0.68,
   "holonomicMode": true,
   "pathFolders": [
+    "AmpAdvance",
     "AmpAndAmpB",
     "MiddleAndMiddleB",
     "MiddleFour",
-    "AmpAdvance",
+    "playoff",
     "SourceAndSourceB",
     "Test"
   ],
   "autoFolders": [
+    "playoff",
     "Test"
   ],
   "defaultMaxVel": 3.5,

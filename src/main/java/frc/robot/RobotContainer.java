@@ -4,10 +4,14 @@
 
 package frc.robot;
 
+import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.introspect.WithMember;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.util.sendable.Sendable;
@@ -21,7 +25,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
 import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.Constants.RotateShooterConstants;
-import frc.robot.commands.Autos;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.TimeStopIntakeCmd;
@@ -74,7 +77,7 @@ public class RobotContainer {
 
                 autoChooser= AutoBuilder.buildAutoChooser();
                 autoChooser.setDefaultOption("Do Nothing", Commands.none());
-                autoChooser.addOption("test", Forward2meterCommand());
+                autoChooser.addOption("test",ShoodCmd());
                 SmartDashboard.putData("Auto Chooser", autoChooser);
 
                 SmartDashboard.putData("drivebase", drivebase);
@@ -201,9 +204,10 @@ public class RobotContainer {
                 mainController.back().onTrue(drivebase.gyroResetCmd());
         }
 
-        public Command Forward2meterCommand() {
-                PathPlannerPath path = PathPlannerPath.fromPathFile("Forward2meter");
-                return AutoBuilder.followPath(path);
+        public Command ShoodCmd() {
+                //List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile("Shoot");
+                return AutoBuilder.buildAuto("Shoot");
+                
         }
 
        public Command getAutonomousCommand() {
