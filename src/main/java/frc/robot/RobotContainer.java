@@ -205,8 +205,10 @@ public class RobotContainer {
         }
 
         public Command ShoodCmd() {
-                //List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile("Shoot");
-                return AutoBuilder.buildAuto("Shoot");
+                List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile("Shoot");
+                Command a=AutoBuilder.followPath(pathGroup.get(0))
+                          .andThen(AutoBuilder.followPath(pathGroup.get(1)));
+                return a;
                 
         }
 
