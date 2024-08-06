@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.lang.module.Configuration;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +78,7 @@ public class RobotContainer {
 
                 autoChooser= AutoBuilder.buildAutoChooser();
                 autoChooser.setDefaultOption("Do Nothing", Commands.none());
-                autoChooser.addOption("Shoot",ShoodCmd());
+                // autoChooser.addOption("Shoot",);
                 SmartDashboard.putData("Auto Chooser", autoChooser);
 
                 SmartDashboard.putData("drivebase", drivebase);
@@ -88,6 +89,7 @@ public class RobotContainer {
                 SmartDashboard.putData("Drivebase", drivebase);
 
                 configureBindings();
+                
 
         }
 
@@ -180,8 +182,7 @@ public class RobotContainer {
 
                                                         return ShooterRotMode.Speaker;
                                                 }));
-                shooterSubsystem.canShootButton(mainController.button(0));
-                // hook
+                                                             // hook
                 mainController.pov(0)
                                 .whileTrue(hookSubsystem.upAllCmd());
                 mainController.pov(180)
@@ -199,13 +200,13 @@ public class RobotContainer {
                 mainController.back().onTrue(drivebase.gyroResetCmd());
         }
 
-        public Command ShoodCmd() {
-                List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile("Shoot");
-                Command a=AutoBuilder.followPath(pathGroup.get(0))
-                          .andThen(AutoBuilder.followPath(pathGroup.get(1)));
-                return a;
+        // public Command ShoodCmd() {
+        //         List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile("Shoot");
+        //         Command a=AutoBuilder.followPath(pathGroup.get(0))
+        //                   .andThen(AutoBuilder.followPath(pathGroup.get(1)));
+        //         return a;
                 
-        }
+        // }
 
        public Command getAutonomousCommand() {
         return autoChooser.getSelected();

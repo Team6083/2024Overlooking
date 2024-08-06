@@ -16,6 +16,12 @@
           "data": {
             "name": "AutoAimControl"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoIntakeDown"
+          }
         }
       ]
     }

@@ -1,4 +1,5 @@
 {
+  
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.server.launchMode": "Standard",
   "files.exclude": {
@@ -28,5 +29,8 @@
   "java.test.defaultConfig": "WPIlibUnitTests",
   "cSpell.words": [
     "revrobotics"
-  ]
+  ],
+  
 }
+  
+
