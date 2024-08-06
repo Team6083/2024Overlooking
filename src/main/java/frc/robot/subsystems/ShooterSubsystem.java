@@ -318,7 +318,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param 2    amp mode
    * @param 3    carry mode
    */
-  public boolean canShoot(Boolean canShootButton) {
+  public boolean canShoot() {
     double[] shooterRate;
 
     switch (shootMode) {
@@ -334,18 +334,8 @@ public class ShooterSubsystem extends SubsystemBase {
       default:
         return false;
     }
-    if (canShootButton != null) {
-      return canShootButton;
-    } else if (getUpEncoderRate() >= shooterRate[0] - ShooterConstants.kShooterRateOffset
-              && getDownEncoderRate() >= shooterRate[1] - ShooterConstants.kShooterRateOffset) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  public void canShootButton(Trigger canShootButton){
-    this.canShootButton = canShootButton.getAsBoolean();
+      return (getUpEncoderRate() >= shooterRate[0] - ShooterConstants.kShooterRateOffset
+              && getDownEncoderRate() >= shooterRate[1] - ShooterConstants.kShooterRateOffset);
   }
 
   /**
@@ -362,7 +352,7 @@ public class ShooterSubsystem extends SubsystemBase {
     setPIDControl();
     SmartDashboard.putNumber("shootingUpMotorRate", getUpEncoderRate());
     SmartDashboard.putNumber("shootingDownMotorRate", getDownEncoderRate());
-    SmartDashboard.putBoolean("shootingIsEnoughRate", canShoot(canShootButton));
+    SmartDashboard.putBoolean("shootingIsEnoughRate", canShoot());
     SmartDashboard.putNumber("shootingRateMode", shootMode);
     SmartDashboard.putData(rotatePID);
     SmartDashboard.putNumber("rotateDegree", getAngle());
