@@ -102,9 +102,9 @@ public class RobotContainer {
                                                 .setMagnification(DrivebaseConstants.kDefaultMagnification)));
 
                 // intake and transport
-                mainController.y()
+                mainController.axisGreaterThan(2,0.5)
                                 .toggleOnTrue(new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-                mainController.x()
+                mainController.a()
                                 .whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
                 controlPanel.button(5)
                                 .whileTrue(intakeSubsystem.setUpIntakeCmd());
@@ -114,12 +114,12 @@ public class RobotContainer {
                 shooterSubsystem
                                 .setDefaultCommand(shooterSubsystem.initControlCmd());
 
-                mainController.pov(0).whileTrue(
-                                shooterSubsystem.manualControlCmd(() -> 1)
-                                                .onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
-                mainController.pov(180).whileTrue(
-                                shooterSubsystem.manualControlCmd(() -> -1)
-                                                .onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
+                // mainController.pov(0).whileTrue(
+                //                 shooterSubsystem.manualControlCmd(() -> 1)
+                //                                 .onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
+                // mainController.pov(180).whileTrue(
+                //                 shooterSubsystem.manualControlCmd(() -> -1)
+                //                                 .onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
 
                 enum ShooterRotMode {
                         Speaker,
@@ -171,7 +171,7 @@ public class RobotContainer {
                                                                                                 .transportIntakeCmd()))
                                                                 .withTimeout(2.0)));
 
-                mainController.b()
+                mainController.axisGreaterThan(2,0.5)
                                 .toggleOnTrue(Commands.select(
                                                 shooterMap,
                                                 () -> {
