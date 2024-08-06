@@ -132,18 +132,14 @@ public class RobotContainer {
                                 Map.entry(ShooterRotMode.Speaker,
                                                 shooterSubsystem
                                                                 .speakerControlCmd(
-                                                                                () -> controlPanel.getRawAxis(4)
-                                                                                                * RotateShooterConstants.kManualOffsetSupplierMulti,
-                                                                                () -> controlPanel.button(12)
-                                                                                                .getAsBoolean())
+                                                                                () -> controlPanel.getRawAxis(4)* RotateShooterConstants.kManualOffsetSupplierMulti,
+                                                                                () -> controlPanel.button(12).getAsBoolean())
                                                                 .alongWith(
-                                                                                Commands.idle().until(
-                                                                                                () -> shooterSubsystem
-                                                                                                                .canShoot(mainController
-                                                                                                                                .button(0)
-                                                                                                                                .getAsBoolean()))
-                                                                                                .andThen(transportSubsystem
-                                                                                                                .transportIntakeCmd()))
+                                                                        Commands.idle().until(() -> shooterSubsystem
+                                                                                        .canShoot(mainController.button(0)
+                                                                                                                .getAsBoolean()))
+                                                                                        .andThen(Commands.idle().until(mainController.y()))
+                                                                                        .andThen(transportSubsystem.transportIntakeCmd()))
                                                                 .withTimeout(3.0)),
                                 Map.entry(ShooterRotMode.Amp,
                                                 shooterSubsystem
@@ -151,27 +147,26 @@ public class RobotContainer {
                                                                                 () -> controlPanel.button(12)
                                                                                                 .getAsBoolean())
                                                                 .alongWith(
-                                                                                Commands.idle().until(
-                                                                                                () -> shooterSubsystem
-                                                                                                                .canShoot(mainController
-                                                                                                                                .button(0)
-                                                                                                                                .getAsBoolean()))
-                                                                                                .andThen(transportSubsystem
-                                                                                                                .transportIntakeCmd()))
+                                                                        Commands.idle().until(() -> shooterSubsystem
+                                                                                        .canShoot(mainController.button(0)
+                                                                                                                .getAsBoolean()))
+                                                                                        .andThen(Commands.idle().until(mainController.y()))
+                                                                                        .andThen(transportSubsystem .transportIntakeCmd()))
                                                                 .withTimeout(4.5)),
                                 Map.entry(ShooterRotMode.Carry,
                                                 shooterSubsystem
                                                                 .carryControlCmd(
                                                                                 () -> controlPanel.button(12)
                                                                                                 .getAsBoolean())
-                                                                .alongWith(Commands.idle().until(() -> shooterSubsystem
-                                                                                .canShoot(mainController.button(0)
-                                                                                                .getAsBoolean()))
-                                                                                .andThen(transportSubsystem
-                                                                                                .transportIntakeCmd()))
+                                                                .alongWith(
+                                                                        Commands.idle().until(() -> shooterSubsystem
+                                                                                        .canShoot(mainController.button(0)
+                                                                                                                .getAsBoolean()))
+                                                                                        .andThen(Commands.idle().until(mainController.y()))
+                                                                                        .andThen(transportSubsystem.transportIntakeCmd()))
                                                                 .withTimeout(2.0)));
 
-                mainController.axisGreaterThan(2,0.5)
+                mainController.axisGreaterThan(3,0.5)
                                 .toggleOnTrue(Commands.select(
                                                 shooterMap,
                                                 () -> {
