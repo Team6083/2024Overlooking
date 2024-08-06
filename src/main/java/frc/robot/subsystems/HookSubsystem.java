@@ -251,7 +251,7 @@ public class HookSubsystem extends SubsystemBase {
     // setLeftSetpoint(getLeftSetpoint() + HookConstants.kLeftSetpointModify);
     // setRightSetpoint(getRightSetpoint() + HookConstants.kRightSetpointModify);
     setLineMotorVoltage(4);
-    setLeftMotorVoltage(4);
+    setLeftMotorVoltage(2);
     setRightMotorVoltage(2);
   }
 
@@ -260,7 +260,7 @@ public class HookSubsystem extends SubsystemBase {
     // setLeftSetpoint(getLeftSetpoint() - HookConstants.kLeftSetpointModify);
     // setRightSetpoint(getRightSetpoint() - HookConstants.kRightSetpointModify);
     setLineMotorVoltage(-4);
-    setLeftMotorVoltage(-4);
+    setLeftMotorVoltage(-2);
     setRightMotorVoltage(-2);
   }
 

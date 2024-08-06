@@ -77,7 +77,7 @@ public class RobotContainer {
 
                 autoChooser= AutoBuilder.buildAutoChooser();
                 autoChooser.setDefaultOption("Do Nothing", Commands.none());
-                autoChooser.addOption("Shoot",ShoodCmd());
+                // autoChooser.addOption("Shoot",ShoodCmd());
                 SmartDashboard.putData("Auto Chooser", autoChooser);
 
                 SmartDashboard.putData("drivebase", drivebase);
@@ -199,13 +199,13 @@ public class RobotContainer {
                 mainController.back().onTrue(drivebase.gyroResetCmd());
         }
 
-        public Command ShoodCmd() {
-                List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile("Shoot");
-                Command a=AutoBuilder.followPath(pathGroup.get(0))
-                          .andThen(AutoBuilder.followPath(pathGroup.get(1)));
-                return a;
+        // public Command ShoodCmd() {
+        //         List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile("Shoot");
+        //         Command a=AutoBuilder.followPath(pathGroup.get(0))
+        //                   .andThen(AutoBuilder.followPath(pathGroup.get(1)));
+        //         return a;
                 
-        }
+        // }
 
        public Command getAutonomousCommand() {
         return autoChooser.getSelected();
