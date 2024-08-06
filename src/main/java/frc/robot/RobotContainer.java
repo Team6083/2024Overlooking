@@ -77,7 +77,7 @@ public class RobotContainer {
 
                 autoChooser= AutoBuilder.buildAutoChooser();
                 autoChooser.setDefaultOption("Do Nothing", Commands.none());
-                autoChooser.addOption("test",ShoodCmd());
+                autoChooser.addOption("Shoot",ShoodCmd());
                 SmartDashboard.putData("Auto Chooser", autoChooser);
 
                 SmartDashboard.putData("drivebase", drivebase);
