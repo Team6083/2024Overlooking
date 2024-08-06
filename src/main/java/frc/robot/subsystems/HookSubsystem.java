@@ -227,18 +227,7 @@ public class HookSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("hookRightPosition", getRightPosition());
   }
 
-  // public Command upAllCmd() {
-  // Command cmd = Commands.parallel(upLineCmd(), upRightCmd(), upLeftCmd());
-  // cmd.setName("upAllCmd");
-  // return cmd;
-  // }
-
-  // public Command downAllCmd() {
-  // Command cmd =Commands.parallel(downLineCmd(), downRightCmd(), downLeftCmd());
-  // cmd.setName("downAllCmd");
-  // return cmd;
-  // }
-
+  
   public Command upAllCmd() {
     Command cmd = Commands.runEnd(
         this::setAllHookUp,
@@ -262,7 +251,7 @@ public class HookSubsystem extends SubsystemBase {
     // setLeftSetpoint(getLeftSetpoint() + HookConstants.kLeftSetpointModify);
     // setRightSetpoint(getRightSetpoint() + HookConstants.kRightSetpointModify);
     setLineMotorVoltage(4);
-    // setLeftMotorVoltage(4);
+    setLeftMotorVoltage(4);
     setRightMotorVoltage(2);
   }
 
@@ -271,7 +260,7 @@ public class HookSubsystem extends SubsystemBase {
     // setLeftSetpoint(getLeftSetpoint() - HookConstants.kLeftSetpointModify);
     // setRightSetpoint(getRightSetpoint() - HookConstants.kRightSetpointModify);
     setLineMotorVoltage(-4);
-    // setLeftMotorVoltage(-4);
+    setLeftMotorVoltage(-4);
     setRightMotorVoltage(-2);
   }
 

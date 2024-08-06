@@ -114,12 +114,12 @@ public class RobotContainer {
                 shooterSubsystem
                                 .setDefaultCommand(shooterSubsystem.initControlCmd());
 
-                mainController.pov(0).whileTrue(
-                                shooterSubsystem.manualControlCmd(() -> 1)
-                                                .onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
-                mainController.pov(180).whileTrue(
-                                shooterSubsystem.manualControlCmd(() -> -1)
-                                                .onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
+                // mainController.pov(0).whileTrue(
+                //                 shooterSubsystem.manualControlCmd(() -> 1)
+                //                                 .onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
+                // mainController.pov(180).whileTrue(
+                //                 shooterSubsystem.manualControlCmd(() -> -1)
+                //                                 .onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
 
                 enum ShooterRotMode {
                         Speaker,
@@ -187,9 +187,9 @@ public class RobotContainer {
                                                 }));
                 shooterSubsystem.canShootButton(mainController.button(0));
                 // hook
-                mainController.rightTrigger(0.5)
+                mainController.pov(0)
                                 .whileTrue(hookSubsystem.upAllCmd());
-                mainController.leftTrigger(0.5)
+                mainController.pov(180)
                                 .whileTrue(hookSubsystem.downAllCmd());
                 controlPanel.button(1)
                                 .whileTrue(hookSubsystem.leftUpIndivisualCmd());
