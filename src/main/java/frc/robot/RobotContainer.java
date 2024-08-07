@@ -140,8 +140,8 @@ public class RobotContainer {
                                                                 Commands.idle().until(() -> shooterSubsystem
                                                                                 .canShoot())
                                                                                 .andThen(Commands.idle().until(mainController.y()))
-                                                                                .andThen(transportSubsystem.transportIntakeCmd()))
-                                                        .withTimeout(3.0)),
+                                                                                .andThen(transportSubsystem.transportIntakeCmd())
+                                                                                .withTimeout(3.0))),
                         Map.entry(ShooterRotMode.Amp,
                                         shooterSubsystem
                                                         .ampControlCmd(
@@ -151,8 +151,8 @@ public class RobotContainer {
                                                                 Commands.idle().until(() -> shooterSubsystem
                                                                                 .canShoot())
                                                                                 .andThen(Commands.idle().until(mainController.y()))
-                                                                                .andThen(transportSubsystem .transportIntakeCmd()))
-                                                        .withTimeout(4.5)),
+                                                                                .andThen(transportSubsystem.transportIntakeCmd())
+                                                                                .withTimeout(5))),
                         Map.entry(ShooterRotMode.Carry,
                                         shooterSubsystem
                                                         .carryControlCmd(
@@ -162,8 +162,8 @@ public class RobotContainer {
                                                                 Commands.idle().until(() -> shooterSubsystem
                                                                                 .canShoot())
                                                                                 .andThen(Commands.idle().until(mainController.y()))
-                                                                                .andThen(transportSubsystem.transportIntakeCmd()))
-                                                        .withTimeout(2.0)));
+                                                                                .andThen(transportSubsystem.transportIntakeCmd())
+                                                                                .withTimeout(2.0))));
 
 
                 mainController.axisGreaterThan(3,0.5)
