@@ -22,7 +22,12 @@ import frc.robot.subsystems.drive.Drivebase;
 
 public final class Autos {
 
-public Command ShootCmd(Drivebase drivebase, ShooterSubsystem shooterSubsystem ,TransportSubsystem transportSubsystem,CommandXboxController maiController) {
+
+
+
+
+public static Command ShootCmd(Drivebase drivebase, ShooterSubsystem shooterSubsystem,TransportSubsystem transportSubsystem,CommandXboxController maiController) {
+
         Command AutoAimControl = shooterSubsystem.speakerControlCmd(null, null);
         Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
         Command AutoTag = new TagDriveCmd(drivebase, maiController);
