@@ -139,7 +139,7 @@ public class RobotContainer {
                                                                                 .canShoot())
                                                                                 .andThen(Commands.idle().until(mainController.y()))
                                                                                 .andThen(transportSubsystem.transportIntakeCmd())
-                                                                                .withTimeout(3.0))),
+                                                                                .withTimeout(5.0))),
                         Map.entry(ShooterRotMode.Amp,
                                         shooterSubsystem
                                                         .ampControlCmd(
@@ -150,7 +150,7 @@ public class RobotContainer {
                                                                                 .canShoot())
                                                                                 .andThen(Commands.idle().until(mainController.y()))
                                                                                 .andThen(transportSubsystem.transportIntakeCmd())
-                                                                                .withTimeout(5))),
+                                                                                .withTimeout(5.0))),
                         Map.entry(ShooterRotMode.Carry,
                                         shooterSubsystem
                                                         .carryControlCmd(
@@ -161,7 +161,7 @@ public class RobotContainer {
                                                                                 .canShoot())
                                                                                 .andThen(Commands.idle().until(mainController.y()))
                                                                                 .andThen(transportSubsystem.transportIntakeCmd())
-                                                                                .withTimeout(2.0))));
+                                                                                .withTimeout(5.0))));
 
 
                 mainController.axisGreaterThan(3,0.5)
