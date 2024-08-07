@@ -140,34 +140,22 @@ public class RobotContainer {
                                                         .speakerControlCmd(
                                                                         () -> controlPanel.getRawAxis(4)* RotateShooterConstants.kManualOffsetSupplierMulti,
                                                                         () -> controlPanel.button(12).getAsBoolean())
-                                                        .alongWith(
-                                                                Commands.idle().until(() -> shooterSubsystem
-                                                                                .canShoot())
-                                                                                .andThen(Commands.idle().until(mainController.y()))
-                                                                                .andThen(transportSubsystem.transportIntakeCmd())
-                                                                                .withTimeout(5.0))),
+                                                        .deadlineWith(
+                                                                transportSubsystem.canTransport(mainController.y().getAsBoolean(), shooterSubsystem.canShoot()))),
                         Map.entry(ShooterRotMode.Amp,
                                         shooterSubsystem
                                                         .ampControlCmd(
                                                                         () -> controlPanel.button(12)
                                                                                         .getAsBoolean())
-                                                        .alongWith(
-                                                                Commands.idle().until(() -> shooterSubsystem
-                                                                                .canShoot())
-                                                                                .andThen(Commands.idle().until(mainController.y()))
-                                                                                .andThen(transportSubsystem.transportIntakeCmd())
-                                                                                .withTimeout(5.0))),
+                                                        .deadlineWith(
+                                                                transportSubsystem.canTransport(mainController.y().getAsBoolean(), shooterSubsystem.canShoot()))),
                         Map.entry(ShooterRotMode.Carry,
                                         shooterSubsystem
                                                         .carryControlCmd(
                                                                         () -> controlPanel.button(12)
                                                                                         .getAsBoolean())
-                                                        .alongWith(
-                                                                Commands.idle().until(() -> shooterSubsystem
-                                                                                .canShoot())
-                                                                                .andThen(Commands.idle().until(mainController.y()))
-                                                                                .andThen(transportSubsystem.transportIntakeCmd())
-                                                                                .withTimeout(5.0))));
+                                                        .deadlineWith(
+                                                                transportSubsystem.canTransport(mainController.y().getAsBoolean(), shooterSubsystem.canShoot()))));
 
 
                 mainController.axisGreaterThan(3,0.5)
