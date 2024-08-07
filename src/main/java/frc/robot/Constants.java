@@ -237,6 +237,8 @@ public final class Constants {
         public static final Pose2d leftPose2d = new Pose2d(0.76, 6.53, Rotation2d.fromDegrees(60));
         public static final Pose2d middlePose2d = new Pose2d(1.24, 5.5, Rotation2d.fromDegrees(0));
         public static final Pose2d rightPose2d = new Pose2d(0.76, 4.56, Rotation2d.fromDegrees(-60));
+
+        public static final String Shoot = "Shoot";
     }
 
     public static final class NoteTrackingConstants {
