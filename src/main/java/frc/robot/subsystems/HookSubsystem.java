@@ -252,7 +252,7 @@ public class HookSubsystem extends SubsystemBase {
     // setRightSetpoint(getRightSetpoint() + HookConstants.kRightSetpointModify);
     setLineMotorVoltage(4);
     setLeftMotorVoltage(2);
-    setRightMotorVoltage(2);
+    // setRightMotorVoltage(2);
   }
 
   private void setAllHookDown() {
@@ -261,7 +261,7 @@ public class HookSubsystem extends SubsystemBase {
     // setRightSetpoint(getRightSetpoint() - HookConstants.kRightSetpointModify);
     setLineMotorVoltage(-4);
     setLeftMotorVoltage(-2);
-    setRightMotorVoltage(-2);
+    // setRightMotorVoltage(-2);
   }
 
   private void stopAllHookMotor() {
@@ -270,9 +270,11 @@ public class HookSubsystem extends SubsystemBase {
     setRightMotorVoltage(0);
   }
 
+
+
   public Command leftUpIndivisualCmd() {
     Command cmd = Commands.run(
-        () -> setLeftSetpointOffset(leftSetpointOffset + HookConstants.kLeftSetpointModify),
+        () -> setLeftMotor(2),
         this);
     cmd.setName("leftUpIndivisualCmd");
     return cmd;
@@ -280,7 +282,7 @@ public class HookSubsystem extends SubsystemBase {
 
   public Command rightUpIndivisualCmd() {
     Command cmd = Commands.run(
-        () -> setRightSetpointOffset(rightSetpointOffset + HookConstants.kRightSetpointModify),
+        () -> setRightMotor(2),
         this);
     cmd.setName("rightUpIndivisualCmd");
     return cmd;
@@ -288,15 +290,15 @@ public class HookSubsystem extends SubsystemBase {
 
   public Command leftDownIndivisualCmd() {
     Command cmd = Commands.run(
-        () -> setLeftSetpointOffset(leftSetpointOffset - HookConstants.kLeftSetpointModify),
+        () -> setLeftMotor(-2),
         this);
-    cmd.setName("leftUpIndivisualCmd");
+    cmd.setName("leftDownIndivisualCmd");
     return cmd;
   }
 
   public Command rightDownIndivisualCmd() {
     Command cmd = Commands.run(
-        () -> setRightSetpointOffset(rightSetpointOffset + HookConstants.kRightSetpointModify),
+        () -> setRightMotor(-2),
         this);
     cmd.setName("rightDownIndivisualCmd");
     return cmd;
