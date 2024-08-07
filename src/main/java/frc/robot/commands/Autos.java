@@ -21,7 +21,7 @@ public final class Autos {
 
 
 
-public Command ShootCmd(Drivebase drivebase, ShooterSubsystem shooterSubsystem) {
+public static Command ShootCmd(Drivebase drivebase, ShooterSubsystem shooterSubsystem) {
         Command AutoAimControl = shooterSubsystem.speakerControlCmd(null, null);
 
         drivebase.resetPose(AutoConstants.middlePose2d);

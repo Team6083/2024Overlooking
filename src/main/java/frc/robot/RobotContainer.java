@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.DriveControllerConstants;
 import frc.robot.Constants.DrivebaseConstants;
 import frc.robot.Constants.RotateShooterConstants;
+import frc.robot.commands.Autos;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.TimeStopIntakeCmd;
@@ -78,6 +79,7 @@ public class RobotContainer {
 
                 autoChooser= AutoBuilder.buildAutoChooser();
                 autoChooser.setDefaultOption("Do Nothing", Commands.none());
+                autoChooser.addOption("Shoot", Autos.ShootCmd(drivebase, shooterSubsystem));
 
                 SmartDashboard.putData("Auto Chooser", autoChooser);
 
