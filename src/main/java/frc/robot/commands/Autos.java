@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.commands.autoCmds.AutoTransportToShootCmd;
 import frc.robot.commands.driveControls.TagDriveCmd;
 
 // import frc.robot.commands.autoCmds.PoseRotateShooterCmd;
@@ -26,17 +27,15 @@ public final class Autos {
 
 
 
-public static Command ShootCmd(Drivebase drivebase, ShooterSubsystem shooterSubsystem,TransportSubsystem transportSubsystem,CommandXboxController maiController,IntakeSubsystem intakeSubsystem) {
+public static Command ShootCmd(Drivebase drivebase, ShooterSubsystem shooterSubsystem,TransportSubsystem transportSubsystem,CommandXboxController maiController,IntakeSubsystem intakeSubsystem,TransportToShootCmd transportToShootCmd,AutoTransportToShootCmd autoTransportToShootCmd) {
 
-        Command AutoAimControl = shooterSubsystem.speakerControlCmd(null, null);
-        Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
         Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
 
         drivebase.resetPose(AutoConstants.middlePose2d);
 
         Command cmd = new ParallelCommandGroup(AutoIntakeDown,
-        new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport),
-        AutoAimControl));
+        new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(transportToShootCmd),
+        autoTransportToShootCmd));
 
         return cmd;
     }

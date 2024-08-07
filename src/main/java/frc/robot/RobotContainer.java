@@ -30,6 +30,8 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.IntakeWithTransportCmd;
 import frc.robot.commands.ReIntakeWithTransportCmd;
 import frc.robot.commands.TimeStopIntakeCmd;
+import frc.robot.commands.TransportToShootCmd;
+import frc.robot.commands.autoCmds.AutoTransportToShootCmd;
 import frc.robot.commands.driveControls.SwerveJoystickCmd;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionSubsystem;
@@ -47,6 +49,8 @@ public class RobotContainer {
         private final ShooterSubsystem shooterSubsystem;
         private final TransportSubsystem transportSubsystem;
         private final TagTracking tagTracking;
+        private final TransportToShootCmd transportToShootCmd;
+        private final AutoTransportToShootCmd autoTransportToShootCmd;
         private final SendableChooser<Command> autoChooser;
         
 
@@ -59,6 +63,8 @@ public class RobotContainer {
                 intakeSubsystem = new IntakeSubsystem(powerDistributionSubsystem);
                 shooterSubsystem = new ShooterSubsystem(tagTracking);
                 transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
+                transportToShootCmd = new TransportToShootCmd(transportSubsystem, shooterSubsystem);
+                autoTransportToShootCmd =new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem);
 
                 NamedCommands.registerCommand("AutoIntakeDown",
                                 new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
@@ -76,7 +82,7 @@ public class RobotContainer {
 
                 autoChooser= AutoBuilder.buildAutoChooser();
                 autoChooser.setDefaultOption("Do Nothing", Commands.none());
-                autoChooser.addOption("Shoot", Autos.ShootCmd(drivebase, shooterSubsystem,transportSubsystem,mainController,intakeSubsystem));
+                autoChooser.addOption("Shoot", Autos.ShootCmd(drivebase, shooterSubsystem,transportSubsystem,mainController,intakeSubsystem,transportToShootCmd,autoTransportToShootCmd));
 
                 SmartDashboard.putData("Auto Chooser", autoChooser);
 
