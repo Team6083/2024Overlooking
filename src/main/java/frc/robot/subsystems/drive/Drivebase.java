@@ -6,6 +6,7 @@ package frc.robot.subsystems.drive;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -300,4 +301,10 @@ public class Drivebase extends SubsystemBase {
     cmd.setName("gyroResetCmd");
     return cmd;
   }
+
+public Command followPathCommand(String cmdNameString) {
+    // TODO Auto-generated method stub
+    PathPlannerPath path = PathPlannerPath.fromPathFile(cmdNameString);
+   return AutoBuilder.followPath(path);
+}
 }

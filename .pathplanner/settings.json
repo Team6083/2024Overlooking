@@ -16,7 +16,7 @@
     "playoff",
     "Test"
   ],
-  "defaultMaxVel": 3.5,
+  "defaultMaxVel": 2.5,
   "defaultMaxAccel": 2.0,
   "defaultMaxAngVel": 453.38,
   "defaultMaxAngAccel": 240.0,

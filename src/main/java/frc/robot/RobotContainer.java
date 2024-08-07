@@ -76,7 +76,7 @@ public class RobotContainer {
 
                 autoChooser= AutoBuilder.buildAutoChooser();
                 autoChooser.setDefaultOption("Do Nothing", Commands.none());
-                autoChooser.addOption("Shoot", Autos.ShootCmd(drivebase, shooterSubsystem,transportSubsystem,mainController));
+                autoChooser.addOption("Shoot", Autos.ShootCmd(drivebase, shooterSubsystem,transportSubsystem,mainController,intakeSubsystem));
 
                 SmartDashboard.putData("Auto Chooser", autoChooser);
 
