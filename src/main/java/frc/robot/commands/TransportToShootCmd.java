@@ -15,8 +15,8 @@ import frc.robot.subsystems.TransportSubsystem;
 public class TransportToShootCmd extends ParallelDeadlineGroup {
   /** Creates a new TransCmd. */
   public TransportToShootCmd(TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem) {
-    super(new WaitCommand(1).onlyWhile(shooterSubsystem::canShoot));
+    super(new WaitCommand(1).onlyWhile(shooterSubsystem::isEnoughRate));
     addCommands(
-        transportSubsystem.transportIntakeCmd().onlyWhile(shooterSubsystem::canShoot));
+        transportSubsystem.transportIntakeCmd().onlyWhile(shooterSubsystem::isEnoughRate));
   }
 }

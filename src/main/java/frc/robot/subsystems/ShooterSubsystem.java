@@ -318,7 +318,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param 2    amp mode
    * @param 3    carry mode
    */
-  public boolean canShoot() {
+  public boolean isEnoughRate() {
     double[] shooterRate;
 
     switch (shootMode) {
@@ -352,7 +352,7 @@ public class ShooterSubsystem extends SubsystemBase {
     setPIDControl();
     SmartDashboard.putNumber("shootingUpMotorRate", getUpEncoderRate());
     SmartDashboard.putNumber("shootingDownMotorRate", getDownEncoderRate());
-    SmartDashboard.putBoolean("shootingIsEnoughRate", canShoot());
+    SmartDashboard.putBoolean("shootingIsEnoughRate", isEnoughRate());
     SmartDashboard.putNumber("shootingRateMode", shootMode);
     SmartDashboard.putData(rotatePID);
     SmartDashboard.putNumber("rotateDegree", getAngle());

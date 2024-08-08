@@ -135,28 +135,30 @@ public class RobotContainer {
                 }
 
                 Map<ShooterRotMode, Command> shooterMap = Map.ofEntries(
-                        Map.entry(ShooterRotMode.Speaker,
-                                        shooterSubsystem
-                                                        .speakerControlCmd(
-                                                                        () -> controlPanel.getRawAxis(4)* RotateShooterConstants.kManualOffsetSupplierMulti,
-                                                                        () -> controlPanel.button(12).getAsBoolean())
-                                                        .deadlineWith(
-                                                                transportSubsystem.canTransport(mainController.y().getAsBoolean(), shooterSubsystem.canShoot()))),
-                        Map.entry(ShooterRotMode.Amp,
-                                        shooterSubsystem
-                                                        .ampControlCmd(
-                                                                        () -> controlPanel.button(12)
-                                                                                        .getAsBoolean())
-                                                        .deadlineWith(
-                                                                transportSubsystem.canTransport(mainController.y().getAsBoolean(), shooterSubsystem.canShoot()))),
-                        Map.entry(ShooterRotMode.Carry,
-                                        shooterSubsystem
-                                                        .carryControlCmd(
-                                                                        () -> controlPanel.button(12)
-                                                                                        .getAsBoolean())
-                                                        .deadlineWith(
-                                                                transportSubsystem.canTransport(mainController.y().getAsBoolean(), shooterSubsystem.canShoot()))));
-
+                Map.entry(ShooterRotMode.Speaker,
+                        shooterSubsystem
+                                .speakerControlCmd(
+                                        () -> controlPanel.getRawAxis(4) * RotateShooterConstants.kManualOffsetSupplierMulti,
+                                        () -> controlPanel.button(12).getAsBoolean())
+                                .alongWith(
+                                        Commands.idle().until(() -> shooterSubsystem.isEnoughRate())
+                                                .andThen(transportSubsystem.transportIntakeCmd()))
+                                .withTimeout(3.0)),
+                Map.entry(ShooterRotMode.Amp,
+                        shooterSubsystem
+                                .ampControlCmd(
+                                        () -> controlPanel.button(12).getAsBoolean())
+                                .alongWith(
+                                        Commands.idle().until(() -> shooterSubsystem.isEnoughRate())
+                                                .andThen(transportSubsystem.transportIntakeCmd()))
+                                .withTimeout(4.5)),
+                Map.entry(ShooterRotMode.Carry,
+                        shooterSubsystem
+                                .carryControlCmd(
+                                        () -> controlPanel.button(12).getAsBoolean())
+                                .alongWith(Commands.idle().until(() -> shooterSubsystem.isEnoughRate())
+                                        .andThen(transportSubsystem.transportIntakeCmd()))
+                                .withTimeout(2.0)));
 
                 mainController.axisGreaterThan(3,0.5)
                                 .toggleOnTrue(Commands.select(
