@@ -27,8 +27,7 @@ public final class Autos {
 
     public static Command ShootCmd(Drivebase drivebase, ShooterSubsystem shooterSubsystem,
             TransportSubsystem transportSubsystem, CommandXboxController maiController,
-            IntakeSubsystem intakeSubsystem, TransportToShootCmd transportToShootCmd,
-            AutoTransportToShootCmd autoTransportToShootCmd) {
+            IntakeSubsystem intakeSubsystem) {
 
         Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
         Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);

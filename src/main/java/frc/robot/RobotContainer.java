@@ -49,8 +49,6 @@ public class RobotContainer {
     private final ShooterSubsystem shooterSubsystem;
     private final TransportSubsystem transportSubsystem;
     private final TagTracking tagTracking;
-    private final TransportToShootCmd transportToShootCmd;
-    private final AutoTransportToShootCmd autoTransportToShootCmd;
     private final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
@@ -62,19 +60,15 @@ public class RobotContainer {
         intakeSubsystem = new IntakeSubsystem(powerDistributionSubsystem);
         shooterSubsystem = new ShooterSubsystem(tagTracking);
         transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
-        transportToShootCmd = new TransportToShootCmd(transportSubsystem, shooterSubsystem);
-        autoTransportToShootCmd = new AutoTransportToShootCmd(transportSubsystem, shooterSubsystem);
 
         NamedCommands.registerCommand("AutoIntakeDown",
                 new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
         NamedCommands.registerCommand("AutoIntakeWithTransport",
                 new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
         NamedCommands.registerCommand("AutoAimControl",
-                shooterSubsystem.speakerControlCmd(null, null)); // rate and rotate
+                shooterSubsystem.speakerControlCmd(() -> 0.0, ()->false)); // rate and rotate
         NamedCommands.registerCommand("AutoTransport",
                 transportSubsystem.transportIntakeCmd().withTimeout(0.6));
-        // NamedCommands.registerCommand("AutoNote",
-        // drivebase.noteTrackingCmd().withTimeout(0.5));
         NamedCommands.registerCommand("AutoNote", new WaitCommand(0.01));
         NamedCommands.registerCommand("AutoTag",
                 drivebase.tagTrackingCmd());
@@ -82,8 +76,8 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser();
         autoChooser.setDefaultOption("Do Nothing", Commands.none());
         autoChooser.addOption("Shoot", Autos.ShootCmd(drivebase, shooterSubsystem, transportSubsystem,
-                mainController, intakeSubsystem, transportToShootCmd, autoTransportToShootCmd));
-
+                mainController, intakeSubsystem));
+        autoChooser.addOption("shootandFoward", Autos.ShootandForwardCmd(drivebase, transportSubsystem, shooterSubsystem, mainController, intakeSubsystem));
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         SmartDashboard.putData("drivebase", drivebase);
