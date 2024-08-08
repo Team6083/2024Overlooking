@@ -32,8 +32,8 @@ public final class Autos {
 
         Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
         Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
-        Command AutoAimControl = shooterSubsystem.speakerControlCmd(null, null);
-        
+        Command AutoAimControl = shooterSubsystem.speakerControlCmd(() -> 0.0, () -> false);
+
         drivebase.resetPose(AutoConstants.middlePose2d);
 
         // Command cmd = new ParallelCommandGroup(AutoIntakeDown,
