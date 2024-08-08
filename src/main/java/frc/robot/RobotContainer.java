@@ -92,7 +92,7 @@ public class RobotContainer {
         autoChooser.setDefaultOption("Do Nothing", Commands.none());
         autoChooser.addOption("Shoot", Autos.ShootCmd(drivebase, shooterSubsystem, transportSubsystem,
                 mainController, intakeSubsystem));
-        autoChooser.addOption("shootandFoward", Autos.ShootandForwardCmd(drivebase, transportSubsystem, shooterSubsystem, mainController, intakeSubsystem));
+        autoChooser.addOption("ShootandForward", Autos.ShootandForwardCmd(drivebase, transportSubsystem, shooterSubsystem, mainController, intakeSubsystem));
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         SmartDashboard.putData("drivebase", drivebase);

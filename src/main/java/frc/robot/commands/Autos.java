@@ -69,6 +69,26 @@ public final class Autos {
         return cmd;
     }
 
+    public static Command MiddleCmd(Drivebase drivebase,
+            TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem,
+            CommandXboxController maiController, IntakeSubsystem intakeSubsystem,IntakeWithTransportCmd intakeWithTransportCmd) {
+        Command AutoAimControl = shooterSubsystem.speakerControlCmd(()->0D, ()->false);
+        Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
+        Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
+        Command AutoIntakeWithTransport = new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem);
+        drivebase.resetPose(AutoConstants.leftPose2d);
+
+        Command cmd = new ParallelCommandGroup(AutoIntakeDown,
+                new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport),
+                        AutoAimControl));
+
+     new ParallelDeadlineGroup(drivebase.followPathCommand("AutoConstants.Amp2"), AutoIntakeWithTransport);                
+      cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport),
+                        AutoAimControl));
+        return cmd;
+    }
+
+
     private Autos() {
         throw new UnsupportedOperationException("This is a utility class!");
     }
