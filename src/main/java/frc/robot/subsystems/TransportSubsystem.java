@@ -6,8 +6,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import java.util.function.Supplier;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.Rev2mDistanceSensor.Port;
 
@@ -15,7 +13,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.TransportConstants;
 import frc.robot.lib.DistanceSensor;
 import frc.robot.lib.DistanceSensorInterface;
@@ -92,7 +89,7 @@ public class TransportSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("distanceSensorDis[]\tance", distanceSensor.getTargetDistance());
+        SmartDashboard.putNumber("distanceSensorDistance", distanceSensor.getTargetDistance());
         SmartDashboard.putBoolean("transportIsGetNote", isGetNote());
     }
 
@@ -103,14 +100,6 @@ public class TransportSubsystem extends SubsystemBase {
      */
     public Command transportIntakeCmd() {
         return this.runEnd(this::setTransport, this::stopMotor);
-    }
-
-    public Command canTransport(Boolean ifCanTransport, Boolean canshoot) {
-        if (ifCanTransport && canshoot) {
-            return this.runEnd(this::setTransport, this::stopMotor);
-        } else {
-            return Commands.idle();
-        }
     }
 
     /**

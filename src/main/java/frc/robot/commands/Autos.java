@@ -4,6 +4,9 @@
 
 package frc.robot.commands;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
@@ -50,17 +53,19 @@ public final class Autos {
             TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem,
             CommandXboxController mainController, IntakeSubsystem intakeSubsystem) {
 
-        Command AutoAimControl = shooterSubsystem.speakerControlCmd(null, null);
+        Command AutoAimControl = shooterSubsystem.speakerControlCmd(()->0D, ()-> false);
         Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
         Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
 
         drivebase.resetPose(AutoConstants.leftPose2d);
 
+        PathPlannerPath path = PathPlannerPath.fromPathFile(AutoConstants.ShootandForward);
+
         Command cmd = new ParallelCommandGroup(AutoIntakeDown,
                 new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport),
                         AutoAimControl));
-        cmd.andThen(drivebase.followPathCommand(AutoConstants.ShootandForward));
-
+        cmd.andThen (AutoBuilder.followPath(path));
+        
         return cmd;
     }
 

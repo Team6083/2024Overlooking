@@ -27,7 +27,7 @@ public final class Constants {
         public static final Boolean kUpMotorInverted = false;
         public static final Boolean kDownMotorInverted = false;
         public static final Boolean kUpEncoderInverted = true;
-        public static final Boolean kDownEncoderInverted = true;
+        public static final Boolean kDownEncoderInverted = false;
         public static final double kUpMotorManualVoltage = 10.0;
         public static final double kDownMotorManualVoltage = 10.0;
         public static final double[] kSpeakerShooterRate = { 60.0, 60.0 };
@@ -84,8 +84,8 @@ public final class Constants {
         public static final int kRotateIntakeChannel = 29;
         public static final int kRotateEncoderChannel = 7;
         public static final Boolean kIntakeInverted = true;
-        public static final Boolean kRotateIntakeInverted = false;
-        public static final Boolean kRotateEncoderInverted = false;
+        public static final Boolean kRotateIntakeInverted = true;
+        public static final Boolean kRotateEncoderInverted = true;
         public static final double kRotateOffset = 105;
         public static final double kIntakeVoltage = 6.3;
         public static final double kThrowVoltage = -4.0;
@@ -178,7 +178,7 @@ public final class Constants {
 
         public static final double kWheelDiameterMeters = 0.15;
 
-        public static final double kMaxModuleDriveVoltage = 12.0;
+        public static final double kMaxModuleDriveVoltage = 10.0;
 
         public static final double kDriveClosedLoopRampRate = 0.1;// 1 second 1 unit
         public static final double kTurningClosedLoopRampRate = 0.1;
