@@ -22,42 +22,47 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TransportSubsystem;
 import frc.robot.subsystems.drive.Drivebase;
 import frc.robot.subsystems.IntakeSubsystem;;
+
 public final class Autos {
 
-
-
-
-
-public static Command ShootCmd(Drivebase drivebase, ShooterSubsystem shooterSubsystem,TransportSubsystem transportSubsystem,CommandXboxController maiController,IntakeSubsystem intakeSubsystem,TransportToShootCmd transportToShootCmd,AutoTransportToShootCmd autoTransportToShootCmd) {
+    public static Command ShootCmd(Drivebase drivebase, ShooterSubsystem shooterSubsystem,
+            TransportSubsystem transportSubsystem, CommandXboxController maiController,
+            IntakeSubsystem intakeSubsystem, TransportToShootCmd transportToShootCmd,
+            AutoTransportToShootCmd autoTransportToShootCmd) {
 
         Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
-
+        Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
+        Command AutoAimControl = shooterSubsystem.speakerControlCmd(null, null);
+        
         drivebase.resetPose(AutoConstants.middlePose2d);
 
+        // Command cmd = new ParallelCommandGroup(AutoIntakeDown,
+        // new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(transportToShootCmd),
+        // autoTransportToShootCmd));
+
         Command cmd = new ParallelCommandGroup(AutoIntakeDown,
-        new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(transportToShootCmd),
-        autoTransportToShootCmd));
+                new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport),
+                        AutoAimControl));
 
         return cmd;
     }
 
     public static Command ShootandForwardCmd(Drivebase drivebase,
-    TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem,
-    CommandXboxController mainController,IntakeSubsystem intakeSubsystem) {
+            TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem,
+            CommandXboxController mainController, IntakeSubsystem intakeSubsystem) {
 
-    Command AutoAimControl = shooterSubsystem.speakerControlCmd(null,null);
-    Command AutoTransport =
-    transportSubsystem.transportIntakeCmd().withTimeout(0.5);
-    Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
+        Command AutoAimControl = shooterSubsystem.speakerControlCmd(null, null);
+        Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
+        Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
 
-    drivebase.resetPose(AutoConstants.leftPose2d);
+        drivebase.resetPose(AutoConstants.leftPose2d);
 
-    Command cmd = new ParallelCommandGroup(AutoIntakeDown,
-    new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport),
-    AutoAimControl));
-    cmd.andThen(drivebase.followPathCommand(AutoConstants.ShootandForward));
-    
-    return cmd;
+        Command cmd = new ParallelCommandGroup(AutoIntakeDown,
+                new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport),
+                        AutoAimControl));
+        cmd.andThen(drivebase.followPathCommand(AutoConstants.ShootandForward));
+
+        return cmd;
     }
 
     private Autos() {
