@@ -69,11 +69,6 @@ public class RobotContainer {
                                 shooterSubsystem.speakerControlCmd(() -> 0.0,() -> false)); // rate and rotate
                 NamedCommands.registerCommand("AutoTransport",
                                 transportSubsystem.transportIntakeCmd().withTimeout(0.6));
-                // NamedCommands.registerCommand("AutoNote",
-                // drivebase.noteTrackingCmd().withTimeout(0.5));
-                NamedCommands.registerCommand("AutoNote", new WaitCommand(0.01));
-                NamedCommands.registerCommand("AutoTag",
-                                drivebase.tagTrackingCmd());
 
         NamedCommands.registerCommand("AutoIntakeDown",
                 new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
