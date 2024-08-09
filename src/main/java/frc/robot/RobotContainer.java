@@ -88,7 +88,7 @@ public class RobotContainer {
         autoChooser.addOption("Shoot", Autos.ShootCmd(drivebase, shooterSubsystem, transportSubsystem,
                  mainController, intakeSubsystem));
         autoChooser.addOption("ShootandForward", Autos.ShootandForwardCmd(drivebase, transportSubsystem,
-                 shooterSubsystem, mainController, intakeSubsystem));
+                 shooterSubsystem, mainController, intakeSubsystem ,null));
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         SmartDashboard.putData("drivebase", drivebase);
@@ -193,6 +193,11 @@ public class RobotContainer {
 
         // reset
         mainController.back().onTrue(drivebase.gyroResetCmd());
+    }
+    public Command followPathCommand(String cmdNameString) {
+        // TODO Auto-generated method stub
+        PathPlannerPath path = PathPlannerPath.fromPathFile(cmdNameString);
+       return AutoBuilder.followPath(path);
     }
 
 

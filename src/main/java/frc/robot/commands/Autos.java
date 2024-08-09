@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 // import frc.robot.commands.autoCmds.AutoTransportToShootCmd;
 
@@ -51,7 +52,7 @@ public final class Autos {
 
     public static Command ShootandForwardCmd(Drivebase drivebase,
             TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem,
-            CommandXboxController mainController, IntakeSubsystem intakeSubsystem) {
+            CommandXboxController mainController, IntakeSubsystem intakeSubsystem ,RobotContainer robotContainer) {
 
         Command AutoAimControl = shooterSubsystem.speakerControlCmd(()->0D, ()-> false);
         Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
@@ -64,14 +65,14 @@ public final class Autos {
         Command cmd = new ParallelCommandGroup(AutoIntakeDown,
                 new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport),
                         AutoAimControl));
-        cmd.andThen (drivebase.followPathCommand(AutoConstants.ShootandForward));
+        cmd.andThen (robotContainer.followPathCommand(AutoConstants.ShootandForward));
         
         return cmd;
     }
 
     public static Command MiddleCmd(Drivebase drivebase,
             TransportSubsystem transportSubsystem, ShooterSubsystem shooterSubsystem,
-            CommandXboxController maiController, IntakeSubsystem intakeSubsystem,IntakeWithTransportCmd intakeWithTransportCmd) {
+            CommandXboxController maiController, IntakeSubsystem intakeSubsystem,IntakeWithTransportCmd intakeWithTransportCmd,RobotContainer robotContainer) {
         Command AutoAimControl = shooterSubsystem.speakerControlCmd(()->0D, ()->false);
         Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
         Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
@@ -84,7 +85,7 @@ public final class Autos {
                 new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport),
                         AutoAimControl));
 
-     new ParallelDeadlineGroup(drivebase.followPathCommand(AutoConstants.ShootandForward), AutoIntakeWithTransport);                
+     new ParallelDeadlineGroup(robotContainer.followPathCommand(AutoConstants.ShootandForward), AutoIntakeWithTransport);                
       cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport),
                         AutoAimControl));
         return cmd;
