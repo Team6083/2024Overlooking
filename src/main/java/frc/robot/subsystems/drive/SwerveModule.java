@@ -78,7 +78,7 @@ public class SwerveModule extends SubsystemBase {
 
   public void configTurningMotor() {
     turningMotor.setSmartCurrentLimit(20);
-    turningMotor.setClosedLoopRampRate(ModuleConstants.kDriveClosedLoopRampRate);
+    // turningMotor.setClosedLoopRampRate(ModuleConstants.kTuClosedLoopRampRate);
     turningMotor.setIdleMode(IdleMode.kBrake);
     turningMotor.burnFlash();
   }
