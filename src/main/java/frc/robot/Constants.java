@@ -185,7 +185,7 @@ public final class Constants {
 
         public static final double kDesireSpeedtoMotorVoltage = kMaxModuleDriveVoltage / DrivebaseConstants.kMaxSpeed;
 
-        public static final double kMaxModuleTuringVoltage = 10.0/3.0f;
+        public static final double kMaxModuleTuringVoltage = 30.0/3.0f;
 
         public static final double kMaxSpeedTurningDegree = 160.0;
 
