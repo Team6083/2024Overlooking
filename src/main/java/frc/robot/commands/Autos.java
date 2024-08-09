@@ -78,11 +78,13 @@ public final class Autos {
         Command AutoIntakeWithTransport = new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem);
         drivebase.resetPose(AutoConstants.leftPose2d);
 
+        PathPlannerPath path = PathPlannerPath.fromPathFile(AutoConstants.ShootandForward);
+
         Command cmd = new ParallelCommandGroup(AutoIntakeDown,
                 new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport),
                         AutoAimControl));
 
-     new ParallelDeadlineGroup(drivebase.followPathCommand("AutoConstants.Amp2"), AutoIntakeWithTransport);                
+     new ParallelDeadlineGroup(AutoBuilder.followPath(path), AutoIntakeWithTransport);                
       cmd.andThen(new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport),
                         AutoAimControl));
         return cmd;
