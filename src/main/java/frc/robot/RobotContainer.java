@@ -61,14 +61,7 @@ public class RobotContainer {
         shooterSubsystem = new ShooterSubsystem(tagTracking);
         transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
 
-                NamedCommands.registerCommand("AutoIntakeDown",
-                                new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
-                NamedCommands.registerCommand("AutoIntakeWithTransport",
-                                new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-                NamedCommands.registerCommand("AutoAimControl",
-                                shooterSubsystem.speakerControlCmd(() -> 0.0,() -> false)); // rate and rotate
-                NamedCommands.registerCommand("AutoTransport",
-                                transportSubsystem.transportIntakeCmd().withTimeout(0.6));
+               
 
         NamedCommands.registerCommand("AutoIntakeDown",
                 new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
