@@ -288,6 +288,12 @@ public class Drivebase extends SubsystemBase {
     SmartDashboard.putNumber("poseRotationDegree", getPose2d().getRotation().getDegrees());
   }
 
+  public Command followPathCommand(String cmdNameString) {
+    // TODO Auto-generated method stub
+    PathPlannerPath path = PathPlannerPath.fromPathFile(cmdNameString);
+   return AutoBuilder.followPath(path);
+}
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -302,9 +308,5 @@ public class Drivebase extends SubsystemBase {
     return cmd;
   }
 
-public Command followPathCommand(String cmdNameString) {
-    // TODO Auto-generated method stub
-    PathPlannerPath path = PathPlannerPath.fromPathFile(cmdNameString);
-   return AutoBuilder.followPath(path);
-}
+
 }
