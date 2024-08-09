@@ -88,7 +88,7 @@ public class RobotContainer {
         autoChooser.addOption("Shoot", Autos.ShootCmd(drivebase, shooterSubsystem, transportSubsystem,
                  mainController, intakeSubsystem));
         autoChooser.addOption("ShootandForward", Autos.ShootandForwardCmd(drivebase, transportSubsystem,
-                 shooterSubsystem, mainController, intakeSubsystem ,null));
+                 shooterSubsystem, mainController, intakeSubsystem ,this));
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         SmartDashboard.putData("drivebase", drivebase);
