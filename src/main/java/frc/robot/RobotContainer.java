@@ -194,11 +194,7 @@ public class RobotContainer {
         // reset
         mainController.back().onTrue(drivebase.gyroResetCmd());
     }
-    public Command followPathCommand(String cmdNameString) {
-        // TODO Auto-generated method stub
-        PathPlannerPath path = PathPlannerPath.fromPathFile(cmdNameString);
-       return AutoBuilder.followPath(path);
-    }
+    
 
 
     public Command getAutonomousCommand() {
