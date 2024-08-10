@@ -134,7 +134,7 @@ public class RobotContainer {
         
 
         Map<ShooterRotMode, Command> shooterMap = Map.ofEntries(
-                Map.entry(ShooterRotMode.Speaker,
+                Map.entry(ShooterRotMode.SpeakerAuto,
                         shooterSubsystem
                                 .speakerControlCmd(
                                         () -> controlPanel.getRawAxis(3)
@@ -148,7 +148,7 @@ public class RobotContainer {
                                                 .andThen(transportSubsystem
                                                         .transportIntakeCmd()))
                                 .withTimeout(5.0)),
-                Map.entry(ShooterRotMode.SpeakerAuto,
+                Map.entry(ShooterRotMode.Speaker,
                         shooterSubsystem
                                 .speakerControlCmd(
                                         () -> controlPanel.getRawAxis(3)
