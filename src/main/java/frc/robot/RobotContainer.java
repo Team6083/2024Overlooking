@@ -61,14 +61,7 @@ public class RobotContainer {
         shooterSubsystem = new ShooterSubsystem(tagTracking);
         transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
 
-                NamedCommands.registerCommand("AutoIntakeDown",
-                                new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
-                NamedCommands.registerCommand("AutoIntakeWithTransport",
-                                new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-                NamedCommands.registerCommand("AutoAimControl",
-                                shooterSubsystem.speakerControlCmd(() -> 0.0,() -> false)); // rate and rotate
-                NamedCommands.registerCommand("AutoTransport",
-                                transportSubsystem.transportIntakeCmd().withTimeout(0.6));
+               
 
         NamedCommands.registerCommand("AutoIntakeDown",
                 new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
@@ -142,7 +135,7 @@ public class RobotContainer {
                 Map.entry(ShooterRotMode.Speaker,
                         shooterSubsystem
                                 .speakerControlCmd(
-                                        () -> controlPanel.getRawAxis(4)
+                                        () -> controlPanel.getRawAxis(3)
                                                 * RotateShooterConstants.kManualOffsetSupplierMulti,
                                         () -> controlPanel.button(12)
                                                 .getAsBoolean())
@@ -193,6 +186,7 @@ public class RobotContainer {
 
         // reset
         mainController.back().onTrue(drivebase.gyroResetCmd());
+        controlPanel.button(7).onTrue(drivebase.gyroResetCmd());
     }
     
 

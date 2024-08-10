@@ -57,12 +57,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "MiddleFour1"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "AutoNote"

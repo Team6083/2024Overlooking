@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 // import frc.robot.commands.autoCmds.AutoTransportToShootCmd;
+import frc.robot.commands.driveControls.Forward;
 
 // import frc.robot.commands.driveControls.TagDriveCmd;
 
@@ -57,7 +58,7 @@ public final class Autos {
         Command AutoAimControl = shooterSubsystem.speakerControlCmd(()->0D, ()-> false);
         Command AutoTransport = transportSubsystem.transportIntakeCmd().withTimeout(0.5);
         Command AutoIntakeDown = new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52);
-
+        Command forward = new Forward(drivebase);
         drivebase.resetPose(AutoConstants.leftPose2d);
 
         // PathPlannerPath path = PathPlannerPath.fromPathFile(AutoConstants.ShootandForward);
@@ -65,7 +66,7 @@ public final class Autos {
         Command cmd = new ParallelCommandGroup(AutoIntakeDown,
                 new ParallelDeadlineGroup(new WaitCommand(0.3).andThen(AutoTransport),
                         AutoAimControl));
-        cmd.andThen (robotContainer.followPathCommand(AutoConstants.ShootandForward));
+        cmd.andThen (forward);
         
         return cmd;
     }

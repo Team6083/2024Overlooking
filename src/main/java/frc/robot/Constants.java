@@ -63,7 +63,7 @@ public final class Constants {
         public static final double kRotateOffset = 420.0;
         public static final double kShooterOffset = 4.32;
         public static final double kSpeakerHeight = 2.18;
-        public static final double kManualOffsetSupplierMulti =-4;
+        public static final double kManualOffsetSupplierMulti =4;
         public static final double kAMPHeight = 0.89;
         public static final double kShooterHeight = 0.3;
         public static final double kP = 0.085;
@@ -153,9 +153,9 @@ public final class Constants {
         public static final double kMinRot = 0.1;
         public static final double kMaxAngularSpeed = 30 * Math.PI; // 1/2 rotation per second
 
-        public static final double kXLimiterRateLimit = 5.0;
-        public static final double kYLimiterRateLimit = 5.0;
-        public static final double kRotLimiterRateLimit = 5.0;
+        public static final double kXLimiterRateLimit = 7.0;
+        public static final double kYLimiterRateLimit = 7.0;
+        public static final double kRotLimiterRateLimit = 7.0;
 
         public static final boolean kFrontLeftDriveMotorInverted = false;
         public static final boolean kFrontRightDriveMotorInverted = true;
@@ -181,11 +181,11 @@ public final class Constants {
         public static final double kMaxModuleDriveVoltage = 12.0;
 
         public static final double kDriveClosedLoopRampRate = 0.1;// 1 second 1 unit
-        public static final double kTurningClosedLoopRampRate = 0.1;
+        public static final double kTurningClosedLoopRampRate = 0.0;
 
         public static final double kDesireSpeedtoMotorVoltage = kMaxModuleDriveVoltage / DrivebaseConstants.kMaxSpeed;
 
-        public static final double kMaxModuleTuringVoltage = 25.0;
+        public static final double kMaxModuleTuringVoltage = 12.0;
 
         public static final double kMaxSpeedTurningDegree = 160.0;
 
