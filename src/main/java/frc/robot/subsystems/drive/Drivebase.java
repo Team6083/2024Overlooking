@@ -6,6 +6,7 @@ package frc.robot.subsystems.drive;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -287,6 +288,40 @@ public class Drivebase extends SubsystemBase {
     SmartDashboard.putNumber("poseY", getPose2d().getY());
     SmartDashboard.putNumber("poseRotationDegree", getPose2d().getRotation().getDegrees());
   }
+   
+  // public Command followPathCommand(String cmdNameString) {
+    // TODO Auto-generated method stub
+  //   PathPlannerPath path = PathPlannerPath.fromPathFile(cmdNameString);
+  //  return AutoBuilder.followPath(path);
+
+   public Command followPathCommand(String pathName) {
+    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+
+    return new FollowPathHolonomic(
+            path,
+            this::getPose2d, 
+            this::getRobotRelativeSpeeds, 
+            this::driveRobotRelative, 
+            new HolonomicPathFollowerConfig( 
+                    new PIDConstants(5.0, 0.0, 0.0), 
+                    new PIDConstants(5.0, 0.0, 0.0), 
+                    3.0, 
+                    0.4, 
+                    new ReplanningConfig()
+            ),
+            () -> {
+              
+
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            },
+            this 
+    );
+}
+
 
   
 
