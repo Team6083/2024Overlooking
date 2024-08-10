@@ -68,7 +68,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("AutoIntakeWithTransport",
                 new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
         NamedCommands.registerCommand("AutoAimControl",
-                shooterSubsystem.speakerControlCmd(() -> 0.0, ()->false)); // rate and rotate
+                shooterSubsystem.speakerControlCmd(() -> 2.0, ()->false)); // rate and rotate
         NamedCommands.registerCommand("AutoTransport",
                 transportSubsystem.transportIntakeCmd().withTimeout(0.6));
         NamedCommands.registerCommand("AutoNote", new WaitCommand(0.01));
