@@ -186,6 +186,7 @@ public class RobotContainer {
 
         // reset
         mainController.back().onTrue(drivebase.gyroResetCmd());
+        controlPanel.button(7).onTrue(drivebase.gyroResetCmd());
     }
     public Command followPathCommand(String cmdNameString) {
         // TODO Auto-generated method stub
