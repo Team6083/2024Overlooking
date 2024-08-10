@@ -334,8 +334,8 @@ public class ShooterSubsystem extends SubsystemBase {
       default:
         return false;
     }
-      return (getUpEncoderRate() >= shooterRate[0] - ShooterConstants.kShooterRateOffset
-              && getDownEncoderRate() >= shooterRate[1] - ShooterConstants.kShooterRateOffset);
+      return (Math.abs(getUpEncoderRate()) >= shooterRate[0] - ShooterConstants.kShooterRateOffset
+              && Math.abs(getDownEncoderRate()) >= shooterRate[1] - ShooterConstants.kShooterRateOffset);
   }
 
   /**
