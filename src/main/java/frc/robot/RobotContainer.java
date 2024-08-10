@@ -61,27 +61,26 @@ public class RobotContainer {
         shooterSubsystem = new ShooterSubsystem(tagTracking);
         transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
 
-               
-
         NamedCommands.registerCommand("AutoIntakeDown",
                 new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
         NamedCommands.registerCommand("AutoIntakeWithTransport",
                 new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
         NamedCommands.registerCommand("AutoAimControl",
-                shooterSubsystem.speakerControlCmd(() -> 2.0, ()->false)); // rate and rotate
+                shooterSubsystem.speakerControlCmd(() -> 2.0, () -> false)); // rate and rotate
         NamedCommands.registerCommand("AutoTransport",
                 transportSubsystem.transportIntakeCmd().withTimeout(0.6));
         NamedCommands.registerCommand("AutoNote", new WaitCommand(0.01));
         NamedCommands.registerCommand("AutoTag",
                 drivebase.tagTrackingCmd());
 
-
         autoChooser = AutoBuilder.buildAutoChooser();
         autoChooser.setDefaultOption("Do Nothing", Commands.none());
-        // autoChooser.addOption("Shoot", Autos.ShootCmd(drivebase, shooterSubsystem, transportSubsystem,
-                //  mainController, intakeSubsystem));
-        // autoChooser.addOption("ShootandForward", Autos.ShootandForwardCmd(drivebase, transportSubsystem,
-                //  shooterSubsystem, mainController, intakeSubsystem ,this));
+        // autoChooser.addOption("Shoot", Autos.ShootCmd(drivebase, shooterSubsystem,
+        // transportSubsystem,
+        // mainController, intakeSubsystem));
+        // autoChooser.addOption("ShootandForward", Autos.ShootandForwardCmd(drivebase,
+        // transportSubsystem,
+        // shooterSubsystem, mainController, intakeSubsystem ,this));
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         SmartDashboard.putData("drivebase", drivebase);
@@ -123,7 +122,8 @@ public class RobotContainer {
         mainController.pov(180).whileTrue(
                 shooterSubsystem.manualControlCmd(() -> -1)
                         .onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
-        mainController.b().whileTrue(transportSubsystem.transportIntakeCmd());
+        mainController.b().whileTrue(Commands.runEnd(transportSubsystem::setTransport, transportSubsystem::stopMotor));
+
         enum ShooterRotMode {
             Speaker,
             SpeakerAuto,
@@ -131,7 +131,6 @@ public class RobotContainer {
             Carry,
             Manual
         }
-        
 
         Map<ShooterRotMode, Command> shooterMap = Map.ofEntries(
                 Map.entry(ShooterRotMode.SpeakerAuto,
@@ -190,7 +189,7 @@ public class RobotContainer {
                             if (controlPanel.button(10).getAsBoolean()) {
                                 return ShooterRotMode.Amp;
                             }
-                            if(controlPanel.button(9).getAsBoolean()){
+                            if (controlPanel.button(9).getAsBoolean()) {
                                 return ShooterRotMode.SpeakerAuto;
                             }
                             return ShooterRotMode.Speaker;
@@ -200,8 +199,6 @@ public class RobotContainer {
         mainController.back().onTrue(drivebase.gyroResetCmd());
         controlPanel.button(7).onTrue(drivebase.gyroResetCmd());
     }
-    
-
 
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
