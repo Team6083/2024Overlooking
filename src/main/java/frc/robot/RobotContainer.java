@@ -123,7 +123,7 @@ public class RobotContainer {
         mainController.pov(180).whileTrue(
                 shooterSubsystem.manualControlCmd(() -> -1)
                         .onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
-
+        mainController.b().whileTrue(transportSubsystem.transportIntakeCmd());
         enum ShooterRotMode {
             Speaker,
             Amp,
