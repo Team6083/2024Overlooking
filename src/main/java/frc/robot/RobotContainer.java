@@ -135,7 +135,7 @@ public class RobotContainer {
                 Map.entry(ShooterRotMode.Speaker,
                         shooterSubsystem
                                 .speakerControlCmd(
-                                        () -> controlPanel.getRawAxis(4)
+                                        () -> controlPanel.getRawAxis(3)
                                                 * RotateShooterConstants.kManualOffsetSupplierMulti,
                                         () -> controlPanel.button(12)
                                                 .getAsBoolean())

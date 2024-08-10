@@ -63,7 +63,7 @@ public final class Constants {
         public static final double kRotateOffset = 420.0;
         public static final double kShooterOffset = 4.32;
         public static final double kSpeakerHeight = 2.18;
-        public static final double kManualOffsetSupplierMulti =-4;
+        public static final double kManualOffsetSupplierMulti =4;
         public static final double kAMPHeight = 0.89;
         public static final double kShooterHeight = 0.3;
         public static final double kP = 0.085;
