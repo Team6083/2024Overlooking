@@ -126,10 +126,12 @@ public class RobotContainer {
         mainController.b().whileTrue(transportSubsystem.transportIntakeCmd());
         enum ShooterRotMode {
             Speaker,
+            SpeakerAuto,
             Amp,
             Carry,
             Manual
         }
+        
 
         Map<ShooterRotMode, Command> shooterMap = Map.ofEntries(
                 Map.entry(ShooterRotMode.Speaker,
@@ -145,6 +147,14 @@ public class RobotContainer {
                                                         .isEnoughRate())
                                                 .andThen(transportSubsystem
                                                         .transportIntakeCmd()))
+                                .withTimeout(5.0)),
+                Map.entry(ShooterRotMode.SpeakerAuto,
+                        shooterSubsystem
+                                .speakerControlCmd(
+                                        () -> controlPanel.getRawAxis(3)
+                                                * RotateShooterConstants.kManualOffsetSupplierMulti,
+                                        () -> controlPanel.button(12)
+                                                .getAsBoolean())
                                 .withTimeout(5.0)),
                 Map.entry(ShooterRotMode.Amp,
                         shooterSubsystem
@@ -180,7 +190,9 @@ public class RobotContainer {
                             if (controlPanel.button(10).getAsBoolean()) {
                                 return ShooterRotMode.Amp;
                             }
-
+                            if(controlPanel.button(9).getAsBoolean()){
+                                return ShooterRotMode.SpeakerAuto;
+                            }
                             return ShooterRotMode.Speaker;
                         }));
 
