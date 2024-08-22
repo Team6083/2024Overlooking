@@ -6,6 +6,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,14 +22,26 @@ public class Robot extends TimedRobot {
 
   private boolean saveLogs = false;
 
+  private RobotWebSocketClient webSocketClient;
+
+
   @Override
   public void robotInit() {
+    try {
+            URI serverUri = new URI("ws://localhost:3000/new_ui.html");
+            webSocketClient = new RobotWebSocketClient(serverUri);
+            webSocketClient.connect();
+    } catch (URISyntaxException e) {
+            e.printStackTrace();
+    }
+    
     if (saveLogs) {
       DataLogManager.start();
       DriverStation.startDataLog(DataLogManager.getLog());
     }
     CameraServer.startAutomaticCapture();
     m_robotContainer = new RobotContainer();
+    
   }
 
   @Override
@@ -71,6 +87,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    if (webSocketClient != null && webSocketClient.isOpen()) {
+      webSocketClient.send("{\"status\": \"Teleop Active\"}");
+    }
   }
 
   @Override
