@@ -12,8 +12,6 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.introspect.WithMember;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -61,6 +59,8 @@ public class RobotContainer {
         shooterSubsystem = new ShooterSubsystem(tagTracking);
         transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
 
+        autoChooser = AutoBuilder.buildAutoChooser();
+        
         NamedCommands.registerCommand("AutoIntakeDown",
                 new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
         NamedCommands.registerCommand("AutoIntakeWithTransport",
@@ -73,7 +73,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("AutoTag",
                 drivebase.tagTrackingCmd());
 
-        autoChooser = AutoBuilder.buildAutoChooser();
+        
         autoChooser.setDefaultOption("Do Nothing", Commands.none());
         // autoChooser.addOption("Shoot", Autos.ShootCmd(drivebase, shooterSubsystem,
         // transportSubsystem,
