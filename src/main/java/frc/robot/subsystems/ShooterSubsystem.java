@@ -360,6 +360,9 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("rotateDownMotorVoltage", downShooterMotor.getMotorOutputVoltage());
   }
 
+  /**
+   * 
+   */
   public Command speakerControlCmd(Supplier<Double> joystickManualOffsetSupplier,
       Supplier<Boolean> isManualSetpointSupplier) {
     Command cmd = runEnd(() -> speakerControl(joystickManualOffsetSupplier, isManualSetpointSupplier),

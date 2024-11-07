@@ -53,6 +53,8 @@ dependencies {
     implementation wpi.java.deps.wpilib()
     implementation wpi.java.vendor.java()
     implementation files('libs/Java-WebSocket-1.5.7.jar')
+    implementation files('libs/slf4j-api-2.0.7.jar')
+    implementation files('libs/slf4j-simple-2.0.7.jar')
 
 
     roborioDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.roborio)
