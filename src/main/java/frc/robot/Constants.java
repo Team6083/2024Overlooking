@@ -73,7 +73,7 @@ public final class Constants {
 
     public static class TransportConstants {
         public static final int kTransportChannel = 22;
-        public static final boolean kTransportInverted = true;
+        public static final boolean kTransportInverted = false;
         public static final double kTransVoltage = 4.5;
         public static final double kReTransVoltage = -4.5;
         public static final double kDistanceRange = 3.0;
@@ -145,9 +145,9 @@ public final class Constants {
 
         // can coder magnet offset value
         public static final double kFrontLeftCanCoderMagOffset = 0.003174;
-        public static final double kFrontRightCanCoderMagOffset = 0.117676 ;
+        public static final double kFrontRightCanCoderMagOffset = 0.242920;
         public static final double kBackLeftCanCoderMagOffset = 0.347656;
-        public static final double kBackRightCanCoderMagOffset = -0.178955;
+        public static final double kBackRightCanCoderMagOffset = 0.157227;
 
         public static final double kMaxSpeed = 5;
         public static final double kMinRot = 0.1;
