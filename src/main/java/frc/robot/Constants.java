@@ -55,7 +55,7 @@ public final class Constants {
         public static final double kInitDegree = 59.0;
         public static final double kCarryDegree = 30.0;
         public static final double kAmpDegree = 52.0;
-        public static final double kManualVoltage = 4.0;
+        public static final double kManualVoltage = 1.5;
         public static final double kRotateVoltLimit = 5.0;
         public static final double kRotateAngleMin = 20.0;
         public static final double kRotateAngleMax = 67.0;
@@ -73,7 +73,7 @@ public final class Constants {
 
     public static class TransportConstants {
         public static final int kTransportChannel = 22;
-        public static final boolean kTransportInverted = false;
+        public static final boolean kTransportInverted = true;
         public static final double kTransVoltage = 4.5;
         public static final double kReTransVoltage = -4.5;
         public static final double kDistanceRange = 3.0;
@@ -83,7 +83,7 @@ public final class Constants {
         public static final int kIntakeChannel = 24;
         public static final int kRotateIntakeChannel = 29;
         public static final int kRotateEncoderChannel = 7;
-        public static final Boolean kIntakeInverted = true;
+        public static final Boolean kIntakeInverted = false;
         public static final Boolean kRotateIntakeInverted = true;
         public static final Boolean kRotateEncoderInverted = true;
         public static final double kRotateOffset = 105;
