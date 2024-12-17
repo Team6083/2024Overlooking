@@ -63,18 +63,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "MiddleFour1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "MiddleFour1"
-          }
-        },
-        {
           "type": "deadline",
           "data": {
             "commands": [
@@ -127,12 +115,6 @@
                 "data": {
                   "name": "AutoAimControl"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoTag"
-                }
               }
             ]
           }
@@ -146,7 +128,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MiddleFour1"
+            "pathName": "MiddleFour2"
           }
         }
       ]

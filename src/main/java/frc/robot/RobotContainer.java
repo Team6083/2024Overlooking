@@ -59,21 +59,25 @@ public class RobotContainer {
         shooterSubsystem = new ShooterSubsystem(tagTracking);
         transportSubsystem = new TransportSubsystem(powerDistributionSubsystem);
 
-        autoChooser = AutoBuilder.buildAutoChooser();
         
         NamedCommands.registerCommand("AutoIntakeDown",
-                new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
+        new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
+        // intake 下降
         NamedCommands.registerCommand("AutoIntakeWithTransport",
-                new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+        new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+        // 吸note
         NamedCommands.registerCommand("AutoAimControl",
-                shooterSubsystem.speakerControlCmd(() -> 2.0, () -> false)); // rate and rotate
+        shooterSubsystem.speakerControlCmd(() -> 2.0, () -> false));
+        // 瞄準
         NamedCommands.registerCommand("AutoTransport",
-                transportSubsystem.transportIntakeCmd().withTimeout(0.6));
+        transportSubsystem.transportIntakeCmd().withTimeout(0.6));
+        // 傳輸
         NamedCommands.registerCommand("AutoNote", new WaitCommand(0.01));
-        NamedCommands.registerCommand("AutoTag",
-                drivebase.tagTrackingCmd());
-
         
+        NamedCommands.registerCommand("AutoTag",
+        drivebase.tagTrackingCmd());
+        
+        autoChooser = AutoBuilder.buildAutoChooser();
         autoChooser.setDefaultOption("Do Nothing", Commands.none());
         // autoChooser.addOption("Shoot", Autos.ShootCmd(drivebase, shooterSubsystem,
         // transportSubsystem,
@@ -90,7 +94,6 @@ public class RobotContainer {
         SmartDashboard.putData("Drivebase", drivebase);
 
         configureBindings();
-
     }
 
     private void configureBindings() {
@@ -122,7 +125,8 @@ public class RobotContainer {
         mainController.pov(180).whileTrue(
                 shooterSubsystem.manualControlCmd(() -> -1)
                         .onlyWhile(() -> controlPanel.button(12).getAsBoolean()));
-        mainController.b().whileTrue(Commands.runEnd(transportSubsystem::setTransport, transportSubsystem::stopMotor));
+        mainController.b().whileTrue(
+                Commands.runEnd(transportSubsystem::setTransport, transportSubsystem::stopMotor));
 
         enum ShooterRotMode {
             Speaker,
