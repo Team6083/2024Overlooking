@@ -88,6 +88,18 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "MiddleTwo3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MiddleTwo3"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
