@@ -64,7 +64,6 @@ public class SwerveModule extends SubsystemBase {
     configDriveMotor();
     configTurningMotor();
     resetAllEncoder();
-    clearSticklyFault();
     stopModule();
   }
 
