@@ -62,16 +62,16 @@ public class RobotContainer {
         
         NamedCommands.registerCommand("AutoIntakeDown",
         new TimeStopIntakeCmd(intakeSubsystem).withTimeout(2.52));
-        // intake 下降
+        
         NamedCommands.registerCommand("AutoIntakeWithTransport",
         new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
-        // 吸note
+        
         NamedCommands.registerCommand("AutoAimControl",
         shooterSubsystem.speakerControlCmd(() -> 2.0, () -> false));
-        // 瞄準
+        
         NamedCommands.registerCommand("AutoTransport",
         transportSubsystem.transportIntakeCmd().withTimeout(0.6));
-        // 傳輸
+        
         NamedCommands.registerCommand("AutoNote", new WaitCommand(0.01));
         
         NamedCommands.registerCommand("AutoTag",
