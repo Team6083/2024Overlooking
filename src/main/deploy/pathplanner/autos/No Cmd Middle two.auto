@@ -20,6 +20,12 @@
         {
           "type": "path",
           "data": {
+            "pathName": "MiddleFour2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "MiddleTwo3"
           }
         },

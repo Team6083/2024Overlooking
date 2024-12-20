@@ -8,13 +8,19 @@
         {
           "type": "named",
           "data": {
-            "name": "AutoTransport"
+            "name": "AutoIntakeWithTransport"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.55
+            "waitTime": 0.7
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoTransport"
           }
         },
         {
