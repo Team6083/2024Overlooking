@@ -108,7 +108,7 @@ public class RobotContainer {
 
         // intake and transport
         mainController.axisGreaterThan(2, 0.5)
-                .toggleOnTrue(new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
+                .onTrue(new IntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
         mainController.a()
                 .whileTrue(new ReIntakeWithTransportCmd(transportSubsystem, intakeSubsystem));
         controlPanel.button(5)
