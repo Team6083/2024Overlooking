@@ -52,7 +52,7 @@ public final class Constants {
         public static final Boolean kRotateShooterInverted = true;
         public static final Boolean kEncoderInverted = true;
         public static final int kRotateEncoderChannel = 2;
-        public static final double kInitDegree = 59.0;
+        public static final double kInitDegree = 57.0;
         public static final double kCarryDegree = 30.0;
         public static final double kAmpDegree = 52.0;
         public static final double kManualVoltage = 1.5;

@@ -16,7 +16,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  private boolean saveLogs = false;
+  private boolean saveLogs = true;
 
   @Override
   public void robotInit() {
