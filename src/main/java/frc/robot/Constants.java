@@ -32,7 +32,7 @@ public final class Constants {
         public static final double kDownMotorManualVoltage = 10.0;
         public static final double[] kSpeakerShooterRate = { 65.0, 65.0 };
         public static final double[] kCarryShooterRate = { 60.0, 60.0 };
-        public static final double[] kAmpShooterRate = { 25.5, 29.5};
+        public static final double[] kAmpShooterRate = { 25.5, 29.5 };
         public static final double kShooterRateOffset = 15;
         public static final double kP = 0.0;
         public static final double kI = 0.0;
@@ -63,7 +63,7 @@ public final class Constants {
         public static final double kRotateOffset = 420.0;
         public static final double kShooterOffset = 4.32;
         public static final double kSpeakerHeight = 2.18;
-        public static final double kManualOffsetSupplierMulti =4;
+        public static final double kManualOffsetSupplierMulti = 4;
         public static final double kAMPHeight = 0.89;
         public static final double kShooterHeight = 0.3;
         public static final double kP = 0.085;
@@ -178,7 +178,7 @@ public final class Constants {
 
         public static final double kWheelDiameterMeters = 0.15;
 
-        public static final double kMaxModuleDriveVoltage = 3.5;
+        public static final double kMaxModuleDriveVoltage = 4.0;
 
         public static final double kDriveClosedLoopRampRate = 0.1;// 1 second 1 unit
         public static final double kTurningClosedLoopRampRate = 0.0;
@@ -239,7 +239,7 @@ public final class Constants {
         public static final Pose2d rightPose2d = new Pose2d(0.76, 4.56, Rotation2d.fromDegrees(-60));
 
         public static final String Shoot = "Shoot";
-        public static final String ShootandForward ="ShootandForward";
+        public static final String ShootandForward = "ShootandForward";
     }
 
     public static final class NoteTrackingConstants {
